@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'web'
+    static_configs:
+      - targets: ['web:8000']
+  - job_name: 'worker'
+    static_configs:
+      - targets: ['worker:8000']
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel-collector:8888']

@@ -1,0 +1,113 @@
+version: "3.8"
+
+services:
+  web:
+    build: ./services/web
+    container_name: aihr_web
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/aihr
+      - REDIS_URL=redis://redis:6379/0
+      - LANGFUSE_API_KEY=${LANGFUSE_API_KEY}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      - db
+      - redis
+      - otel-collector
+    volumes:
+      - ./services/web:/app
+    networks:
+      - aihr-net
+
+  worker:
+    build: ./services/worker
+    container_name: aihr_worker
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/aihr
+      - REDIS_URL=redis://redis:6379/1
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - LANGFUSE_API_KEY=${LANGFUSE_API_KEY}
+    depends_on:
+      - db
+      - redis
+      - otel-collector
+    networks:
+      - aihr-net
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aihr
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - aihr-net
+
+  redis:
+    image: redis:7
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - aihr-net
+
+  embeddings:
+    # пример: можно использовать milvus, weaviate, or redis vector
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - aihr-net
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    volumes:
+      - ./observability/otel-collector-config.yaml:/etc/otel_collector_config.yaml
+    command: ["--config", "/etc/otel_collector_config.yaml"]
+    ports:
+      - "4317:4317"
+      - "55681:55681"
+    networks:
+      - aihr-net
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - aihr-net
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - loki
+    networks:
+      - aihr-net
+
+  loki:
+    image: grafana/loki:2.8.2
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./observability/loki-config.yaml:/etc/loki/local-config.yaml
+    networks:
+      - aihr-net
+
+volumes:
+  db-data:
+  redis-data:
+
+networks:
+  aihr-net:
+    driver: bridge
