@@ -11,7 +11,7 @@ CREATE TABLE `vacancy` (
   `job_title` varchar(255),
   `education` varchar(255),
   `work_experience` integer,
-  `desired_salary` varchar(255),
+  `desired_salary` integer,
   `work_shedule` varchar(255),
   `work_format` varchar(255),
   `additional_requirements` varchar(255),
