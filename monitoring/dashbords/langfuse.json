@@ -1,0 +1,66 @@
+{
+  "id": null,
+  "uid": "langfuse-llm-stats",
+  "title": "Langfuse — LLM Performance Overview",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "15s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Total Prompts Processed",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum(langfuse_requests_total)",
+          "legendFormat": "Prompts"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 }
+    },
+    {
+      "type": "graph",
+      "title": "LLM Response Latency (s)",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "avg(rate(langfuse_request_latency_seconds_sum[1m])) / avg(rate(langfuse_request_latency_seconds_count[1m]))",
+          "legendFormat": "avg latency"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 4, "w": 12, "h": 6 }
+    },
+    {
+      "type": "graph",
+      "title": "Tokens Processed (input/output)",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum(rate(langfuse_input_tokens_total[1m]))",
+          "legendFormat": "input tokens"
+        },
+        {
+          "expr": "sum(rate(langfuse_output_tokens_total[1m]))",
+          "legendFormat": "output tokens"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 10, "w": 12, "h": 6 }
+    },
+    {
+      "type": "graph",
+      "title": "LLM Errors (rate)",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum(rate(langfuse_request_errors_total[5m]))",
+          "legendFormat": "errors/min"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 6 }
+    }
+  ],
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  }
+}

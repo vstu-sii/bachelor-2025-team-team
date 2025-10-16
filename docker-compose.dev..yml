@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://backend:8000
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/hr_db
+      - LLM_URL=http://llm-service:5000
+    depends_on:
+      - db
+      - llm-service
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: hr_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  llm-service:
+    build: ./llm-service
+    ports:
+      - "5000:5000"
+    environment:
+      - MODEL_NAME=gpt-4
+    volumes:
+      - ./llm-service/notebooks:/app/notebooks
+
+  jupyter:
+    image: jupyter/minimal-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./llm-service/notebooks:/home/jovyan/work
+    depends_on:
+      - llm-service
+
+volumes:
+  pgdata:

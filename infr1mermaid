@@ -1,0 +1,33 @@
+flowchart LR
+    subgraph Frontend
+        F[Next.js / React]
+    end
+
+    subgraph Backend
+        B[FastAPI / Node.js]
+    end
+
+    subgraph Database
+        D[(PostgreSQL / MongoDB)]
+    end
+
+    subgraph LLM
+        L[LLM Service]
+        J[Jupyter]
+    end
+
+    subgraph Monitoring
+        P[Prometheus]
+        G[Grafana]
+        LF[Langfuse]
+        LK[Loki]
+    end
+
+    F --> B
+    B --> D
+    B --> L
+    L --> LF
+    B --> P
+    P --> G
+    LF --> G
+    LK --> G

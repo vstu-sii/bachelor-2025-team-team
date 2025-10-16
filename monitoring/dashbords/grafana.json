@@ -1,0 +1,70 @@
+{
+  "id": null,
+  "uid": "ai-hr-monitor",
+  "title": "AI HR Assistant — Dev Monitoring",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Backend Response Time (ms)",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "avg(rate(http_request_duration_seconds_sum{job=\"backend\"}[1m])) / avg(rate(http_request_duration_seconds_count{job=\"backend\"}[1m]))",
+          "legendFormat": "avg response time",
+          "refId": "A"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
+    },
+    {
+      "type": "graph",
+      "title": "Container CPU Usage (%)",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "avg(rate(container_cpu_usage_seconds_total{name=~\".+\"}[1m])) * 100",
+          "legendFormat": "{{name}}",
+          "refId": "B"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 }
+    },
+    {
+      "type": "graph",
+      "title": "Memory Usage (MB)",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "container_memory_usage_bytes{name=~\".+\"} / (1024*1024)",
+          "legendFormat": "{{name}}",
+          "refId": "C"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 }
+    },
+    {
+      "type": "graph",
+      "title": "Database Connections",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "pg_stat_activity_count",
+          "legendFormat": "connections",
+          "refId": "D"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 24, "w": 12, "h": 8 }
+    }
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  }
+}
