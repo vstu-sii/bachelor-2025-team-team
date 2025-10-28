@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+requests
+psycopg2-binary  # если работаешь с PostgreSQL

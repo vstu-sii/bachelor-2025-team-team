@@ -71,7 +71,7 @@ jobs:
           DATABASE_URL: postgresql://user:password@localhost:5432/hr_db
         run: pytest backend/tests -v
 
-  deploy-dev:
+    deploy-dev:
     name: Deploy to Dev Environment
     needs: build-test-lint
     runs-on: ubuntu-latest
@@ -96,7 +96,7 @@ jobs:
           docker compose -f docker-compose.dev.yml build
           docker compose -f docker-compose.dev.yml push
 
-      - name: Deploy to dev environment
+      - name: Deploy to dev environment and ensure model
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DEV_SSH_KEY }}
           DEV_HOST: ${{ secrets.DEV_HOST }}
@@ -104,8 +104,28 @@ jobs:
         run: |
           echo "${SSH_PRIVATE_KEY}" > key.pem
           chmod 600 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ${DEV_USER}@${DEV_HOST} \
-          "cd ~/ai-hr-assistant && git pull && docker compose -f docker-compose.dev.yml up -d --build"
+          ssh -o StrictHostKeyChecking=no -i key.pem ${DEV_USER}@${DEV_HOST} << 'EOF'
+            cd ~/ai-hr-assistant
+            git pull
+
+            # Проверка и запуск Ollama (если не запущен)
+            if ! pgrep -f "ollama serve" > /dev/null; then
+              echo "Запуск Ollama..."
+              nohup ollama serve > ollama.log 2>&1 &
+              sleep 5
+            fi
+
+            # Проверяем, есть ли модель
+            if ! ollama list | grep -q "llama3"; then
+              echo "Модель llama3 не найдена — скачиваем..."
+              ollama pull llama3
+            else
+              echo "Модель llama3 уже установлена."
+            fi
+
+            # Поднимаем контейнеры
+            docker compose -f docker-compose.dev.yml up -d --build
+          EOF
 
       - name: Notify success
         uses: slackapi/slack-github-action@v1.26.0
@@ -113,7 +133,8 @@ jobs:
         with:
           payload: |
             {
-              "text": "Успешный деплой AI HR Assistant в dev окружение!"
+              "text": "Успешный деплой AI HR Assistant в dev окружение (с проверкой модели)!"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
