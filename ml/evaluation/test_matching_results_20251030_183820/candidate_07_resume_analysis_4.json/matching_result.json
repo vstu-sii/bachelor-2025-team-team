@@ -1,0 +1,156 @@
+{
+  "candidate_id": "resume_analysis_4.json",
+  "resume_analysis": {
+    "skills": {
+      "technical": [
+        "Java",
+        "Kotlin",
+        "Android SDK",
+        "Android Layouts",
+        "Material Design",
+        "SQLite",
+        "Room",
+        "Realm",
+        "MVP",
+        "MVVM",
+        "Clean Architecture",
+        "SOLID",
+        "DRY",
+        "KISS",
+        "Android Debug Bridge (ADB)",
+        "Android Monitor",
+        "Firebase Crashlytics",
+        "Espresso",
+        "Robolectric",
+        "Google Play Store (release management)",
+        "Automated testing",
+        "UI optimization",
+        "Performance optimization",
+        "Data security programming"
+      ],
+      "soft": [
+        "Analytical thinking",
+        "Creativity",
+        "Hard work",
+        "High productivity",
+        "Time management",
+        "Responsibility",
+        "Collaboration with designers and developers"
+      ],
+      "languages": [
+        "English (fluent)"
+      ]
+    },
+    "experience": {
+      "total_years": "9",
+      "relevant_years": "9",
+      "positions": [
+        {
+          "title": "Android-разработчик",
+          "company": "Частная практика (фриланс)",
+          "years": "6.8",
+          "description": "Разработка мобильных приложений по требованиям заказчика и анализа рынка; реализация UI и бизнес‑логики; тестирование и исправление ошибок; сотрудничество с другими разработчиками и дизайнерами; внедрение биометрической аутентификации в приложение бронирования авиабилетов; оптимизация кода и производительности; создание игровых и книжных приложений."
+        },
+        {
+          "title": "Android-разработчик",
+          "company": "\"ADV-Apps\"",
+          "years": "3.75",
+          "description": "Разработка приложения онлайн‑магазина: UI, бизнес‑логика, интеграция с платёжной системой; создание дизайна и макетов; тестирование и исправление багов; поддержка и выпуск обновлений; разработка уникального дизайна и однокнопочного процесса покупки, что привело к росту продаж на 20 % в первый месяц."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Университет Иннополис, г. Казань",
+        "degree": "Высшее образование",
+        "year": "2017",
+        "field": "Разработчик мобильных приложений"
+      }
+    ],
+    "match_analysis": {
+      "strengths": [
+        "9 лет практического опыта Android‑разработки",
+        "Глубокие знания Java и Kotlin",
+        "Опыт работы с современными архитектурными паттернами (MVP, MVVM, Clean Architecture)",
+        "Навыки оптимизации производительности и безопасности приложений",
+        "Опыт публикации и поддержки приложений в Google Play Store",
+        "Умение писать автоматические UI‑тесты (Espresso, Robolectric)",
+        "Опыт работы с базами данных SQLite/Room/Realm",
+        "Сильные коммуникативные и аналитические навыки"
+      ],
+      "gaps": [
+        "Отсутствие упоминания о Jetpack Compose",
+        "Нет опыта CI/CD, Docker, облачных сервисов (Firebase Cloud Functions, AWS и пр.)",
+        "Не указаны навыки работы с Kotlin Coroutines/Flow",
+        "Нет подтверждённого опыта руководства командой"
+      ],
+      "risk_factors": [
+        "Готовность к переезду и командировкам отсутствует – ограничивает варианты работы в офисе",
+        "Большая часть текущего опыта – фриланс, что может вызвать вопросы о работе в крупной команде",
+        "Последний указанный опыт работы в компании заканчивается в 2018 г., возможный пробел в командной среде"
+      ]
+    }
+  },
+  "matching_result": {
+    "candidate_info": {
+      "name": null,
+      "current_position": "Android-разработчик"
+    },
+    "matching_results": {
+      "overall_score": 38,
+      "is_suitable": false,
+      "critical_issues": [
+        "Отсутствие опыта разработки на Python",
+        "Нет навыков работы с Django, FastAPI, PostgreSQL, Docker",
+        "Требуемый гибридный формат работы не подтверждён",
+        "Неполное соответствие образованию (не профиль CS/Software Engineering)"
+      ],
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 10,
+          "weight": 0.25,
+          "weighted_score": 2.5,
+          "explanation": "Вакансия требует Python-разработчика, кандидат имеет опыт только Android-разработки на Java/Kotlin."
+        },
+        "education_match": {
+          "score": 70,
+          "weight": 0.15,
+          "weighted_score": 10.5,
+          "explanation": "Кандидат имеет высшее техническое образование, но специализация – мобильные приложения, а не компьютерные науки или программная инженерия."
+        },
+        "experience_match": {
+          "score": 30,
+          "weight": 0.3,
+          "weighted_score": 9,
+          "explanation": "Общий опыт 9 лет, но весь он относится к Android-разработке, а не к Python и требуемым технологиям."
+        },
+        "schedule_match": {
+          "score": 100,
+          "weight": 0.1,
+          "weighted_score": 10,
+          "explanation": "Кандидат, судя по описанию, готов работать полный день (фриланс и штат)."
+        },
+        "format_match": {
+          "score": 40,
+          "weight": 0.1,
+          "weighted_score": 4,
+          "explanation": "Не указано наличие гибридного формата; основной опыт – удалённый фриланс."
+        },
+        "additional_match": {
+          "score": 20,
+          "weight": 0.1,
+          "weighted_score": 2,
+          "explanation": "Есть свободный английский, но отсутствуют навыки Django, FastAPI, PostgreSQL, Docker."
+        }
+      }
+    },
+    "recommendation": {
+      "level": "не рекомендован",
+      "reason": "Кандидат не обладает необходимыми навыками Python и требуемыми технологиями, а также не соответствует формату гибридной работы, что делает его неподходящим для данной позиции.",
+      "suggested_salary": "N/A",
+      "interview_priority": "низкий"
+    }
+  },
+  "overall_score": 38,
+  "is_suitable": false
+}

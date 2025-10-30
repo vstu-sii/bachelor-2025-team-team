@@ -1,0 +1,9 @@
+{
+  "job_title": "Middle Backend Developer (Java/Kotlin)",
+  "education": "Высшее техническое образование (компьютерные науки, программная инженерия, информационные технологии)",
+  "work_experience": 3,
+  "desired_salary": 180000,
+  "work_schedule": "Полный день",
+  "work_format": "Гибридный формат (2-3 дня в офисе, остальное время удаленно)",
+  "additional_requirements": "Опыт работы с Java 8+, Kotlin, Spring Boot, микросервисной архитектурой, PostgreSQL, Redis, Docker, Kubernetes, знание английского языка на уровне чтения технической документации"
+}

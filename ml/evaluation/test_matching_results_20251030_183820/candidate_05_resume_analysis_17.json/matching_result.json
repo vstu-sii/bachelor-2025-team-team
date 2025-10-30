@@ -1,0 +1,149 @@
+{
+  "candidate_id": "resume_analysis_17.json",
+  "resume_analysis": {
+    "skills": {
+      "technical": [
+        "JavaScript (ES6+)",
+        "TypeScript",
+        "React",
+        "Redux Toolkit",
+        "React Router",
+        "HTML5",
+        "CSS3",
+        "SASS/SCSS",
+        "Styled Components",
+        "Tailwind CSS",
+        "Material-UI",
+        "Webpack",
+        "Vite",
+        "Git",
+        "npm",
+        "yarn",
+        "Jest",
+        "React Testing Library",
+        "Figma",
+        "Chrome DevTools",
+        "REST API",
+        "GraphQL (basic)",
+        "PWA",
+        "Adaptive and cross‑browser layout"
+      ],
+      "soft": [],
+      "languages": [
+        "Russian (native)",
+        "English (C1 – Advanced)"
+      ]
+    },
+    "experience": {
+      "total_years": "2",
+      "relevant_years": "2",
+      "positions": [
+        {
+          "title": "Frontend Разработчик",
+          "company": "Агентство \"КреативДев\"",
+          "years": "3.5",
+          "description": "Разработка пользовательских интерфейсов для клиентских проектов: от лендингов до сложных SPA‑приложений на React. Участие в рефакторинге легаси‑кода на TypeScript. Создание reusable‑компонентов, что ускорило разработку новых фич на 25 %. Тесная работа с UX/UI дизайнерами (Figma) для реализации pixel‑perfect верстки. Оптимизация производительности приложений (Lighthouse score >90)."
+        },
+        {
+          "title": "Стажер Frontend‑разработчик",
+          "company": "ООО \"Стартап Технолоджи\"",
+          "years": "0.25",
+          "description": "Верстка компонентов по готовым макетам. Исправление мелких багов в интерфейсе. Изучение и применение React‑экосистемы в реальных задачах."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Санкт‑Петербургский политехнический университет Петра Великого (СПбПУ)",
+        "degree": "Бакалавр",
+        "year": "2021",
+        "field": "Информационные системы и технологии"
+      }
+    ],
+    "match_analysis": {
+      "strengths": [
+        "Глубокие знания React и TypeScript",
+        "Опыт работы с современными инструментами сборки (Webpack, Vite)",
+        "Умение создавать переиспользуемые UI‑компоненты",
+        "Оптимизация производительности (Lighthouse >90)",
+        "Тестирование с Jest и React Testing Library",
+        "Работа с UI/UX дизайнерами и pixel‑perfect верстка",
+        "Опыт адаптивной и кросс‑браузерной вёрстки",
+        "Базовый опыт работы с GraphQL и PWA",
+        "Активное участие в профессиональном сообществе и ведение блога"
+      ],
+      "gaps": [
+        "Ограниченный опыт бэкенд‑интеграций (только базовый GraphQL, REST без глубоких деталей)",
+        "Отсутствие упоминаний о масштабных архитектурных решениях или лидерстве в команде",
+        "Не указаны навыки DevOps/CI‑CD, контейнеризации"
+      ],
+      "risk_factors": [
+        "Относительно небольшой общий опыт (2 года) для позиции среднего уровня",
+        "Большая часть опыта получена за короткий период (2022 г.)",
+        "Отсутствие явно указанных soft‑skills (коммуникация, управление проектами и т.п.)"
+      ]
+    }
+  },
+  "matching_result": {
+    "candidate_info": {
+      "name": null,
+      "current_position": "Frontend Разработчик"
+    },
+    "matching_results": {
+      "overall_score": 40,
+      "is_suitable": false,
+      "critical_issues": [
+        "Отсутствие опыта разработки на Python",
+        "Нет навыков работы с Django, FastAPI, PostgreSQL, Docker",
+        "Текущая должность и профиль полностью фронтенд, а не бэкенд",
+        "Отсутствие указаний о гибридном формате работы"
+      ],
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 0,
+          "weight": 0.25,
+          "weighted_score": 0,
+          "explanation": "Вакансия требует Python разработчика, кандидат имеет опыт только во Frontend разработке, без упоминания Python."
+        },
+        "education_match": {
+          "score": 80,
+          "weight": 0.15,
+          "weighted_score": 12,
+          "explanation": "Кандидат имеет высшее техническое образование в области информационных систем и технологий, что частично соответствует требуемому техническому образованию."
+        },
+        "experience_match": {
+          "score": 30,
+          "weight": 0.3,
+          "weighted_score": 9,
+          "explanation": "Общий опыт работы 2 года, но он полностью относится к Frontend разработке, а не к Python/Backend, что снижает релевантность."
+        },
+        "schedule_match": {
+          "score": 100,
+          "weight": 0.1,
+          "weighted_score": 10,
+          "explanation": "Требуемый график – полный день. Информация о предпочтениях кандидата отсутствует, но отсутствие противоречий считается полным совпадением."
+        },
+        "format_match": {
+          "score": 70,
+          "weight": 0.1,
+          "weighted_score": 7,
+          "explanation": "Требуется гибридный формат. Кандидат не указал предпочтения, поэтому оценка условно положительная, но не полное совпадение."
+        },
+        "additional_match": {
+          "score": 20,
+          "weight": 0.1,
+          "weighted_score": 2,
+          "explanation": "Кандидат владеет английским на уровне C1, но не имеет опыта с Django, FastAPI, PostgreSQL, Docker."
+        }
+      }
+    },
+    "recommendation": {
+      "level": "не рекомендован",
+      "reason": "Кандидат не соответствует ключевым требованиям позиции Python разработчика: отсутствует опыт Python и необходимых бэкенд‑технологий, а его профиль полностью фронтенд.",
+      "suggested_salary": "80 000 руб.",
+      "interview_priority": "низкий"
+    }
+  },
+  "overall_score": 40,
+  "is_suitable": false
+}
