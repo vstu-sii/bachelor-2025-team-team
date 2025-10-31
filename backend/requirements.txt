@@ -1,4 +1,5 @@
 fastapi
 uvicorn
 requests
-psycopg2-binary  # если работаешь с PostgreSQL
+psycopg2-binary  
+langfuse

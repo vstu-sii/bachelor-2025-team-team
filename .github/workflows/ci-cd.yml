@@ -122,7 +122,8 @@ jobs:
             else
               echo "Модель llama3 уже установлена."
             fi
-
+            pip install langfuse
+            pip install fastapi
             # Поднимаем контейнеры
             docker compose -f docker-compose.dev.yml up -d --build
           EOF
@@ -133,7 +134,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "Успешный деплой AI HR Assistant в dev окружение (с проверкой модели)!"
+              "text": "Успешный деплой!"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
