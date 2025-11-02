@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
+      - lab2
       - dev
   pull_request:
     branches:
       - main
+      - lab2
       - dev
 
 jobs:
@@ -117,7 +119,7 @@ jobs:
 
             # Проверяем, есть ли модель
             if ! ollama list | grep -q "llama3"; then
-              echo "Модель llama3 не найдена — скачиваем..."
+              echo "Модель llama3 не найдена"
               ollama pull llama3
             else
               echo "Модель llama3 уже установлена."

@@ -1,0 +1,70 @@
+{
+  "id": null,
+  "uid": "ai-hr-monitor",
+  "title": "AI HR Assistant — Monitoring",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 2,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Uploaded Resumes",
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "upload_resume_total", "refId": "A" }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 }
+    },
+    {
+      "type": "stat",
+      "title": "Uploaded Vacancies",
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "upload_vacancy_total", "refId": "B" }
+      ],
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 }
+    },
+    {
+      "type": "stat",
+      "title": "AI Resume Selections",
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "ai_selection_total", "refId": "C" }
+      ],
+      "gridPos": { "x": 0, "y": 4, "w": 6, "h": 4 }
+    },
+    {
+      "type": "graph",
+      "title": "AI Selection Latency (s)",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(ai_selection_latency_seconds_bucket[1m])) by (le))",
+          "refId": "D",
+          "legendFormat": "95th percentile"
+        }
+      ],
+      "gridPos": { "x": 6, "y": 4, "w": 6, "h": 4 }
+    },
+    {
+      "type": "stat",
+      "title": "AI Question Generations",
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "ai_question_gen_total", "refId": "E" }
+      ],
+      "gridPos": { "x": 0, "y": 8, "w": 6, "h": 4 }
+    },
+    {
+      "type": "stat",
+      "title": "Errors",
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "error_total", "refId": "F" }
+      ],
+      "gridPos": { "x": 6, "y": 8, "w": 6, "h": 4 }
+    }
+  ],
+  "time": { "from": "now-30m", "to": "now" }
+}
