@@ -1,9 +1,8 @@
 # **C4 Architecture**
 ## Context (Контекст системы)
-<img width="832" height="603" alt="image" src="docs_SA_PO/png/C4_Contex.png" />
-
+![Context](../docs_SA_PO/png/C4_Contex.png)
 ## Container 
-<img alt="image" src="docs_SA_PO/png/C4_container.png">
+![Context](../docs_SA_PO/png/C4_container.png)
 
 ## Выбор и обоснование технологий
 
