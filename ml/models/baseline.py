@@ -249,6 +249,7 @@ class Gemma3Text:
             print("⚠️ Файлы не найдены")
         
         return analyzed_candidates
+<<<<<<< HEAD
     
     def compare_evaluations(self, resume_analysis: dict, vacancy_data: dict, criteria_weights: dict = None):
         """
@@ -327,3 +328,5 @@ class Gemma3Text:
             
         except Exception as e:
             return {"error": f"Matching failed: {str(e)}"}
+=======
+>>>>>>> b47f40b4ac48899a5370262cfd50056f18951786
