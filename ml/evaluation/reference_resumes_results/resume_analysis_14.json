@@ -1,0 +1,95 @@
+{
+  "skills": {
+    "technical": [
+      "HTML5",
+      "CSS",
+      "JavaScript",
+      "React",
+      "Node.js",
+      "Sass",
+      "TypeScript",
+      "GraphQL",
+      "MongoDB",
+      "Mongoose",
+      "Express",
+      "Nest.js",
+      "Next.js",
+      "Tailwindcss",
+      "PostgreSQL",
+      "C++",
+      "AWS",
+      "Git",
+      "Jest",
+      "ООП",
+      "React Native",
+      "SEO-оптимизация",
+      "Adobe Photoshop"
+    ],
+    "soft": [],
+    "languages": [
+      "Русский",
+      "Азербайджанский",
+      "Английский",
+      "Турецкий",
+      "Украинский",
+      "Французский"
+    ]
+  },
+  "experience": {
+    "total_years": 6,
+    "relevant_years": 6,
+    "positions": [
+      {
+        "title": "Fullstack-разработчик",
+        "company": "Dinistor",
+        "years": 2,
+        "description": "Разработка и поддержка интернет магазина на должности fullstack-разработчика"
+      },
+      {
+        "title": "Ведущий инженер-программист",
+        "company": "InfoPool",
+        "years": 2,
+        "description": "Разработка и поддержка платформы"
+      },
+      {
+        "title": "Full Stack программист",
+        "company": "Freelance",
+        "years": 1,
+        "description": "Разработка и поддержка сайтов"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Qafkaz инженерия",
+      "degree": "Бакалавр",
+      "year": 2018,
+      "field": "Компьютерная инженерия"
+    },
+    {
+      "institution": "Udemy",
+      "degree": "",
+      "year": 2020,
+      "field": "React Js программист"
+    },
+    {
+      "institution": "Udemy",
+      "degree": "",
+      "year": 2019,
+      "field": "JavaScript программист"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Опыт работы в качестве Fullstack-разработчика",
+      "Знание современных технологий",
+      "Умение решать бизнес-задачи"
+    ],
+    "gaps": [
+      "Отсутствие опыта работы в крупных компаниях"
+    ],
+    "risk_factors": [
+      "Нет информации о причинах ухода с предыдущих мест работы"
+    ]
+  }
+}

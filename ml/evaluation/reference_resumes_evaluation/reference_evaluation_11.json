@@ -1,0 +1,102 @@
+{
+    "skills": {
+    "technical": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "React",
+      "Redux",
+      "Git",
+      "TypeScript",
+      "Redux Toolkit",
+      "NextJS",
+      "Storybook",
+      "Unit Testing",
+      "TDD",
+      "AntDesign",
+      "Material UI",
+      "RTK Query",
+      "Tanstack Query",
+      "React Query",
+      "axios",
+      "Jest",
+      "Apollo",
+      "WebSocket",
+      "Eslint",
+      "REST API",
+      "VueJS",
+      "GraphQL",
+      "MongoDB",
+      "FSD"
+    ],
+    "soft": [],
+    "languages": [
+      "Русский",
+      "Английский"
+    ]
+  },
+  "experience": {
+    "total_years": 1,
+    "relevant_years": 1,
+    "positions": [
+      {
+        "title": "Frontend-разработчик",
+        "company": "Kunstschule Berlin",
+        "years": 1,
+        "description": "Реализация новых пользовательских функций, разработка и рефакторинг компонентов, тестирование функционала, участие в code review, поддержка адаптивности и кроссбраузерности интерфейса, взаимодействие с техлидом, backend- и дизайн-командами, участие в CI/CD-процессах"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Колледж при Карагандинском экономическом университете Казпотребсоюза",
+      "degree": "Среднее специальное образование",
+      "year": 2025,
+      "field": "Программист"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Опыт работы с React, TypeScript и Next.js",
+      "Знание Redux, Redux Toolkit и других технологий",
+      "Участие в CI/CD-процессах",
+      "Опыт работы в команде"
+    ],
+    "gaps": [
+      "Ограниченный опыт работы с backend-разработкой",
+      "Низкий уровень владения английским языком"
+    ],
+    "risk_factors": [
+      "Ограниченный опыт работы в командировках",
+      "Низкий уровень владения английским языком может создать проблемы при работе с международными командами"
+    ]
+  },
+    "scores": {
+    "job_title_match": {
+      "score": 45,
+      "comment": "Junior уровень с 1 годом опыта, недостаточно для Middle позиции"
+    },
+    "education_match": {
+      "score": 30,
+      "comment": "Среднее специальное образование, еще не завершено"
+    },
+    "experience_match": {
+      "score": 50,
+      "comment": "1 год опыта ниже требований (2+ года)"
+    },
+    "schedule_match": {
+      "score": 100,
+      "comment": "Полный день - стандартный формат"
+    },
+    "format_match": {
+      "score": 100,
+      "comment": "Гибридный формат приемлем"
+    },
+    "additional_match": {
+      "score": 95,
+      "comment": "Отличное техническое соответствие: React, TypeScript, Redux, RTK Query, Jest, Next.js"
+    }
+  },
+  "overall_score": 58,
+  "summary_comment": "Перспективный junior с хорошим техническим стеком, но недостаточный опыт для Middle позиции"
+}

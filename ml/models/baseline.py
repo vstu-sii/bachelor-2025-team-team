@@ -8,7 +8,7 @@ import time
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from ml.prompt_templates import UC_ANALYSIS_PROMPT, UC_MATCHING_PROMPT, UC_QUESTION_GENERATION_PROMPT
+from ml.prompt_templates import UC_ANALYSIS_PROMPT, UC_MATCHING_PROMPT, UC_QUESTION_GENERATION_PROMPT, UC_MATCHING_PROMPT_WITH_BENCHMARK
 from ml.utils.file_parser import FileParser
 
 
@@ -17,8 +17,8 @@ class Gemma3Text:
     
     def __init__(self):
         self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-        #self.model = "llama-3.3-70b-versatile"  # Актуальная модель
-        self.model = "openai/gpt-oss-120b"
+        self.model = "llama-3.3-70b-versatile"  # Актуальная модель
+        #self.model = "openai/gpt-oss-120b"
         
         # LangChain версия для промптов
         self.llm = ChatGroq(
@@ -249,3 +249,81 @@ class Gemma3Text:
             print("⚠️ Файлы не найдены")
         
         return analyzed_candidates
+    
+    def compare_evaluations(self, resume_analysis: dict, vacancy_data: dict, criteria_weights: dict = None):
+        """
+        Сравнивает оценку кандидата с эталонной оценкой
+        
+        Args:
+            resume_analysis: данные резюме (должны содержать overall_score)
+            vacancy_data: данные вакансии
+            criteria_weights: веса критериев оценки
+        """
+        
+        start_time = time.time()
+        
+        try:
+            # Извлекаем benchmark_score из данных резюме
+            benchmark_score = resume_analysis.get('overall_score')
+            if benchmark_score is None:
+                return {"error": "В данных резюме отсутствует overall_score"}
+            
+            # Веса по умолчанию
+            default_weights = {
+                'job_title_weight': 0.25,
+                'education_weight': 0.15,
+                'experience_weight': 0.30,
+                'schedule_weight': 0.10,
+                'format_weight': 0.10,
+                'additional_weight': 0.10
+            }
+            
+            # Объединяем с переданными весами
+            weights = {**default_weights, **(criteria_weights or {})}
+            
+            # Используем LangChain если доступен
+            if self.llm and UC_MATCHING_PROMPT_WITH_BENCHMARK:
+                chain = UC_MATCHING_PROMPT_WITH_BENCHMARK | self.llm
+                response = chain.invoke({
+                    "job_title": vacancy_data.get("job_title", ""),
+                    "education": vacancy_data.get("education", ""),
+                    "work_experience": vacancy_data.get("work_experience", 0),
+                    "desired_salary": vacancy_data.get("desired_salary", 0),
+                    "work_schedule": vacancy_data.get("work_schedule", ""),
+                    "work_format": vacancy_data.get("work_format", ""),
+                    "additional_requirements": vacancy_data.get("additional_requirements", ""),
+                    "resume_analysis": json.dumps(resume_analysis, ensure_ascii=False),
+                    "benchmark_score": benchmark_score,
+                    "job_title_weight": weights['job_title_weight'],
+                    "education_weight": weights['education_weight'],
+                    "experience_weight": weights['experience_weight'],
+                    "schedule_weight": weights['schedule_weight'],
+                    "format_weight": weights['format_weight'],
+                    "additional_weight": weights['additional_weight']
+                })
+                result_text = response.content
+            else:
+                # Fallback: прямой вызов Groq API
+                prompt = self._create_matching_prompt_with_benchmark(resume_analysis, vacancy_data, benchmark_score, weights)
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.1,
+                    response_format={"type": "json_object"}
+                )
+                result_text = response.choices[0].message.content
+            
+            result = self._parse_json_response(result_text)
+            
+            # Добавляем метаданные
+            if "error" not in result:
+                result["evaluation_metadata"] = {
+                    "benchmark_used": benchmark_score,
+                    "criteria_weights": weights,
+                    "processing_time": time.time() - start_time,
+                }
+            
+            return result
+            
+        except Exception as e:
+            return {"error": f"Matching failed: {str(e)}"}
