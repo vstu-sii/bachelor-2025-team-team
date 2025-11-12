@@ -1,5 +1,8 @@
 # Актуальная архитектура (C4)
 ## Context (Контекст системы)
-![Context](../docs_SA_PO/png/C4_Contex.png)
+
+![Context](../png/C4_Contex_new.png)
+
 ## Container 
-![Context](../docs_SA_PO/png/C4_container.png)
+
+![Containers](../png/C4_Contex_new.png)
