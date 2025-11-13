@@ -10,7 +10,7 @@ from pathlib import Path
 # Добавляем корневую директорию в путь
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from ml.models.baseline import Gemma3Text
+from ml.models.baseline import MistralText
 from ml.prompt_templates import UC_MATCHING_PROMPT_WITH_BENCHMARK
 
 load_dotenv()
@@ -22,7 +22,7 @@ from datetime import datetime
 from pathlib import Path
 
 def evaluate_candidate_with_benchmark(
-    pipeline,              # экземпляр Gemma3Text
+    pipeline,              # экземпляр MistralText
     resume_json_path,      # путь к JSON файлу с резюме (содержит overall_score)
     job_json_path,         # путь к JSON файлу с вакансией
     criteria_weights=None
@@ -54,12 +54,12 @@ def evaluate_candidate_with_benchmark(
     
     # Веса по умолчанию
     default_weights = {
-        'job_title_weight': 0.25,
-        'education_weight': 0.15,
-        'experience_weight': 0.30,
-        'schedule_weight': 0.10,
-        'format_weight': 0.10,
-        'additional_weight': 0.10
+        'job_title_weight': 25,
+        'education_weight': 15,
+        'experience_weight': 20,
+        'schedule_weight': 10,
+        'format_weight': 10,
+        'additional_weight': 25
     }
     
     # Объединяем с переданными весами
@@ -96,7 +96,7 @@ def evaluate_candidate_with_benchmark(
 
 
 def evaluate_all_candidates_in_folder(
-    pipeline,              # экземпляр Gemma3Text
+    pipeline,              # экземпляр MistralText
     resumes_folder_path,   # путь к папке с JSON файлами резюме
     job_json_path,         # путь к JSON файлу с вакансией
     criteria_weights=None,
@@ -145,34 +145,6 @@ def evaluate_all_candidates_in_folder(
             print(f"❌ {candidate_id} - ошибка оценки")
     
     return results
-
-
-# Функция для проверки наличия overall_score во всех файлах
-def validate_resumes_have_scores(resumes_folder_path):
-    """Проверяет, что все файлы резюме имеют overall_score"""
-    resumes_folder = Path(resumes_folder_path)
-    resume_files = list(resumes_folder.glob("*.json"))
-    
-    missing_scores = []
-    
-    for resume_path in resume_files:
-        try:
-            with open(resume_path, 'r', encoding='utf-8') as f:
-                resume_data = json.load(f)
-            
-            if 'overall_score' not in resume_data:
-                missing_scores.append(resume_path.name)
-                
-        except Exception as e:
-            print(f"Ошибка чтения файла {resume_path}: {e}")
-            missing_scores.append(resume_path.name)
-    
-    if missing_scores:
-        print(f"❌ Отсутствует overall_score в файлах: {missing_scores}")
-        return False
-    
-    print(f"✅ Все {len(resume_files)} файлов имеют overall_score")
-    return True
 
 
 # Функция для анализа результатов пакетной обработки
@@ -311,7 +283,7 @@ def save_evaluation_results(results, output_path, include_analysis=True):
 
 # Пример использования
 if __name__ == "__main__":
-    from ml.models.baseline import Gemma3Text  # импортируйте ваш класс
+    from ml.models.baseline import MistralText  # импортируйте ваш класс
     
     # Пути к файлам
     job_file = "ml/evaluation/reference_resumes_results/vacancy.json"
@@ -319,18 +291,13 @@ if __name__ == "__main__":
     output_file = "ml/evaluation/comparison_results.json"
     
     # Создаем экземпляр pipeline
-    pipeline = Gemma3Text()
-    
-    # Проверяем, что все резюме имеют overall_score
-    if not validate_resumes_have_scores(resumes_folder):
-        print("Не все резюме имеют overall_score. Прерывание.")
-        exit(1)
+    pipeline = MistralText()
     
     # Кастомные веса (опционально)
     custom_weights = {
-        'job_title_weight': 0.30,
-        'experience_weight': 0.25,
-        'additional_weight': 0.15
+        'job_title_weight': 30,
+        'experience_weight': 25,
+        'additional_weight': 15
     }
     
     # Пакетная обработка всех кандидатов в папке
@@ -338,7 +305,7 @@ if __name__ == "__main__":
         pipeline=pipeline,
         resumes_folder_path=resumes_folder,
         job_json_path=job_file,
-        criteria_weights=custom_weights
+        criteria_weights=None
     )
     
     # Сохранение результатов

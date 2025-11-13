@@ -9,7 +9,7 @@ from typing import Dict, List, Any
 # Добавляем корневую директорию в путь
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from ml.models.baseline import Gemma3Text
+from ml.models.baseline import MistralText
 
 load_dotenv()
 
