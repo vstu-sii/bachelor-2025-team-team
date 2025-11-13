@@ -66,14 +66,31 @@ class Gemma3Text:
 
             return {"error": error_msg}
     
-    def match_vacancy_with_resume(self, resume_analysis: dict, vacancy_data: dict):
+    def match_vacancy_with_resume(self, resume_analysis: dict, vacancy_data: dict, criteria_weights: dict = None, candidate_id: str = None):
         """Сопоставляет требования вакансии с данными кандидата"""
         
         start_time = time.time()
         
         try:
             print("🎯 Сопоставляем вакансию с резюме...")
+
+             # Веса по умолчанию
+            default_weights = {
+                'job_title_weight': 0.20,
+                'education_weight': 0.15,
+                'experience_weight': 0.25,
+                'schedule_weight': 0.10,
+                'format_weight': 0.10,
+                'additional_weight': 0.20
+            }
             
+            # Объединяем с переданными весами
+            weights = {**default_weights, **(criteria_weights or {})}
+            
+             # Генерируем candidate_id если не передан
+            if candidate_id is None:
+                candidate_id = f"candidate_{int(time.time())}"
+
             # Используем LangChain если доступен
             if self.llm and UC_MATCHING_PROMPT:
                 chain = UC_MATCHING_PROMPT | self.llm
@@ -85,19 +102,15 @@ class Gemma3Text:
                     "work_schedule": vacancy_data.get("work_schedule", ""),
                     "work_format": vacancy_data.get("work_format", ""),
                     "additional_requirements": vacancy_data.get("additional_requirements", ""),
-                    "resume_analysis": str(resume_analysis)
+                    "resume_analysis": str(resume_analysis),
+                    "job_title_weight": weights['job_title_weight'],
+                    "education_weight": weights['education_weight'],
+                    "experience_weight": weights['experience_weight'],
+                    "schedule_weight": weights['schedule_weight'],
+                    "format_weight": weights['format_weight'],
+                    "additional_weight": weights['additional_weight']
                 })
                 result_text = response.content
-            else:
-                # Fallback: прямой вызов Groq API
-                prompt = self._create_matching_prompt(resume_analysis, vacancy_data)
-                response = self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.1,
-                    response_format={"type": "json_object"}
-                )
-                result_text = response.choices[0].message.content
             
             result = self._parse_json_response(result_text)
             
@@ -249,9 +262,8 @@ class Gemma3Text:
             print("⚠️ Файлы не найдены")
         
         return analyzed_candidates
-<<<<<<< HEAD
-    
-    def compare_evaluations(self, resume_analysis: dict, vacancy_data: dict, criteria_weights: dict = None):
+
+    def compare_evaluations(self, resume_analysis: dict, vacancy_data: dict):
         """
         Сравнивает оценку кандидата с эталонной оценкой
         
@@ -269,19 +281,6 @@ class Gemma3Text:
             if benchmark_score is None:
                 return {"error": "В данных резюме отсутствует overall_score"}
             
-            # Веса по умолчанию
-            default_weights = {
-                'job_title_weight': 0.25,
-                'education_weight': 0.15,
-                'experience_weight': 0.30,
-                'schedule_weight': 0.10,
-                'format_weight': 0.10,
-                'additional_weight': 0.10
-            }
-            
-            # Объединяем с переданными весами
-            weights = {**default_weights, **(criteria_weights or {})}
-            
             # Используем LangChain если доступен
             if self.llm and UC_MATCHING_PROMPT_WITH_BENCHMARK:
                 chain = UC_MATCHING_PROMPT_WITH_BENCHMARK | self.llm
@@ -295,32 +294,15 @@ class Gemma3Text:
                     "additional_requirements": vacancy_data.get("additional_requirements", ""),
                     "resume_analysis": json.dumps(resume_analysis, ensure_ascii=False),
                     "benchmark_score": benchmark_score,
-                    "job_title_weight": weights['job_title_weight'],
-                    "education_weight": weights['education_weight'],
-                    "experience_weight": weights['experience_weight'],
-                    "schedule_weight": weights['schedule_weight'],
-                    "format_weight": weights['format_weight'],
-                    "additional_weight": weights['additional_weight']
                 })
                 result_text = response.content
-            else:
-                # Fallback: прямой вызов Groq API
-                prompt = self._create_matching_prompt_with_benchmark(resume_analysis, vacancy_data, benchmark_score, weights)
-                response = self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.1,
-                    response_format={"type": "json_object"}
-                )
-                result_text = response.choices[0].message.content
-            
+                
             result = self._parse_json_response(result_text)
             
             # Добавляем метаданные
             if "error" not in result:
                 result["evaluation_metadata"] = {
                     "benchmark_used": benchmark_score,
-                    "criteria_weights": weights,
                     "processing_time": time.time() - start_time,
                 }
             
@@ -328,5 +310,3 @@ class Gemma3Text:
             
         except Exception as e:
             return {"error": f"Matching failed: {str(e)}"}
-=======
->>>>>>> b47f40b4ac48899a5370262cfd50056f18951786

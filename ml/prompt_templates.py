@@ -57,20 +57,21 @@ UC_MATCHING_PROMPT = ChatPromptTemplate.from_messages([
 - Учитывай как точные совпадения, так и близкие соответствия
 - Выявляй критические несоответствия
 
-Критерии оценки:
-1. Соответствие должности (job_title) - 25%
-2. Образование (education) - 15% 
-3. Опыт работы (work_experience) - 30%
-4. График работы (work_schedule) - 10%
-5. Формат работы (work_format) - 10%
-6. Дополнительные требования (additional_requirements) - 10%
+Критерии оценки с весами:
+1. Соответствие должности (job_title) - {job_title_weight}
+2. Образование (education) - {education_weight}
+3. Опыт работы (work_experience) - {experience_weight}
+4. График работы (work_schedule) - {schedule_weight}
+5. Формат работы (work_format) - {format_weight}
+6. Дополнительные требования (additional_requirements) - {additional_weight}
+
 
 ВЕРНИ ТОЛЬКО JSON БЕЗ ЛИШНИХ КОММЕНТАРИЕВ.
 
 Формат JSON:
 {{
   "candidate_info": {{
-    "name": "имя из резюме",
+    "candidate_id": "{candidate_id}",
     "current_position": "текущая должность"
   }},
   "matching_results": {{
@@ -80,38 +81,38 @@ UC_MATCHING_PROMPT = ChatPromptTemplate.from_messages([
     "match_breakdown": {{
       "job_title_match": {{
         "score": 0-100,
-        "weight": 0.25,
-        "weighted_score": 0-25,
+        "weight": {job_title_weight},
+        "weighted_score": 0-{job_title_weight},
         "explanation": "обоснование оценки"
       }},
       "education_match": {{
         "score": 0-100,
-        "weight": 0.15,
-        "weighted_score": 0-15,
+        "weight": {education_weight},
+        "weighted_score": 0-{education_weight},
         "explanation": "обоснование оценки"
       }},
       "experience_match": {{
         "score": 0-100,
-        "weight": 0.30,
-        "weighted_score": 0-30,
+        "weight": {experience_weight},
+        "weighted_score": 0-{experience_weight},
         "explanation": "обоснование оценки"
       }},
       "schedule_match": {{
         "score": 0-100,
-        "weight": 0.10,
-        "weighted_score": 0-10,
+        "weight": {schedule_weight},
+        "weighted_score": 0-{schedule_weight},
         "explanation": "обоснование оценки"
       }},
       "format_match": {{
         "score": 0-100,
-        "weight": 0.10,
-        "weighted_score": 0-10,
+        "weight": {format_weight},
+        "weighted_score": 0-{format_weight},
         "explanation": "обоснование оценки"
       }},
       "additional_match": {{
         "score": 0-100,
-        "weight": 0.10,
-        "weighted_score": 0-10,
+        "weight": {additional_weight},
+        "weighted_score": 0-{additional_weight},
         "explanation": "обоснование оценки"
       }}
     }}
@@ -182,101 +183,64 @@ UC_QUESTION_GENERATION_PROMPT = ChatPromptTemplate.from_messages([
 
 UC_MATCHING_PROMPT_WITH_BENCHMARK = ChatPromptTemplate.from_messages([
     ("system", """Ты — HR-эксперт по подбору персонала. 
-Твоя задача: сопоставить требования вакансии с данными кандидата, оценить соответствие и провести сравнительный анализ с эталонной оценкой.
+Твоя задача: провести сравнительный анализ оценки кандидата с эталонной оценкой и выявить расхождения.
 
-Правила оценки:
-- Оценивай только на основе данных из резюме
-- Будь объективным и последовательным
-- Учитывай как точные совпадения, так и близкие соответствия
-- Выявляй критические несоответствия
-- Проведи сравнительный анализ итоговой оценки с эталоном
-
-Критерии оценки с весами:
-1. Соответствие должности (job_title) - {job_title_weight}%
-2. Образование (education) - {education_weight}%
-3. Опыт работы (work_experience) - {experience_weight}%
-4. График работы (work_schedule) - {schedule_weight}%
-5. Формат работы (work_format) - {format_weight}%
-6. Дополнительные требования (additional_requirements) - {additional_weight}%
+Правила анализа:
+- Сравни оценки по всем критериям между текущим и эталонным анализом
+- Выяви причины расхождений в оценках
+- Проанализируй различия в интерпретации данных кандидата
+- Определи, какая оценка более объективна и почему
 
 ВЕРНИ ТОЛЬКО JSON БЕЗ ЛИШНИХ КОММЕНТАРИЕВ.
 
 Формат JSON:
 {{
-  "candidate_info": {{
-    "name": "имя из резюме",
-    "current_position": "текущая должность"
-  }},
-  "matching_results": {{
-    "overall_score": 0-100,
-    "is_suitable": true/false,
-    "critical_issues": ["критические несоответствия"],
-    "match_breakdown": {{
-      "job_title_match": {{
-        "score": 0-100,
-        "weight": {job_title_weight},
-        "weighted_score": 0-{job_title_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "education_match": {{
-        "score": 0-100,
-        "weight": {education_weight},
-        "weighted_score": 0-{education_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "experience_match": {{
-        "score": 0-100,
-        "weight": {experience_weight},
-        "weighted_score": 0-{experience_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "schedule_match": {{
-        "score": 0-100,
-        "weight": {schedule_weight},
-        "weighted_score": 0-{schedule_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "format_match": {{
-        "score": 0-100,
-        "weight": {format_weight},
-        "weighted_score": 0-{format_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "additional_match": {{
-        "score": 0-100,
-        "weight": {additional_weight},
-        "weighted_score": 0-{additional_weight},
-        "explanation": "обоснование оценки"
-      }}
-    }}
-  }},
-  "benchmark_comparison": {{
-    "benchmark_overall_score": {benchmark_score},
-    "current_overall_score": "рассчитанная итоговая оценка",
+  "comparison_analysis": {{
+    "benchmark_score": {benchmark_score},
+    "current_score": "рассчитанная итоговая оценка",
     "score_difference": +/-(разница в баллах),
-    "deviation_analysis": "анализ расхождения итоговых оценок",
-    "consistency_level": "высокий/средний/низкий"
+    "deviation_analysis": "анализ причин расхождения оценок",
+    "consistency_level": "высокий/средний/низкий",
+    "key_differences": [
+      {{
+        "criterion": "название критерия",
+        "benchmark_score": "оценка из эталона", 
+        "current_score": "текущая оценка",
+        "difference": "разница",
+        "reason": "причина расхождения"
+      }}
+    ]
   }},
-  "recommendation": {{
+  "quality_assessment": {{
+    "more_accurate_evaluation": "эталон/текущая",
+    "reason": "обоснование, какая оценка более точна",
+    "potential_biases": "выявленные возможные смещения",
+    "improvement_suggestions": "предложения по улучшению оценки"
+  }},
+  "final_recommendation": {{
     "level": "рекомендован/условно рекомендован/не рекомендован",
-    "reason": "обоснование рекомендации",
-    "suggested_salary": "предлагаемая зарплата на основе опыта",
+    "combined_confidence": "высокая/средняя/низкая",
+    "reason": "итоговое обоснование на основе двух оценок",
     "interview_priority": "высокий/средний/низкий"
   }}
 }}"""),
-    ("human", """ТРЕБОВАНИЯ ВАКАНСИИ:
+    ("human", """СРАВНИТЕЛЬНЫЙ АНАЛИЗ ОЦЕНОК КАНДИДАТА
+
+ТРЕБОВАНИЯ ВАКАНСИИ:
 Должность: {job_title}
-Образование: {education}
+Образование: {education} 
 Требуемый опыт: {work_experience} лет
-Желаемая зарплата: {desired_salary} руб.
 График работы: {work_schedule}
 Формат работы: {work_format}
 Дополнительные требования: {additional_requirements}
 
-ДАННЫЕ КАНДИДАТА:
+ЭТАЛОННАЯ ОЦЕНКА (benchmark):
+{benchmark_analysis}
+
+ТЕКУЩАЯ ОЦЕНКА КАНДИДАТА:
 {resume_analysis}
 
 ЭТАЛОННАЯ ИТОГОВАЯ ОЦЕНКА: {benchmark_score}
 
-Проведи сопоставление, оцени соответствие и проанализируй расхождение итоговой оценки с эталоном.""")
+Проведи сравнительный анализ двух оценок, выяви расхождения и определи, какая оценка более объективна.""")
 ])
