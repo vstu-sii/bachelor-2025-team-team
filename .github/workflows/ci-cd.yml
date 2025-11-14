@@ -3,12 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
-      - dev
+      - lab2-mlops-sprint
   pull_request:
     branches:
-      - main
-      - dev
+      - lab2-mlops-sprint
 
 jobs:
   # Проверки кода и тесты
