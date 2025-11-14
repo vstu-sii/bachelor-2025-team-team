@@ -1,0 +1,77 @@
+version: "3.9"
+
+services:
+  # База данных для Langfuse
+  langfuse-db:
+    image: postgres:16
+    container_name: langfuse-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: langfuse
+    volumes:
+      - langfuse-db-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d langfuse"]
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+  zookeeper:
+    image: zookeeper:3.8
+    container_name: zookeeper
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+    ports:
+      - "2181:2181"
+
+  # Основной сервис Langfuse
+  langfuse:
+    image: langfuse/langfuse:latest
+    container_name: langfuse
+    environment:
+      DATABASE_URL: postgresql://user:password@langfuse-db:5432/langfuse
+      NEXTAUTH_SECRET: supersecretkey
+      NEXTAUTH_URL: http://localhost:8081
+      CLICKHOUSE_URL: clickhouse://123:@clickhouse:9000/langfuse
+      CLICKHOUSE_MIGRATION_URL: clickhouse://123:@clickhouse:9000/langfuse
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: "123"
+      CLICKHOUSE_USE_REPLICATED_ENGINE: "false"
+      LANGFUSE_INIT_USER_EMAIL: admin@example.com    
+      LANGFUSE_INIT_USER_PASSWORD: admin123          
+      LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "true"
+      
+    ports:
+      - "8081:8080"
+    depends_on:
+      langfuse-db:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    restart: unless-stopped
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    healthcheck:
+      test: ["CMD-SHELL", "clickhouse-client --host=localhost --query='SELECT 1' || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    container_name: clickhouse
+    environment:
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: "123"
+      CLICKHOUSE_DB: langfuse
+      CLICKHOUSE_ZOOKEEPER: zookeeper:2181
+    depends_on:
+      - zookeeper
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+    - clickhouse-data:/var/lib/clickhouse
+volumes:
+  langfuse-db-data:
+  clickhouse-data:

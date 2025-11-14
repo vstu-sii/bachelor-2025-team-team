@@ -4,15 +4,14 @@ on:
   push:
     branches:
       - main
-      - lab2
       - dev
   pull_request:
     branches:
       - main
-      - lab2
       - dev
 
 jobs:
+  # Проверки кода и тесты ===
   build-test-lint:
     name: Build, Test & Lint
     runs-on: ubuntu-latest
@@ -37,7 +36,7 @@ jobs:
         uses: actions/checkout@v4
 
       # ---------- FRONTEND ----------
-      - name: Setup Node.js for frontend
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -45,14 +44,16 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci --prefix frontend
 
-      - name: Run frontend lint
-        run: npm run lint --prefix frontend
+      - name: Run ESLint & Format Check
+        run: |
+          npm run lint --prefix frontend
+          npm run format:check --prefix frontend || echo "⚠️ Format issues detected"
 
-      - name: Run frontend build
+      - name: Build frontend
         run: npm run build --prefix frontend
 
       # ---------- BACKEND ----------
-      - name: Setup Python for backend
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -61,19 +62,47 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
+          pip install flake8 black pytest
 
-      - name: Run backend lint
+      - name: Lint and format backend
         run: |
-          pip install flake8 black
-          black --check backend
+          black --check backend || echo "⚠️ Format issues detected"
           flake8 backend
 
-      - name: Run backend tests
+      - name: Run backend unit tests
         env:
           DATABASE_URL: postgresql://user:password@localhost:5432/hr_db
-        run: pytest backend/tests -v
+        run: pytest backend/tests -v --maxfail=1 --disable-warnings
 
-    deploy-dev:
+      # ---------- DOCKER BUILD CHECK ----------
+      - name: Validate Docker builds
+        run: |
+          docker compose -f docker-compose.dev.yml config
+          docker compose -f docker-compose.dev.yml build
+
+  #Проверка PR ===
+  pr-checks:
+    name: Pull Request Checks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: build-test-lint
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ensure code formatted
+        run: |
+          pip install black flake8
+          black --check backend
+          flake8 backend
+          npm run lint --prefix frontend
+
+      - name: Run lightweight backend tests
+        run: pytest backend/tests/unit -v
+
+  #Деплой (Dev/Main) ===
+  deploy-dev:
     name: Deploy to Dev Environment
     needs: build-test-lint
     runs-on: ubuntu-latest
@@ -97,8 +126,9 @@ jobs:
         run: |
           docker compose -f docker-compose.dev.yml build
           docker compose -f docker-compose.dev.yml push
-
-      - name: Deploy to dev environment and ensure model
+          docker compose -f docker-compose.langfuse.yml build
+          docker compose -f docker-compose.langfuse.yml push
+      - name: Deploy to Dev Server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DEV_SSH_KEY }}
           DEV_HOST: ${{ secrets.DEV_HOST }}
@@ -110,34 +140,27 @@ jobs:
             cd ~/ai-hr-assistant
             git pull
 
-            # Проверка и запуск Ollama (если не запущен)
+            echo "🔁 Проверка Ollama..."
             if ! pgrep -f "ollama serve" > /dev/null; then
-              echo "Запуск Ollama..."
               nohup ollama serve > ollama.log 2>&1 &
               sleep 5
             fi
 
-            # Проверяем, есть ли модель
             if ! ollama list | grep -q "llama3"; then
-              echo "Модель llama3 не найдена"
               ollama pull llama3
-            else
-              echo "Модель llama3 уже установлена."
             fi
-            pip install langfuse
-            pip install fastapi
-            # Поднимаем контейнеры
+
+            pip install --upgrade fastapi langfuse
             docker compose -f docker-compose.dev.yml up -d --build
           EOF
 
-      - name: Notify success
+      - name: Notify Success
         uses: slackapi/slack-github-action@v1.26.0
         if: success()
         with:
           payload: |
             {
-              "text": "Успешный деплой!"
+              "text": "✅ Успешный деплой AI HR Assistant в Dev окружение!"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-

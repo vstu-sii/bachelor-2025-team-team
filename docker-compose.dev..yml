@@ -19,7 +19,7 @@ services:
       - LLM_URL=http://llm-service:5000
       - LANGFUSE_PUBLIC_KEY=dev_public_key
       - LANGFUSE_SECRET_KEY=dev_secret_key
-      - LANGFUSE_HOST=http://langfuse:3000
+      - LANGFUSE_HOST=http://langfuse:8080
     depends_on:
       - db
       - llm-service
