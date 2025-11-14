@@ -1,0 +1,116 @@
+{
+    "skills": {
+    "technical": [
+      "HTML5",
+      "CSS3",
+      "Ajax",
+      "Sass",
+      "Кроссбраузерная верстка",
+      "CMS Wordpress",
+      "jQuery",
+      "PHP",
+      "Веб-дизайн",
+      "Анимация интерфейсов",
+      "Адаптивная верстка",
+      "Git",
+      "BEM",
+      "Web Design",
+      "barba.js",
+      "pixi.js",
+      "gsap",
+      "GreenSock",
+      "strapi",
+      "JavaScript",
+      "Gulp",
+      "Webpack",
+      "VueJS",
+      "MySQL",
+      "n8n",
+      "three.js",
+      "webgl",
+      "3D анимация"
+    ],
+    "soft": [
+      "Быстрая коммуникация",
+      "Внимание к деталям",
+      "Чистый код"
+    ],
+    "languages": [
+      "Русский",
+      "Английский"
+    ]
+  },
+  "experience": {
+    "total_years": 11,
+    "relevant_years": 11,
+    "positions": [
+      {
+        "title": "Fullstack-разработчик",
+        "company": "Pixelcarve Inc.",
+        "years": 4,
+        "description": "Делаю с нуля фронтенд и бэкенд разных проектов"
+      },
+      {
+        "title": "Fullstack-разработчик",
+        "company": "Advisable",
+        "years": 0.67,
+        "description": "Работал над фронтендом и бэкендом основного сайта фриланс биржи"
+      },
+      {
+        "title": "Индивидуальное предпринимательство",
+        "company": "",
+        "years": 11,
+        "description": "Проектирование, дизайн и разработка сайтов"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "",
+      "degree": "Среднее образование",
+      "year": "",
+      "field": ""
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Большой опыт в веб-разработке и анимации",
+      "Глубокая экспертиза в WordPress, фронтенде и AI-интеграциях",
+      "Быстрая коммуникация, внимание к деталям и чистый код"
+    ],
+    "gaps": [
+      "Отсутствие информации об образовании"
+    ],
+    "risk_factors": [
+      "Нет информации о причинах ухода с предыдущих мест работы"
+    ]
+  },
+    "scores": {
+    "job_title_match": {
+      "score": 20,
+      "comment": "Веб-дизайнер/CMS разработчик с фокусом на анимацию, не React разработчик"
+    },
+    "education_match": {
+      "score": 10,
+      "comment": "Только среднее образование, не соответствует требованиям"
+    },
+    "experience_match": {
+      "score": 100,
+      "comment": "11 лет опыта значительно превышает требования"
+    },
+    "schedule_match": {
+      "score": 100,
+      "comment": "Полный день - стандартный формат"
+    },
+    "format_match": {
+      "score": 100,
+      "comment": "Гибридный формат приемлем"
+    },
+    "additional_match": {
+      "score": 5,
+      "comment": "Полное несоответствие: отсутствует React, TypeScript, Redux, современные инструменты фронтенда"
+    }
+  },
+  "overall_score": 32,
+  "summary_comment": "Опытный веб-дизайнер и CMS разработчик, но абсолютно не соответствует требованиям React вакансии"
+}

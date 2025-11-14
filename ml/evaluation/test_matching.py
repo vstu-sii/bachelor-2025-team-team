@@ -3,20 +3,16 @@ import os
 import json
 from datetime import datetime
 from dotenv import load_dotenv
+import glob
+from typing import Dict, List, Any
 
 # Добавляем корневую директорию в путь
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from ml.models.baseline import Gemma3Text
+from ml.models.baseline import MistralText
 
 load_dotenv()
 
-
-import os
-import json
-import glob
-from datetime import datetime
-from typing import Dict, List, Any
 
 class Evaluator:
     """Класс для оценки правильности и структуры сгенерированных файлов"""
