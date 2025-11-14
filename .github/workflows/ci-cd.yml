@@ -45,6 +45,7 @@ jobs:
       - name: Run ESLint & Format Check
         run: |
           npm run lint --prefix frontend
+          npm install --save-dev eslint eslint-plugin-react
           npm run format:check --prefix frontend || echo "⚠️ Format issues detected"
 
       - name: Build frontend
