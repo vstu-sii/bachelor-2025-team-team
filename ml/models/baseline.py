@@ -17,8 +17,8 @@ class Gemma3Text:
     
     def __init__(self):
         self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-        #self.model = "llama-3.3-70b-versatile"  # Актуальная модель
-        self.model = "openai/gpt-oss-120b"
+        self.model = "llama-3.3-70b-versatile"  # Актуальная модель
+        #self.model = "openai/gpt-oss-120b"
         
         # LangChain версия для промптов
         self.llm = ChatGroq(
