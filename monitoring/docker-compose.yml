@@ -30,16 +30,6 @@ services:
     container_name: loki
     ports:
       - "3100:3100"
-
-  langfuse:
-    image: langfuse/langfuse:latest
-    container_name: langfuse
-    environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/langfuse
-    ports:
-      - "8081:8080"
-    depends_on:
-      - prometheus
-
+      
 volumes:
   grafana-data:

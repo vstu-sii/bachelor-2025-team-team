@@ -11,7 +11,7 @@ on:
       - dev
 
 jobs:
-  # Проверки кода и тесты ===
+  # Проверки кода и тесты
   build-test-lint:
     name: Build, Test & Lint
     runs-on: ubuntu-latest
@@ -79,8 +79,12 @@ jobs:
         run: |
           docker compose -f docker-compose.dev.yml config
           docker compose -f docker-compose.dev.yml build
+          docker compose -f docker-compose.langfuse.yml config
+          docker compose -f docker-compose.langfuse.yml build
+          docker compose -f monitoring/docker-compose.yml config
+          docker compose -f monitoring/docker-compose.yml build
 
-  #Проверка PR ===
+  #Проверка PR 
   pr-checks:
     name: Pull Request Checks
     runs-on: ubuntu-latest
@@ -101,7 +105,7 @@ jobs:
       - name: Run lightweight backend tests
         run: pytest backend/tests/unit -v
 
-  #Деплой (Dev/Main) ===
+  #Деплой (Dev/Main) 
   deploy-dev:
     name: Deploy to Dev Environment
     needs: build-test-lint
@@ -128,6 +132,8 @@ jobs:
           docker compose -f docker-compose.dev.yml push
           docker compose -f docker-compose.langfuse.yml build
           docker compose -f docker-compose.langfuse.yml push
+          docker compose -f monitoring/docker-compose.yml build
+          docker compose -f monitoring/docker-compose.yml push
       - name: Deploy to Dev Server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DEV_SSH_KEY }}
@@ -160,7 +166,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "✅ Успешный деплой AI HR Assistant в Dev окружение!"
+              "text": "Успешный деплой AI HR Assistant в Dev окружение!"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

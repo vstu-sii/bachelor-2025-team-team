@@ -1,9 +1,9 @@
 from langfuse import Langfuse
-
+import os
 langfuse = Langfuse(
-    public_key="dev_public_key",
-    secret_key="dev_secret_key",
-    host="http://langfuse:3000"
+    public_key=os.getenv("LANGFUSE_PUBLIC_KEY"),
+    secret_key=os.getenv("LANGFUSE_SECRET_KEY"),
+    host=os.getenv("LANGFUSE_HOST"),
 )
 
 @app.middleware("http")

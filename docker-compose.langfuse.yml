@@ -18,14 +18,7 @@ services:
       interval: 5s
       retries: 10
     restart: unless-stopped
-  zookeeper:
-    image: zookeeper:3.8
-    container_name: zookeeper
-    environment:
-      ZOO_MY_ID: 1
-      ZOO_PORT: 2181
-    ports:
-      - "2181:2181"
+
 
   # Основной сервис Langfuse
   langfuse:
@@ -35,8 +28,8 @@ services:
       DATABASE_URL: postgresql://user:password@langfuse-db:5432/langfuse
       NEXTAUTH_SECRET: supersecretkey
       NEXTAUTH_URL: http://localhost:8081
-      CLICKHOUSE_URL: clickhouse://123:@clickhouse:9000/langfuse
-      CLICKHOUSE_MIGRATION_URL: clickhouse://123:@clickhouse:9000/langfuse
+      CLICKHOUSE_URL: clickhouse://default:@clickhouse:9000/langfuse
+      CLICKHOUSE_MIGRATION_URL: clickhouse://default:@clickhouse:9000/langfuse
       CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: "123"
       CLICKHOUSE_USE_REPLICATED_ENGINE: "false"
@@ -51,6 +44,8 @@ services:
         condition: service_healthy
       clickhouse:
         condition: service_healthy
+    volumes:
+      - ./monitoring/dashboards/langfuse.json:containerPath:ro
     restart: unless-stopped
   clickhouse:
     image: clickhouse/clickhouse-server:latest
@@ -64,9 +59,7 @@ services:
       CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: "123"
       CLICKHOUSE_DB: langfuse
-      CLICKHOUSE_ZOOKEEPER: zookeeper:2181
-    depends_on:
-      - zookeeper
+      CLICKHOUSE_USE_REPLICATED_ENGINE: "false"
     ports:
       - "8123:8123"
       - "9000:9000"
