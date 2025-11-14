@@ -1,0 +1,102 @@
+{
+    "skills": {
+    "technical": [
+      "TypeScript",
+      "React",
+      "Webpack",
+      "RTK",
+      "RTK Query",
+      "GraphQL",
+      "Styled CSS",
+      "Node.js",
+      "SCSS",
+      "Next.js",
+      "gRPC",
+      "Cypress",
+      "Jest",
+      "Express.js",
+      "Flask",
+      "MongoDB",
+      "Nginx",
+      "Ubuntu"
+    ],
+    "soft": [],
+    "languages": [
+      "Русский",
+      "Английский"
+    ]
+  },
+  "experience": {
+    "total_years": 6,
+    "relevant_years": 6,
+    "positions": [
+      {
+        "title": "Senior Frontend Developer",
+        "company": "Информационные технологии, системная интеграция, интернет",
+        "years": 1,
+        "description": "Разрабатывал микросервисные приложения для Центральной Депозитарной Системы (ЦДС)"
+      },
+      {
+        "title": "Senior Frontend Developer",
+        "company": "Финансовый сектор",
+        "years": 2,
+        "description": "Разрабатывал новую версию микросервисного приложения для операторов банка"
+      },
+      {
+        "title": "Fullstack Web-разработчик",
+        "company": "Строительство, недвижимость, эксплуатация, проектирование",
+        "years": 2,
+        "description": "Разработка сайта компании с нуля, верстка писем"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Уфимский государственный авиационный технический университет",
+      "degree": "Неоконченное высшее образование",
+      "year": 2024,
+      "field": "ФИРТ, Информационная безопасность телекоммуникационных систем"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Опыт работы с React и TypeScript",
+      "Знакомство с микросервисной архитектурой",
+      "Опыт работы с различными технологиями и инструментами"
+    ],
+    "gaps": [
+      "Отсутствие опыта работы в других областях, кроме frontend-разработки"
+    ],
+    "risk_factors": [
+      "Неоконченное высшее образование"
+    ]
+  },
+    "scores": {
+    "job_title_match": {
+      "score": 90,
+      "comment": "Senior уровень с 6-летним опытом, превышает требования Middle позиции"
+    },
+    "education_match": {
+      "score": 70,
+      "comment": "Неоконченное высшее техническое образование, но по профильной специальности"
+    },
+    "experience_match": {
+      "score": 95,
+      "comment": "6 лет релевантного опыта, работа в финансовом секторе и ЦДС"
+    },
+    "schedule_match": {
+      "score": 100,
+      "comment": "Полный день - стандартный формат"
+    },
+    "format_match": {
+      "score": 100,
+      "comment": "Гибридный формат приемлем"
+    },
+    "additional_match": {
+      "score": 95,
+      "comment": "Полное соответствие тех. стеку: React, TypeScript, RTK, RTK Query, Jest, Cypress, Webpack"
+    }
+  },
+  "overall_score": 89,
+  "summary_comment": "Сильный Senior кандидат с отличным техническим соответствием. Опыт в enterprise-проектах финансового сектора. Рекомендован к собеседованию."
+}

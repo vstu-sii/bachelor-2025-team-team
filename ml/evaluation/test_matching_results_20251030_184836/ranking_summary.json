@@ -1,0 +1,36 @@
+{
+  "vacancy_data": {
+    "job_title": "Middle Backend Developer (Java/Kotlin)",
+    "education": "Высшее техническое образование (компьютерные науки, программная инженерия, информационные технологии)",
+    "work_experience": 3,
+    "desired_salary": 180000,
+    "work_schedule": "Полный день",
+    "work_format": "Гибридный формат (2-3 дня в офисе, остальное время удаленно)",
+    "additional_requirements": "Опыт работы с Java 8+, Kotlin, Spring Boot, микросервисной архитектурой, PostgreSQL, Redis, Docker, Kubernetes, знание английского языка на уровне чтения технической документации"
+  },
+  "processing_date": "2025-10-30T18:50:06.049651",
+  "summary": {
+    "total_candidates": 8,
+    "suitable_candidates": 1,
+    "unsuitable_candidates": 7,
+    "success_rate": "12.5%"
+  },
+  "top_candidates": [
+    {
+      "rank": 1,
+      "candidate_id": "resume_analysis_16.json",
+      "overall_score": 88.5,
+      "recommendation": {
+        "level": "рекомендован",
+        "reason": "Кандидат полностью удовлетворяет ключевые технические требования и имеет достаточный опыт, однако требуется уточнение готовности к гибридному формату и полному рабочему дню, а также развитие навыков Kubernetes.",
+        "suggested_salary": "190000 руб.",
+        "interview_priority": "высокий"
+      },
+      "critical_issues": [
+        "Не указано согласие на гибридный формат работы (2‑3 дня в офисе)",
+        "Не указано предпочтение полного рабочего дня",
+        "Базовые знания Kubernetes, а не продвинутый опыт"
+      ]
+    }
+  ]
+}

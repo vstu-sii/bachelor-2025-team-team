@@ -1,0 +1,127 @@
+{
+    "skills": {
+    "technical": [
+      "HTML5",
+      "CSS3",
+      "SCSS",
+      "Flex",
+      "jQuery",
+      "JavaScript",
+      "Angular 2+",
+      "Linux",
+      "Node.js",
+      "Git",
+      "CI/CD",
+      "BEM",
+      "GraphQL",
+      "REST API",
+      "Gitlab",
+      "RxJS",
+      "TypeScript",
+      "Webpack"
+    ],
+    "soft": [],
+    "languages": [
+      "Русский",
+      "Английский"
+    ]
+  },
+  "experience": {
+    "total_years": 8,
+    "relevant_years": 8,
+    "positions": [
+      {
+        "title": "Frontend-разработчик",
+        "company": "T1 Консалтинг",
+        "years": 3,
+        "description": "Разработка интерфейса для ентерепрайз приложения"
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "dplugins",
+        "years": 0.67,
+        "description": "Разработка плагинов"
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "www.esportsconstruct.com",
+        "years": 1.92,
+        "description": "Разработка интерфейсов для платформы ставок на киберспортивные события"
+      },
+      {
+        "title": "Фронт-енд разработчик",
+        "company": "ООО 'ЕЛО'",
+        "years": 1.08,
+        "description": "Разработка и развитие CRM-системы компании"
+      },
+      {
+        "title": "Web-разработчик",
+        "company": "Индивидуальное предпринимательство",
+        "years": 0.58,
+        "description": "Разработка и поддержка гибридных мобильных приложений"
+      },
+      {
+        "title": "Web-разработчик",
+        "company": "Веб-студия Ace's spades",
+        "years": 1.75,
+        "description": "Серверная часть работы на PHP + клиентская на Angular 5"
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "Wiintech",
+        "years": 0.17,
+        "description": "Разработка клиентской части кабинета администрирования автопарков"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Не указано",
+      "degree": "Среднее образование",
+      "year": "Не указано",
+      "field": "Не указано"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Большой опыт работы в качестве Frontend-разработчика",
+      "Знакомство с различными технологиями и инструментами"
+    ],
+    "gaps": [
+      "Отсутствие информации об образовании",
+      "Нет опыта работы в командировках"
+    ],
+    "risk_factors": [
+      "Ограниченный опыт работы в крупных компаниях",
+      "Нет информации о сертификатах или дополнительном образовании"
+    ]
+  },
+    "scores": {
+      "job_title_match": {
+        "score": 35,
+        "comment": "Angular разработчик, не React"
+      },
+      "education_match": {
+        "score": 10,
+        "comment": "Только среднее образование"
+      },
+      "experience_match": {
+        "score": 95,
+        "comment": "8 лет опыта значительно превышает требования"
+      },
+      "schedule_match": {
+        "score": 100,
+        "comment": "Полный день - стандартный формат"
+      },
+      "format_match": {
+        "score": 100,
+        "comment": "Гибридный формат приемлем"
+      },
+      "additional_match": {
+        "score": 10,
+        "comment": "Отсутствует React, Redux, TypeScript глубокое знание"
+      }
+    },
+    "overall_score": 38,
+    "summary_comment": "Angular разработчик, не соответствует React вакансии"
+}
