@@ -40,12 +40,12 @@ jobs:
           node-version: 20
 
       - name: Install frontend dependencies
-        run: npm ci --prefix frontend
-
+        run: |
+          npm ci --prefix frontend
+          npm install --prefix frontend --save-dev eslint-plugin-react
       - name: Run ESLint & Format Check
         run: |
           npm run lint --prefix frontend
-          npm install --save-dev eslint eslint-plugin-react
           npm run format:check --prefix frontend || echo "⚠️ Format issues detected"
 
       - name: Build frontend
