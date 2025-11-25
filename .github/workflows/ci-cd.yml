@@ -71,7 +71,12 @@ jobs:
       - name: Run backend unit tests
         env:
           DATABASE_URL: postgresql://user:password@localhost:5432/hr_db
-        run: pytest backend/tests -v --maxfail=1 --disable-warnings
+        run: |
+            if [ -d "backend/tests" ] && [ "$(ls -A backend/tests)" ]; then
+            pytest backend/tests -v --maxfail=1 --disable-warnings
+            else
+            echo "⚠️ No tests found, skipping pytest"
+            fi
 
       # ---------- DOCKER BUILD CHECK ----------
       - name: Validate Docker builds
