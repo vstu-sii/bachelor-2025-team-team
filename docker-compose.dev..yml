@@ -23,7 +23,6 @@ services:
     depends_on:
       - db
       - llm-service
-      - langfuse
 
   db:
     image: postgres:16

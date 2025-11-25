@@ -81,8 +81,8 @@ jobs:
       # ---------- DOCKER BUILD CHECK ----------
       - name: Validate Docker builds
         run: |
-          docker compose -f docker-compose.dev.yml config
-          docker compose -f docker-compose.dev.yml build
+          docker compose -f docker-compose.dev..yml config
+          docker compose -f docker-compose.dev..yml build
           docker compose -f docker-compose.langfuse.yml config
           docker compose -f docker-compose.langfuse.yml build
           docker compose -f monitoring/docker-compose.yml config
