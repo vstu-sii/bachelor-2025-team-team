@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filters - AI HR Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">The best company in the world</a>
+            <a href="#contact" class="contact-link">Contact</a>
+        </header>
+    </div>
+
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-content">
+                <!-- Переключатель режима -->
+                <div class="toggle-container">
+                    <div class="toggle-option" id="filtersToggle">
+                        <div class="toggle-radio active"></div>
+                        <span>Filters</span>
+                    </div>
+                    <div class="toggle-option" id="freeInputToggle">
+                        <div class="toggle-radio"></div>
+                        <span>Free input</span>
+                    </div>
+                </div>
+
+                <!-- Режим фильтров -->
+                <div class="filters-container" id="filtersContainer">
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <div class="filter-header" data-filter="1">
+                                <span class="filter-title">Фильтр 1</span>
+                                <span class="filter-arrow">∨</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter1" value="option1">
+                                    Опция 1
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter1" value="option2">
+                                    Опция 2
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter1" value="option3">
+                                    Опция 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="filter-header" data-filter="4">
+                                <span class="filter-title">Фильтр 4</span>
+                                <span class="filter-arrow">∨</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter4" value="option1">
+                                    Опция 1
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter4" value="option2">
+                                    Опция 2
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="filter-header" data-filter="2">
+                                <span class="filter-title">Фильтр 2</span>
+                                <span class="filter-arrow">∨</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter2" value="option1">
+                                    Опция 1
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter2" value="option2">
+                                    Опция 2
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="filter-header" data-filter="5">
+                                <span class="filter-title">Фильтр 5</span>
+                                <span class="filter-arrow">∨</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter5" value="option1">
+                                    Опция 1
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter5" value="option2">
+                                    Опция 2
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="filter-header" data-filter="3">
+                                <span class="filter-title">Фильтр 3</span>
+                                <span class="filter-arrow">∨</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter3" value="option1">
+                                    Опция 1
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter3" value="option2">
+                                    Опция 2
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="filter-header" data-filter="6">
+                                <span class="filter-title">Фильтр 6</span>
+                                <span class="filter-arrow">∨</span>
+                            </div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter6" value="option1">
+                                    Опция 1
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter6" value="option2">
+                                    Опция 2
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Режим свободного ввода -->
+                <div class="free-input-container" id="freeInputContainer">
+                    <textarea 
+                        class="free-input-area" 
+                        id="freeInputArea" 
+                        placeholder="Enter your requirements here...&#10;&#10;Example:&#10;- Position: Senior Developer&#10;- Experience: 5+ years&#10;- Skills: Python, JavaScript, SQL&#10;- Location: Remote"
+                    ></textarea>
+                </div>
+
+                <!-- Кнопка Apply -->
+                <div class="apply-button-container">
+                    <button class="btn-apply" id="applyButton">Apply</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>What is it?</h3>
+                    <p style="color: #cccccc; line-height: 1.6;">Create a vacancy, download the resume and give it for AI</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="LinkedIn">in</a>
+                        <a href="#" aria-label="Twitter">X</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Features</h3>
+                    <ul>
+                        <li><a href="#core">Core features</a></li>
+                        <li><a href="#pro">Pro experience</a></li>
+                        <li><a href="#integrations">Integrations</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Learn more</h3>
+                    <ul>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#cases">Case studies</a></li>
+                        <li><a href="#stories">Customer stories</a></li>
+                        <li><a href="#practices">Best practices</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#support">Support</a></li>
+                        <li><a href="#legal">Legal</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Переключение между режимами
+        const filtersToggle = document.getElementById('filtersToggle');
+        const freeInputToggle = document.getElementById('freeInputToggle');
+        const filtersContainer = document.getElementById('filtersContainer');
+        const freeInputContainer = document.getElementById('freeInputContainer');
+
+        filtersToggle.addEventListener('click', () => {
+            filtersToggle.querySelector('.toggle-radio').classList.add('active');
+            freeInputToggle.querySelector('.toggle-radio').classList.remove('active');
+            filtersContainer.style.display = 'block';
+            freeInputContainer.classList.remove('active');
+        });
+
+        freeInputToggle.addEventListener('click', () => {
+            freeInputToggle.querySelector('.toggle-radio').classList.add('active');
+            filtersToggle.querySelector('.toggle-radio').classList.remove('active');
+            filtersContainer.style.display = 'none';
+            freeInputContainer.classList.add('active');
+        });
+
+        // Раскрытие/скрытие фильтров
+        const filterHeaders = document.querySelectorAll('.filter-header');
+        
+        filterHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const arrow = header.querySelector('.filter-arrow');
+                const options = header.nextElementSibling;
+                
+                arrow.classList.toggle('expanded');
+                options.classList.toggle('expanded');
+            });
+        });
+
+        // Обработка кнопки Apply
+        document.getElementById('applyButton').addEventListener('click', () => {
+            const isFiltersMode = filtersContainer.style.display !== 'none';
+            
+            if (isFiltersMode) {
+                // Сбор выбранных фильтров
+                const selectedFilters = {};
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+                
+                checkboxes.forEach(checkbox => {
+                    const filterName = checkbox.name;
+                    if (!selectedFilters[filterName]) {
+                        selectedFilters[filterName] = [];
+                    }
+                    selectedFilters[filterName].push(checkbox.value);
+                });
+                
+                console.log('Selected Filters:', selectedFilters);
+                alert('Фильтры применены!\n' + JSON.stringify(selectedFilters, null, 2));
+            } else {
+                // Получение текста из свободного ввода
+                const freeText = document.getElementById('freeInputArea').value;
+                console.log('Free Input:', freeText);
+                
+                if (freeText.trim()) {
+                    alert('Требования применены!\n\n' + freeText);
+                } else {
+                    alert('Пожалуйста, введите требования');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
