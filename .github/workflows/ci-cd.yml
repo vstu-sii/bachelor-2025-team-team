@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - lab2-mlops-sprint
+      - lab3-mlops-prototype
   pull_request:
     branches:
       - lab2-mlops-sprint
+      - lab3-mlops-prototype
 
 jobs:
   # Проверки кода и тесты
