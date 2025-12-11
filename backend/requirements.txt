@@ -3,3 +3,5 @@ uvicorn
 requests
 psycopg2-binary  
 langfuse
+pika
+python-dotenv

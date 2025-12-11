@@ -20,9 +20,10 @@ services:
       - LANGFUSE_PUBLIC_KEY=dev_public_key
       - LANGFUSE_SECRET_KEY=dev_secret_key
       - LANGFUSE_HOST=http://langfuse:8080
+      - DISABLE_WORKER=1
     depends_on:
       - db
-      - llm-service
+      #- llm-service
 
   db:
     image: postgres:16
@@ -35,24 +36,24 @@ services:
     ports:
       - "5432:5432"
 
-  llm-service:
-    build: ./llm-service
-    ports:
-      - "5000:5000"
-    environment:
-      - OLLAMA_API=http://host.docker.internal:11434
-    volumes:
-      - ./llm-service:/app
-    restart: unless-stopped
+  #llm-service:
+  #  build: ./llm-service
+  #  ports:
+  #    - "5000:5000"
+ #   environment:
+ #     - OLLAMA_API=http://host.docker.internal:11434
+ #   volumes:
+ #     - ./llm-service:/app
+ #   restart: unless-stopped
 
-  jupyter:
-    image: jupyter/minimal-notebook
-    ports:
-      - "8888:8888"
-    volumes:
-      - ./llm-service/notebooks:/home/jovyan/work
-    depends_on:
-      - llm-service
+#  jupyter:
+#    image: jupyter/minimal-notebook
+#    ports:
+#      - "8888:8888"
+#    volumes:
+#      - ./llm-service/notebooks:/home/jovyan/work
+#    depends_on:
+#      - llm-service
 
 volumes:
   pgdata:

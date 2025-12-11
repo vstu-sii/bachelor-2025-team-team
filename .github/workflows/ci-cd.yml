@@ -46,7 +46,7 @@ jobs:
       - name: Run ESLint & Format Check
         run: |
           npm run lint --prefix frontend
-          npm run format:check --prefix frontend || echo "⚠️ Format issues detected"
+          npm run format:check --prefix frontend || echo "Format issues detected"
 
       - name: Build frontend
         run: npm run build --prefix frontend
@@ -65,7 +65,7 @@ jobs:
 
       - name: Lint and format backend
         run: |
-          black --check backend || echo "⚠️ Format issues detected"
+          black --check backend || echo "Format issues detected"
           flake8 backend
 
       - name: Run backend unit tests
@@ -75,7 +75,7 @@ jobs:
             if [ -d "backend/tests" ] && [ "$(ls -A backend/tests)" ]; then
             pytest backend/tests -v --maxfail=1 --disable-warnings
             else
-            echo "⚠️ No tests found, skipping pytest"
+            echo "No tests found, skipping pytest"
             fi
 
       # ---------- DOCKER BUILD CHECK ----------
@@ -107,7 +107,12 @@ jobs:
           npm run lint --prefix frontend
 
       - name: Run lightweight backend tests
-        run: pytest backend/tests/unit -v
+        run: |
+            if [ -d "backend/tests" ] && [ "$(ls -A backend/tests)" ]; then
+            pytest backend/tests -v --maxfail=1 --disable-warnings
+            else
+            echo "No tests found, skipping pytest"
+            fi
 
   #Деплой (Dev/Main) 
   deploy-dev:
@@ -132,8 +137,8 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker compose -f docker-compose.dev.yml build
-          docker compose -f docker-compose.dev.yml push
+          docker compose -f docker-compose.dev..yml build
+          docker compose -f docker-compose.dev..yml push
           docker compose -f docker-compose.langfuse.yml build
           docker compose -f docker-compose.langfuse.yml push
           docker compose -f monitoring/docker-compose.yml build
@@ -150,7 +155,7 @@ jobs:
             cd ~/ai-hr-assistant
             git pull
 
-            echo "🔁 Проверка Ollama..."
+            echo "Проверка Ollama..."
             if ! pgrep -f "ollama serve" > /dev/null; then
               nohup ollama serve > ollama.log 2>&1 &
               sleep 5
