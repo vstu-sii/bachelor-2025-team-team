@@ -1,0 +1,58 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311910",
+    "current_position": "Frontend-разработчик"
+  },
+  "matching_results": {
+    "overall_score": 65,
+    "is_suitable": false,
+    "critical_issues": [
+      "Несоответствие образования и сферы деятельности",
+      "Отсутствие опыта работы с React, Redux, современными инструментами сборки и тестирования, знание английского языка на уровне чтения технической документации"
+    ],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 80,
+        "weight": 0.2,
+        "weighted_score": 0.16,
+        "explanation": "Кандидат имеет опыт работы как Frontend-разработчик, что близко к требуемой должности Middle Frontend Developer (React)."
+      },
+      "education_match": {
+        "score": 0,
+        "weight": 0.15,
+        "weighted_score": 0,
+        "explanation": "Образование кандидата не соответствует требуемому высшему техническому образованию в области компьютерных наук, программной инженерии или информационных технологий."
+      },
+      "experience_match": {
+        "score": 70,
+        "weight": 0.25,
+        "weighted_score": 0.175,
+        "explanation": "Кандидат имеет 5.5 лет опыта работы как Frontend-разработчик, что превышает требуемые 2 года, но не имеет опыта работы с React и Redux."
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать полный день."
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат может работать в гибридном формате."
+      },
+      "additional_match": {
+        "score": 30,
+        "weight": 0.2,
+        "weighted_score": 0.06,
+        "explanation": "Кандидат не имеет опыта работы с React, Redux, современными инструментами сборки и тестирования, знание английского языка на уровне чтения технической документации."
+      }
+    }
+  },
+  "recommendation": {
+    "level": "не рекомендован",
+    "reason": "Кандидат не соответствует требованиям вакансии из-за несоответствия образования и отсутствия опыта работы с ключевыми технологиями.",
+    "suggested_salary": "180000 руб.",
+    "interview_priority": "низкий"
+  }
+}

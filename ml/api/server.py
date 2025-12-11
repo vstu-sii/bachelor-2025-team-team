@@ -12,7 +12,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from ml.models.baseline import Gemma3Text
 from ml.utils.file_parser import FileParser
-from ml.api.langfuse_integration import langfuse_monitor
 
 from dotenv import load_dotenv
 
@@ -125,14 +124,6 @@ async def analyze_resume(file: UploadFile = File(...)):
         
         # Трекинг успешного запроса
         latency = (time.time() - start_time) * 1000
-        langfuse_monitor.track_api_call(
-            endpoint="analyze-resume",
-            input_data={"filename": file.filename, "text_length": len(cleaned_text)},
-            output_data={"status": "success", "analysis_keys": list(analysis_result.keys())},
-            latency=latency,
-            status="success",
-            metadata={"file_type": file_ext, "text_preview": cleaned_text[:200]}
-        )
         
         return {
             "status": "success",
@@ -144,14 +135,7 @@ async def analyze_resume(file: UploadFile = File(...)):
     except Exception as e:
         # Трекинг ошибки
         latency = (time.time() - start_time) * 1000
-        langfuse_monitor.track_api_call(
-            endpoint="analyze-resume",
-            input_data={"filename": file.filename},
-            output_data={"error": str(e)},
-            latency=latency,
-            status="error",
-            metadata={"error_type": type(e).__name__}
-        )
+       
         
         raise HTTPException(status_code=500, detail=f"Ошибка обработки файла: {str(e)}")
 

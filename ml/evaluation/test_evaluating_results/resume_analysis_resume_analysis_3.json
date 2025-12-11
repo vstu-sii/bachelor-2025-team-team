@@ -1,0 +1,58 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311906",
+    "current_position": "Senior frontend developer"
+  },
+  "matching_results": {
+    "overall_score": 65,
+    "is_suitable": true,
+    "critical_issues": [
+      "Отсутствие высшего технического образования",
+      "Низкий уровень английского языка"
+    ],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 80,
+        "weight": 0.2,
+        "weighted_score": 0.16,
+        "explanation": "Имеет опыт работы Middle frontend developer, но в настоящее время занимает должность Senior frontend developer."
+      },
+      "education_match": {
+        "score": 0,
+        "weight": 0.15,
+        "weighted_score": 0,
+        "explanation": "Отсутствует высшее техническое образование."
+      },
+      "experience_match": {
+        "score": 90,
+        "weight": 0.25,
+        "weighted_score": 0.225,
+        "explanation": "Имеет 14 лет общего опыта, из которых 14 лет релевантного опыта, что значительно превышает требуемые 2 года."
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Готов работать полный день."
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Готов работать в гибридном формате."
+      },
+      "additional_match": {
+        "score": 70,
+        "weight": 0.2,
+        "weighted_score": 0.14,
+        "explanation": "Имеет опыт работы с React, TypeScript, но отсутствует опыт работы с Redux и знание современных инструментов сборки и тестирования. Имеет низкий уровень английского языка."
+      }
+    }
+  },
+  "recommendation": {
+    "level": "условно рекомендован",
+    "reason": "Имеет значительный опыт работы, но отсутствует высшее техническое образование и низкий уровень английского языка.",
+    "suggested_salary": "250000 руб.",
+    "interview_priority": "средний"
+  }
+}

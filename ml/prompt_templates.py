@@ -1,4 +1,6 @@
 from langchain_core.prompts import ChatPromptTemplate
+import sys
+import os
 
 UC_ANALYSIS_PROMPT = ChatPromptTemplate.from_messages([
     ("system", """Ты — HR-ассистент для анализа резюме.
@@ -7,12 +9,20 @@ UC_ANALYSIS_PROMPT = ChatPromptTemplate.from_messages([
 Правила анализа:
 - Извлекай только факты, указанные в резюме
 - Не добавляй информацию, которой нет в тексте
-- Для навыков указывай только те, что явно mentioned
+- Для навыков указывай только те, что явно указаны
 - Для опыта считай только подтвержденные периоды работы
 - Для образования указывай только указанные учреждения и степени
 
 Формат вывода строго в JSON:
 {{
+  "contacts": {{
+    "name": "имя кандидата",
+    "sex": "пол кандидата", 
+    "city": "город",
+    "number": "телефон",
+    "email": "почта",
+    "social": ["список социальных сетей"],
+  }}, 
   "skills": {{
     "technical": ["список технических навыков"],
     "soft": ["список мягких навыков"], 
@@ -24,7 +34,8 @@ UC_ANALYSIS_PROMPT = ChatPromptTemplate.from_messages([
     "positions": [
       {{
         "title": "должность",
-        "company": "компания", 
+        "company": "название компании (обычно идет после указания периода работы в компании и общего времени)", 
+        "sphere": "сектор, сфера, в которой работает компания", 
         "years": "число",
         "description": "описание обязанностей"
       }}
@@ -37,12 +48,7 @@ UC_ANALYSIS_PROMPT = ChatPromptTemplate.from_messages([
       "year": "год окончания",
       "field": "специальность"
     }}
-  ],
-  "match_analysis": {{
-    "strengths": ["сильные стороны кандидата"],
-    "gaps": ["пробелы в навыках"],
-    "risk_factors": ["потенциальные риски"]
-  }}
+  ]
 }}"""),
     ("human", "Проанализируй это резюме: {resume_text}")
 ])
@@ -75,9 +81,6 @@ UC_MATCHING_PROMPT = ChatPromptTemplate.from_messages([
     "current_position": "текущая должность"
   }},
   "matching_results": {{
-    "overall_score": 0-100,
-    "is_suitable": true/false,
-    "critical_issues": ["критические несоответствия"],
     "match_breakdown": {{
       "job_title_match": {{
         "score": 0-100,
@@ -115,6 +118,9 @@ UC_MATCHING_PROMPT = ChatPromptTemplate.from_messages([
         "weighted_score": 0-{additional_weight},
         "explanation": "обоснование оценки"
       }}
+    "overall_score": 0-100,
+    "is_suitable": true/false,
+    "critical_issues": ["критические несоответствия"],
     }}
   }},
   "recommendation": {{
@@ -176,114 +182,71 @@ UC_QUESTION_GENERATION_PROMPT = ChatPromptTemplate.from_messages([
 Дополнительные указания: {additional_instructions}
 
 Сгенерируй персонализированные вопросы для интервью, учитывая:
-- Пробелы в навыках: {skill_gaps}
-- Сильные стороны: {strengths}
-- Опыт работы: {experience_summary}""")
+- Пробелы в навыках
+- Сильные стороны
+- Опыт работы""")
 ])
 
 UC_MATCHING_PROMPT_WITH_BENCHMARK = ChatPromptTemplate.from_messages([
     ("system", """Ты — HR-эксперт по подбору персонала. 
-Твоя задача: сопоставить требования вакансии с данными кандидата, оценить соответствие и провести сравнительный анализ с эталонной оценкой.
+Твоя задача: провести сравнительный анализ оценки кандидата с эталонной оценкой и выявить расхождения.
 
-Правила оценки:
-- ПРИ ОЦЕНКЕ НЕ ОРИЕНТИРУЙСЯ НА ЭТАЛОННУЮ, А ВЫЧИСЛЯЙ ОЦЕНКУ КАК СУММУ
-- Оценивай только на основе данных из резюме
-- Будь объективным и последовательным
-- Учитывай как точные совпадения, так и близкие соответствия
-- Выявляй критические несоответствия
-- Проведи сравнительный анализ итоговой оценки с эталоном
-- Итоговая оценка(overall score) вычисляется как сумма weighted_score всех критериев
-
-Критерии оценки с весами:
-1. Соответствие должности (job_title) - {job_title_weight}%
-2. Образование (education) - {education_weight}%
-3. Опыт работы (work_experience) - {experience_weight}%
-4. График работы (work_schedule) - {schedule_weight}%
-5. Формат работы (work_format) - {format_weight}%
-6. Дополнительные требования (additional_requirements) - {additional_weight}%
+Правила анализа:
+- Сравни оценки по всем критериям между текущим и эталонным анализом
+- Выяви причины расхождений в оценках
+- Проанализируй различия в интерпретации данных кандидата
+- Определи, какая оценка более объективна и почему
 
 ВЕРНИ ТОЛЬКО JSON БЕЗ ЛИШНИХ КОММЕНТАРИЕВ.
 
 Формат JSON:
 {{
-  "candidate_info": {{
-    "name": "имя из резюме",
-    "current_position": "текущая должность"
-  }},
-  "matching_results": {{
-    "match_breakdown": {{
-      "job_title_match": {{
-        "score": 0-100,
-        "weight": {job_title_weight} / 100,
-        "weighted_score": 0-{job_title_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "education_match": {{
-        "score": 0-100,
-        "weight": {education_weight} / 100,
-        "weighted_score": 0-{education_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "experience_match": {{
-        "score": 0-100,
-        "weight": {experience_weight} / 100,
-        "weighted_score": 0-{experience_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "schedule_match": {{
-        "score": 0-100,
-        "weight": {schedule_weight} / 100,
-        "weighted_score": 0-{schedule_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "format_match": {{
-        "score": 0-100,
-        "weight": {format_weight} / 100,
-        "weighted_score": 0-{format_weight},
-        "explanation": "обоснование оценки"
-      }},
-      "additional_match": {{
-        "score": 0-100,
-        "weight": {additional_weight} / 100,
-        "weighted_score": 0-{additional_weight},
-        "explanation": "обоснование оценки"
+  "comparison_analysis": {{
+    "benchmark_score": {benchmark_score},
+    "current_score": "рассчитанная итоговая оценка",
+    "score_difference": +/-(разница в баллах),
+    "deviation_analysis": "анализ причин расхождения оценок",
+    "consistency_level": "высокий/средний/низкий",
+    "key_differences": [
+      {{
+        "criterion": "название критерия",
+        "benchmark_score": "оценка из эталона", 
+        "current_score": "текущая оценка",
+        "difference": "разница",
+        "reason": "причина расхождения"
       }}
-    }}
-    "overall_score": 0-100,
-    "is_suitable": true/false,
-    "critical_issues": ["критические несоответствия"],
+    ]
   }},
-  "recommendation": {{
+  "quality_assessment": {{
+    "more_accurate_evaluation": "эталон/текущая",
+    "reason": "обоснование, какая оценка более точна",
+    "potential_biases": "выявленные возможные смещения",
+    "improvement_suggestions": "предложения по улучшению оценки"
+  }},
+  "final_recommendation": {{
     "level": "рекомендован/условно рекомендован/не рекомендован",
-    "reason": "обоснование рекомендации",
-    "suggested_salary": "предлагаемая зарплата на основе опыта",
+    "combined_confidence": "высокая/средняя/низкая",
+    "reason": "итоговое обоснование на основе двух оценок",
     "interview_priority": "высокий/средний/низкий"
   }}
-  "benchmark_comparison": {{
-    "benchmark_overall_score": {benchmark_score},
-    "current_overall_score": "рассчитанная итоговая оценка",
-    "score_difference": +/-(разница в баллах),
-    "deviation_analysis": "анализ расхождения итоговых оценок",
-    "consistency_level": "высокий/средний/низкий"
-  }},
-     
 }}"""),
-    ("human", """ТРЕБОВАНИЯ ВАКАНСИИ:
+    ("human", """СРАВНИТЕЛЬНЫЙ АНАЛИЗ ОЦЕНОК КАНДИДАТА
 
 ТРЕБОВАНИЯ ВАКАНСИИ:
-Должность: {job_title}  
+Должность: {job_title}
 Образование: {education} 
 Требуемый опыт: {work_experience} лет
-Желаемая зарплата: {desired_salary} руб.
 График работы: {work_schedule}
 Формат работы: {work_format}
 Дополнительные требования: {additional_requirements}
 
-ДАННЫЕ КАНДИДАТА:
+ЭТАЛОННАЯ ОЦЕНКА (benchmark):
+{benchmark_analysis}
+
+ТЕКУЩАЯ ОЦЕНКА КАНДИДАТА:
 {resume_analysis}
 
-ЭТАЛОННАЯ ИТОГОВАЯ ОЦЕНКА: 
-{benchmark_score}
+ЭТАЛОННАЯ ИТОГОВАЯ ОЦЕНКА: {benchmark_score}
 
-Проведи сопоставление, оцени соответствие и проанализируй расхождение итоговой оценки с эталоном.""")
+Проведи сравнительный анализ двух оценок, выяви расхождения и определи, какая оценка более объективна.""")
 ])

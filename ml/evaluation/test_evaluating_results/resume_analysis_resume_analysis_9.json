@@ -1,0 +1,58 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311934",
+    "current_position": "Google-script разработчик"
+  },
+  "matching_results": {
+    "overall_score": 58.5,
+    "is_suitable": false,
+    "critical_issues": [
+      "Отсутствие опыта работы с React, TypeScript, Redux",
+      "Недостаточный опыт работы с современными инструментами сборки и тестирования"
+    ],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 50,
+        "weight": 0.2,
+        "weighted_score": 0.1,
+        "explanation": "Должность кандидата не полностью соответствует требуемой должности Middle Frontend Developer (React)."
+      },
+      "education_match": {
+        "score": 100,
+        "weight": 0.15,
+        "weighted_score": 0.15,
+        "explanation": "Кандидат имеет высшее техническое образование, соответствующее требованиям вакансии."
+      },
+      "experience_match": {
+        "score": 60,
+        "weight": 0.25,
+        "weighted_score": 0.15,
+        "explanation": "Кандидат имеет общий опыт работы 12.5 лет, но только 7.5 года из них релевантны. Отсутствует опыт работы с React, TypeScript, Redux."
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать полный день."
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат имеет опыт удаленной работы, что соответствует гибридному формату."
+      },
+      "additional_match": {
+        "score": 40,
+        "weight": 0.2,
+        "weighted_score": 0.08,
+        "explanation": "Кандидат имеет опыт работы с некоторыми современными инструментами, но отсутствует опыт работы с React, TypeScript, Redux и знание принципов UI/UX."
+      }
+    }
+  },
+  "recommendation": {
+    "level": "не рекомендован",
+    "reason": "Отсутствие опыта работы с ключевыми технологиями и инструментами, необходимыми для должности Middle Frontend Developer (React).",
+    "suggested_salary": "150000 руб.",
+    "interview_priority": "низкий"
+  }
+}

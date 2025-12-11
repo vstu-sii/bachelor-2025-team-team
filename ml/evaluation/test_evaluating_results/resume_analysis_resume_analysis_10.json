@@ -1,0 +1,55 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311896",
+    "current_position": "Senior Frontend Developer"
+  },
+  "matching_results": {
+    "overall_score": 85,
+    "is_suitable": true,
+    "critical_issues": [],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 90,
+        "weight": 0.2,
+        "weighted_score": 0.18,
+        "explanation": "Кандидат имеет опыт работы как Senior Frontend Developer, что соответствует требованиям Middle Frontend Developer."
+      },
+      "education_match": {
+        "score": 50,
+        "weight": 0.15,
+        "weighted_score": 0.075,
+        "explanation": "Кандидат имеет неоконченное высшее образование в технической области, что частично соответствует требованиям."
+      },
+      "experience_match": {
+        "score": 95,
+        "weight": 0.25,
+        "weighted_score": 0.2375,
+        "explanation": "Кандидат имеет 6 лет опыта работы с React, TypeScript, Redux и другими современными технологиями, что значительно превышает требуемые 2 года."
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать полный день."
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать в гибридном формате."
+      },
+      "additional_match": {
+        "score": 90,
+        "weight": 0.2,
+        "weighted_score": 0.18,
+        "explanation": "Кандидат имеет опыт работы с React, TypeScript, Redux, современными инструментами сборки и тестирования, понимание принципов UI/UX, знание английского языка на уровне чтения технической документации."
+      }
+    }
+  },
+  "recommendation": {
+    "level": "рекомендован",
+    "reason": "Кандидат имеет значительный опыт работы с требуемыми технологиями и готов работать в гибридном формате. Неоконченное высшее образование является единственным значительным недостатком.",
+    "suggested_salary": "200000 руб.",
+    "interview_priority": "высокий"
+  }
+}

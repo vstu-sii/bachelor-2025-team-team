@@ -1,0 +1,58 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311915",
+    "current_position": "Программист"
+  },
+  "matching_results": {
+    "overall_score": 55,
+    "is_suitable": false,
+    "critical_issues": [
+      "Отсутствие высшего технического образования",
+      "Отсутствие опыта работы с React, TypeScript, Redux"
+    ],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 50,
+        "weight": 0.2,
+        "weighted_score": 0.1,
+        "explanation": "Должность кандидата (Программист) не полностью соответствует требуемой должности (Middle Frontend Developer)"
+      },
+      "education_match": {
+        "score": 0,
+        "weight": 0.15,
+        "weighted_score": 0,
+        "explanation": "Кандидат имеет среднее специальное образование, а не высшее техническое"
+      },
+      "experience_match": {
+        "score": 60,
+        "weight": 0.25,
+        "weighted_score": 0.15,
+        "explanation": "Кандидат имеет 5.6 лет опыта, что соответствует требованию, но опыт не связан с React, TypeScript, Redux"
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать полный день"
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов к гибридному формату работы"
+      },
+      "additional_match": {
+        "score": 30,
+        "weight": 0.2,
+        "weighted_score": 0.06,
+        "explanation": "Кандидат имеет опыт работы с JavaScript, но не имеет опыта работы с React, TypeScript, Redux и современными инструментами сборки и тестирования. Знание английского языка на уровне чтения технической документации не подтверждено"
+      }
+    }
+  },
+  "recommendation": {
+    "level": "не рекомендован",
+    "reason": "Отсутствие высшего технического образования и опыта работы с требуемыми технологиями",
+    "suggested_salary": "120000 руб.",
+    "interview_priority": "низкий"
+  }
+}

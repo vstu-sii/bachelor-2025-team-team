@@ -1,0 +1,55 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311900",
+    "current_position": "frontend-devolper"
+  },
+  "matching_results": {
+    "overall_score": 82.5,
+    "is_suitable": true,
+    "critical_issues": [],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 90,
+        "weight": 0.2,
+        "weighted_score": 0.18,
+        "explanation": "Текущая должность кандидата (frontend-devolper) соответствует требованиям вакансии (Middle Frontend Developer)"
+      },
+      "education_match": {
+        "score": 60,
+        "weight": 0.15,
+        "weighted_score": 0.09,
+        "explanation": "Кандидат имеет неоконченное высшее образование, что не полностью соответствует требованию высшего технического образования"
+      },
+      "experience_match": {
+        "score": 95,
+        "weight": 0.25,
+        "weighted_score": 0.2375,
+        "explanation": "Кандидат имеет 5 лет опыта работы, что превышает требуемые 2 года, и 5 лет релевантного опыта"
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "График работы кандидата соответствует требованию полного дня"
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов к гибридному формату работы"
+      },
+      "additional_match": {
+        "score": 90,
+        "weight": 0.2,
+        "weighted_score": 0.18,
+        "explanation": "Кандидат имеет опыт работы с React, TypeScript, Redux, современными инструментами сборки и тестирования, знание английского языка на уровне чтения технической документации"
+      }
+    }
+  },
+  "recommendation": {
+    "level": "рекомендован",
+    "reason": "Кандидат имеет значительный опыт работы с соответствующими технологиями и фреймворками, а также знание английского языка на уровне B1. Неоконченное высшее образование является незначительным недостатком.",
+    "suggested_salary": "180000 руб.",
+    "interview_priority": "высокий"
+  }
+}
