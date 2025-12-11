@@ -9,12 +9,20 @@ UC_ANALYSIS_PROMPT = ChatPromptTemplate.from_messages([
 Правила анализа:
 - Извлекай только факты, указанные в резюме
 - Не добавляй информацию, которой нет в тексте
-- Для навыков указывай только те, что явно mentioned
+- Для навыков указывай только те, что явно указаны
 - Для опыта считай только подтвержденные периоды работы
 - Для образования указывай только указанные учреждения и степени
 
 Формат вывода строго в JSON:
 {{
+  "contacts": {{
+    "name": "имя кандидата",
+    "sex": "пол кандидата", 
+    "city": "город",
+    "number": "телефон",
+    "email": "почта",
+    "social": ["список социальных сетей"],
+  }}, 
   "skills": {{
     "technical": ["список технических навыков"],
     "soft": ["список мягких навыков"], 
@@ -26,7 +34,8 @@ UC_ANALYSIS_PROMPT = ChatPromptTemplate.from_messages([
     "positions": [
       {{
         "title": "должность",
-        "company": "компания", 
+        "company": "название компании (обычно идет после указания периода работы в компании и общего времени)", 
+        "sphere": "сектор, сфера, в которой работает компания", 
         "years": "число",
         "description": "описание обязанностей"
       }}
@@ -39,12 +48,7 @@ UC_ANALYSIS_PROMPT = ChatPromptTemplate.from_messages([
       "year": "год окончания",
       "field": "специальность"
     }}
-  ],
-  "match_analysis": {{
-    "strengths": ["сильные стороны кандидата"],
-    "gaps": ["пробелы в навыках"],
-    "risk_factors": ["потенциальные риски"]
-  }}
+  ]
 }}"""),
     ("human", "Проанализируй это резюме: {resume_text}")
 ])
@@ -77,9 +81,6 @@ UC_MATCHING_PROMPT = ChatPromptTemplate.from_messages([
     "current_position": "текущая должность"
   }},
   "matching_results": {{
-    "overall_score": 0-100,
-    "is_suitable": true/false,
-    "critical_issues": ["критические несоответствия"],
     "match_breakdown": {{
       "job_title_match": {{
         "score": 0-100,
@@ -117,6 +118,9 @@ UC_MATCHING_PROMPT = ChatPromptTemplate.from_messages([
         "weighted_score": 0-{additional_weight},
         "explanation": "обоснование оценки"
       }}
+    "overall_score": 0-100,
+    "is_suitable": true/false,
+    "critical_issues": ["критические несоответствия"],
     }}
   }},
   "recommendation": {{

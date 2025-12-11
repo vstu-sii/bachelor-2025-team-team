@@ -1,0 +1,74 @@
+{
+  "contacts": {
+    "name": "Кандидат",
+    "sex": "мужской",
+    "city": "Минск",
+    "number": null,
+    "email": null,
+    "social": []
+  },
+  "skills": {
+    "technical": [
+      "JavaScript",
+      "Git",
+      "React",
+      "HTML5",
+      "CSS3",
+      "Redux",
+      "HTML",
+      "TypeScript",
+      "MySQL",
+      "SQL",
+      "Node.js",
+      "React-Table v7",
+      "React-Hook-Form",
+      "React-Select",
+      "Storybook",
+      "RTK Query",
+      "MUI",
+      "CSS Modules",
+      "Next.js",
+      "Styled Components"
+    ],
+    "soft": [],
+    "languages": [
+      "Русский",
+      "Английский — B1",
+      "Польский — A1"
+    ]
+  },
+  "experience": {
+    "total_years": 3.17,
+    "relevant_years": 3.17,
+    "positions": [
+      {
+        "title": "Frontend-разработчик",
+        "company": null,
+        "sphere": "Лесная промышленность, деревообработка",
+        "years": 1.58,
+        "description": "Разработал компоненты на основе React, TypeScript, Redux Toolkit, MUI и CSS Modules. Работал с формами с помощью react-hook-form, писал кастомные компоненты. Для HTTP-запросов и кэширования использовал RTK Query. Реализовал перехватчик запросов, работу с CSRF-токенами и cookie. Писал unit-тесты на Jest. Оптимизировал приложение с помощью memo, useMemo, useCallback, lazy-loading и debounce."
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": null,
+        "sphere": "Информационные технологии, системная интеграция, интернет",
+        "years": 2.08,
+        "description": "Разрабатывал компоненты на основе React, TypeScript, Redux Toolkit, styled-components. Работал с таблицами с использованием React-Table v7. Работал с формами, используя React-Hook-Form и React-Select. Разработал Storybook для компонентов. Реализовал API-сервис для HTTP-запросов и кэширования с помощью RTK Query. Оптимизировал приложение с использованием Memo, UseMemo, UseCallback, lazy-loading, infinite scroll, debounce."
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Белорусский государственный университет информатики и радиоэлектроники",
+      "degree": "Высшее образование (Магистр)",
+      "year": 2023,
+      "field": "Электронные системы и технологии"
+    },
+    {
+      "institution": "Белорусский государственный университет информатики и радиоэлектроники",
+      "degree": null,
+      "year": 2021,
+      "field": "Программист, бизнес-аналитик"
+    }
+  ]
+}
