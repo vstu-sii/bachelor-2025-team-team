@@ -90,7 +90,7 @@ Frontend: React / Vue.js + TailwindCSS
 
 Backend: Python (FastAPI / Django REST)
 
-AI-интеграция: OpenAI 
+AI-интеграция: mistral
 
 Очередь задач: Celery + Redis
 
