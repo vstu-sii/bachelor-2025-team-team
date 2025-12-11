@@ -1,23 +1,43 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const mysql = require('mysql2');
 const path = require('path');
 const { spawn } = require('child_process');
+const session = require('express-session');
+const keys = require(path.join(__dirname, "..", "keys.json"));
 
 const app = express();
 const PORT = 3000;
 
-// Разрешаем отдачу статических файлов (HTML, CSS)
+app.use(session({
+    secret: keys.secret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 часа
+    }
+}));
+
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Подключение к базе данных
-const db = new sqlite3.Database('./database/database.db', (err) => {
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: keys.bd_pass,
+    database: 'SII',
+    port: 3307
+});
+
+db.connect((err) => {
     if (err) {
-        console.error('Ошибка подключения к БД:', err.message);
-    } else {
-        console.log('✓ Подключено к базе данных');
+        console.error('Ошибка подключения к базе данных', err.stack);
+        return;
     }
+    console.log('Успешное подключение к базе данных.');
 });
 
 // ==========================================
@@ -47,7 +67,9 @@ function hashPassword(password) {
                 reject(new Error(error || 'Python script failed'));
             } else {
                 try {
-                    const [hash, salt] = result.trim().split('\n');
+                    const parts = result.split(/\r?\n/).map(s => s.trim());
+                    const hash = parts[0];
+                    const salt = parts[1];
                     resolve({ hash, salt });
                 } catch (e) {
                     reject(new Error('Invalid response from hasher'));
@@ -77,7 +99,7 @@ function verifyPassword(password, hash, salt) {
             if (code !== 0) {
                 reject(new Error('Verification failed'));
             } else {
-                resolve(result.trim() === 'True');
+                resolve(result.trim().toLowerCase() === 'true');
             }
         });
     });
@@ -87,35 +109,59 @@ function verifyPassword(password, hash, salt) {
 // МАРШРУТЫ ДЛЯ СТРАНИЦ
 // ==========================================
 
-// Главная страница
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// Переход на страницу авторизации
 app.get('/authorization', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/authorization.html'));
 });
 
-// Переход на страницу регистрации
 app.get('/registration', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/registration.html'));
 });
 
-// Переход на страницу с вакансиями
 app.get('/vacancy', (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/vacancy.html"));
+});
+
+// ИСПРАВЛЕННЫЙ LOGOUT
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) return res.status(500).send('Ошибка при выходе');
+        res.clearCookie('connect.sid');
+        res.redirect('/');
+    });
+});
+
+app.get('/api/user', (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ success: false, message: 'Пользователь не авторизован' });
+    }
+
+    const query = 'SELECT login, email FROM user WHERE id = ?';
+    db.query(query, [req.session.userId], (err, results) => {
+        if (err) {
+            console.error('Ошибка при выполнении запроса:', err);
+            return res.status(500).json({ success: false, message: 'Ошибка сервера' });
+        }
+
+        if (results.length > 0) {
+            res.json({ success: true, user: results[0] });
+        } else {
+            res.status(404).json({ success: false, message: 'Пользователь не найден' });
+        }
+    });
 });
 
 // ==========================================
 // API МАРШРУТЫ
 // ==========================================
 
-// РЕГИСТРАЦИЯ
+// РЕГИСТРАЦИЯ (ИСПРАВЛЕНО ДЛЯ MySQL)
 app.post('/api/signup', async (req, res) => {
     const { username, email, password } = req.body;
 
-    // Валидация входных данных
     if (!username || !email || !password) {
         return res.status(400).json({
             success: false,
@@ -123,7 +169,6 @@ app.post('/api/signup', async (req, res) => {
         });
     }
 
-    // Проверка длины username
     if (username.length < 3) {
         return res.status(400).json({
             success: false,
@@ -131,7 +176,6 @@ app.post('/api/signup', async (req, res) => {
         });
     }
 
-    // Проверка email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return res.status(400).json({
@@ -140,7 +184,6 @@ app.post('/api/signup', async (req, res) => {
         });
     }
 
-    // Проверка длины пароля
     if (password.length < 8) {
         return res.status(400).json({
             success: false,
@@ -149,46 +192,28 @@ app.post('/api/signup', async (req, res) => {
     }
 
     try {
-        // Проверка существования пользователя
-        const existingUser = await new Promise((resolve, reject) => {
-            db.get(
-                'SELECT id FROM users WHERE username = ? OR email = ?',
-                [username, email],
-                (err, row) => {
-                    if (err) reject(err);
-                    else resolve(row);
-                }
-            );
-        });
+        // Проверка существования пользователя (MYSQL)
+        const checkQuery = 'SELECT id FROM users WHERE username = ? OR email = ?';
+        const [existingUsers] = await db.promise().query(checkQuery, [username, email]);
 
-        if (existingUser) {
+        if (existingUsers.length > 0) {
             return res.status(409).json({
                 success: false,
                 message: 'Пользователь с таким именем или email уже существует'
             });
         }
 
-        // Хэширование пароля через Python
+        // Хэширование пароля
         const { hash, salt } = await hashPassword(password);
 
-        // Вставка нового пользователя в БД
-        const result = await new Promise((resolve, reject) => {
-            db.run(
-                `INSERT INTO users (username, email, password_hash, password_salt) 
-                 VALUES (?, ?, ?, ?)`,
-                [username, email, hash, salt],
-                function(err) {
-                    if (err) reject(err);
-                    else resolve(this.lastID);
-                }
-            );
-        });
+        // Вставка нового пользователя (MYSQL)
+        const insertQuery = `INSERT INTO users (username, email, password_hash, password_salt) VALUES (?, ?, ?, ?)`;
+        const [result] = await db.promise().query(insertQuery, [username, email, hash, salt]);
 
-        // Успешная регистрация
         res.status(201).json({
             success: true,
             message: 'Регистрация успешна!',
-            userId: result
+            userId: result.insertId
         });
 
     } catch (error) {
@@ -200,7 +225,7 @@ app.post('/api/signup', async (req, res) => {
     }
 });
 
-// АВТОРИЗАЦИЯ
+// АВТОРИЗАЦИЯ (ИСПРАВЛЕНО ДЛЯ MySQL + СЕССИЯ)
 app.post('/api/signin', async (req, res) => {
     const { email, password } = req.body;
 
@@ -212,26 +237,20 @@ app.post('/api/signin', async (req, res) => {
     }
 
     try {
-        // Получение пользователя из БД
-        const user = await new Promise((resolve, reject) => {
-            db.get(
-                'SELECT * FROM users WHERE email = ?',
-                [email],
-                (err, row) => {
-                    if (err) reject(err);
-                    else resolve(row);
-                }
-            );
-        });
+        // Получение пользователя из БД (MYSQL)
+        const query = 'SELECT * FROM users WHERE email = ?';
+        const [users] = await db.promise().query(query, [email]);
 
-        if (!user) {
+        if (users.length === 0) {
             return res.status(401).json({
                 success: false,
                 message: 'Неверный email или пароль'
             });
         }
 
-        // Проверка пароля через Python
+        const user = users[0];
+
+        // Проверка пароля
         const isValid = await verifyPassword(password, user.password_hash, user.password_salt);
 
         if (!isValid) {
@@ -241,7 +260,11 @@ app.post('/api/signin', async (req, res) => {
             });
         }
 
-        // Успешный вход
+        // СОЗДАНИЕ СЕССИИ
+        req.session.userId = user.id;
+        req.session.username = user.username;
+        req.session.email = user.email;
+
         res.status(200).json({
             success: true,
             message: 'Вход выполнен успешно!',
@@ -269,9 +292,8 @@ app.listen(PORT, () => {
     console.log(`✓ Сервер запущен на http://localhost:${PORT}`);
 });
 
-// Корректное завершение при выходе
 process.on('SIGINT', () => {
-    db.close((err) => {
+    db.end((err) => {
         if (err) {
             console.error('Ошибка закрытия БД:', err.message);
         }

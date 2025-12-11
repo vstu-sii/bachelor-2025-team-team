@@ -550,3 +550,40 @@ footer.signin-footer {
     gap:20px;
 }
 }
+
+.filter-option {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.filter-option input[type="number"] {
+    padding: 5px 8px;
+    width: 120px;
+}
+
+/* Прячем стрелки в Chrome, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Прячем стрелки в Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Красивый стиль, если нужно */
+.filter-option {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.filter-option input[type="number"] {
+    padding: 5px 8px;
+    width: 120px;
+}

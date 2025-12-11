@@ -9,14 +9,28 @@
 <body>
     <div class="container">
         <header>
-            <a href="/" class="logo">The best company in the world</a>
-            <a href="#contact" class="contact-link">Contact</a>
+            <a class="logo">The best company in the world</a>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <span id="userGreeting" style="color: #f4d03f;"></span>
+                <a href="#" id="logoutBtn" class="contact-link" style="color: #ff6b6b;">Logout</a>
+            </div>
         </header>
     </div>
 
     <section class="filters-section">
         <div class="container">
             <div class="filters-content">
+                <!-- Поле для описания вакансии -->
+                <div class="vacancy-description-section">
+                    <h2 style="color: #f4d03f; margin-bottom: 15px; font-size: 1.5rem;">Vacancy Description</h2>
+                    <textarea 
+                        class="vacancy-description-input" 
+                        id="vacancyDescription" 
+                        placeholder="Enter vacancy description...&#10;&#10;Example:&#10;Position: Senior Full-Stack Developer&#10;Company: Tech Innovations Inc.&#10;Location: Remote/Hybrid&#10;Salary: Competitive&#10;&#10;We are looking for an experienced developer..."
+                        rows="6"
+                    ></textarea>
+                </div>
+
                 <!-- Переключатель режима -->
                 <div class="toggle-container">
                     <div class="toggle-option" id="filtersToggle">
@@ -34,58 +48,69 @@
                     <div class="filters-grid">
                         <div class="filter-group">
                             <div class="filter-header" data-filter="1">
-                                <span class="filter-title">Фильтр 1</span>
+                                <span class="filter-title">Образование</span>
                                 <span class="filter-arrow">∨</span>
                             </div>
                             <div class="filter-options">
                                 <label class="filter-option">
                                     <input type="checkbox" name="filter1" value="option1">
-                                    Опция 1
+                                    Среднее общее
                                 </label>
                                 <label class="filter-option">
                                     <input type="checkbox" name="filter1" value="option2">
-                                    Опция 2
+                                    Среднее специальное
                                 </label>
                                 <label class="filter-option">
                                     <input type="checkbox" name="filter1" value="option3">
-                                    Опция 3
+                                    Высшее
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter1" value="option4">
+                                    Без образования
                                 </label>
                             </div>
                         </div>
 
                         <div class="filter-group">
                             <div class="filter-header" data-filter="4">
-                                <span class="filter-title">Фильтр 4</span>
+                                <span class="filter-title">Опыт работы</span>
                                 <span class="filter-arrow">∨</span>
                             </div>
                             <div class="filter-options">
                                 <label class="filter-option">
                                     <input type="checkbox" name="filter4" value="option1">
-                                    Опция 1
+                                    Без опыта работы
                                 </label>
                                 <label class="filter-option">
                                     <input type="checkbox" name="filter4" value="option2">
-                                    Опция 2
+                                    От 1 года до 5 лет
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="filter4" value="option3">
+                                    От 5 лет
                                 </label>
                             </div>
                         </div>
 
                         <div class="filter-group">
                             <div class="filter-header" data-filter="2">
-                                <span class="filter-title">Фильтр 2</span>
+                                <span class="filter-title">Заработная плата</span>
                                 <span class="filter-arrow">∨</span>
                             </div>
+
                             <div class="filter-options">
                                 <label class="filter-option">
-                                    <input type="checkbox" name="filter2" value="option1">
-                                    Опция 1
+                                    <span>От:</span>
+                                    <input type="number" name="salary_min" placeholder="0" min="0">
                                 </label>
+
                                 <label class="filter-option">
-                                    <input type="checkbox" name="filter2" value="option2">
-                                    Опция 2
+                                    <span>До:</span>
+                                    <input type="number" name="salary_max" placeholder="100000" min="0">
                                 </label>
                             </div>
                         </div>
+
 
                         <div class="filter-group">
                             <div class="filter-header" data-filter="5">
@@ -197,7 +222,78 @@
         </div>
     </footer>
 
+    <style>
+        /* Стили для поля описания вакансии */
+        .vacancy-description-section {
+            background-color: #3a3a3a;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .vacancy-description-input {
+            width: 100%;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border: 2px solid #5a5a5a;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+            min-height: 150px;
+        }
+
+        .vacancy-description-input:focus {
+            outline: none;
+            border-color: #f4d03f;
+            background-color: #333333;
+        }
+
+        .vacancy-description-input::placeholder {
+            color: #888888;
+        }
+    </style>
+
     <script>
+        // Проверка авторизации при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                alert('Необходимо войти в систему');
+                window.location.href = '/authorization';
+                return;
+            }
+
+            const userData = JSON.parse(user);
+            document.getElementById('userGreeting').textContent = `Hello, ${userData.username}!`;
+        });
+
+        // Обработка выхода
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            if (confirm('Вы действительно хотите выйти?')) {
+                try {
+                    // Очищаем localStorage
+                    localStorage.removeItem('user');
+                    
+                    // Запрос на сервер для уничтожения сессии
+                    await fetch('/logout');
+                    
+                    // Перенаправление на страницу входа
+                    window.location.href = '/authorization?logout=true';
+                } catch (error) {
+                    console.error('Ошибка при выходе:', error);
+                    // Даже если запрос не прошёл, очищаем localStorage и перенаправляем
+                    localStorage.removeItem('user');
+                    window.location.href = '/authorization?logout=true';
+                }
+            }
+        });
+
         // Переключение между режимами
         const filtersToggle = document.getElementById('filtersToggle');
         const freeInputToggle = document.getElementById('freeInputToggle');
@@ -233,10 +329,18 @@
 
         // Обработка кнопки Apply
         document.getElementById('applyButton').addEventListener('click', () => {
+            const vacancyDescription = document.getElementById('vacancyDescription').value;
+            
+            // Проверка, заполнено ли описание вакансии
+            if (!vacancyDescription.trim()) {
+                alert('Пожалуйста, введите описание вакансии!');
+                document.getElementById('vacancyDescription').focus();
+                return;
+            }
+
             const isFiltersMode = filtersContainer.style.display !== 'none';
             
             if (isFiltersMode) {
-                // Сбор выбранных фильтров
                 const selectedFilters = {};
                 const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
                 
@@ -248,18 +352,29 @@
                     selectedFilters[filterName].push(checkbox.value);
                 });
                 
-                console.log('Selected Filters:', selectedFilters);
-                alert('Фильтры применены!\n' + JSON.stringify(selectedFilters, null, 2));
-            } else {
-                // Получение текста из свободного ввода
-                const freeText = document.getElementById('freeInputArea').value;
-                console.log('Free Input:', freeText);
+                const data = {
+                    vacancyDescription: vacancyDescription,
+                    filters: selectedFilters
+                };
                 
-                if (freeText.trim()) {
-                    alert('Требования применены!\n\n' + freeText);
-                } else {
-                    alert('Пожалуйста, введите требования');
+                console.log('Vacancy Data:', data);
+                alert('Вакансия создана!\n\nОписание:\n' + vacancyDescription + '\n\nФильтры:\n' + JSON.stringify(selectedFilters, null, 2));
+            } else {
+                const freeText = document.getElementById('freeInputArea').value;
+                
+                if (!freeText.trim()) {
+                    alert('Пожалуйста, введите требования в свободной форме!');
+                    document.getElementById('freeInputArea').focus();
+                    return;
                 }
+                
+                const data = {
+                    vacancyDescription: vacancyDescription,
+                    requirements: freeText
+                };
+                
+                console.log('Vacancy Data:', data);
+                alert('Вакансия создана!\n\nОписание:\n' + vacancyDescription + '\n\nТребования:\n' + freeText);
             }
         });
     </script>

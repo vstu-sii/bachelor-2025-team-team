@@ -62,22 +62,31 @@
     </footer>
 
     <script>
+        // ОЧИСТКА localStorage при загрузке страницы входа
+        window.addEventListener('DOMContentLoaded', () => {
+            // Проверяем, есть ли параметр logout в URL
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('logout') === 'true') {
+                localStorage.removeItem('user');
+                alert('Вы успешно вышли из системы');
+                // Удаляем параметр из URL
+                window.history.replaceState({}, document.title, '/authorization');
+            }
+        });
+
         // Обработка формы авторизации
         document.getElementById('signinForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Получение данных из формы
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Показываем процесс загрузки (опционально)
             const submitButton = document.querySelector('.btn-submit');
             const originalText = submitButton.textContent;
             submitButton.textContent = 'Signing In...';
             submitButton.disabled = true;
 
             try {
-                // Отправка POST запроса на сервер
                 const response = await fetch('/api/signin', {
                     method: 'POST',
                     headers: {
@@ -92,41 +101,23 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    // Успешный вход
                     alert(`${data.message}\nWelcome, ${data.user.username}!`);
                     
-                    // Сохраняем данные пользователя (опционально)
+                    // Сохраняем данные пользователя
                     localStorage.setItem('user', JSON.stringify(data.user));
                     
-                    // Перенаправление на главную или dashboard
+                    // Перенаправление
                     window.location.href = '/vacancy';
                 } else {
-                    // Ошибка авторизации
                     alert(data.message);
-                    
-                    // Возвращаем кнопку в исходное состояние
                     submitButton.textContent = originalText;
                     submitButton.disabled = false;
                 }
             } catch (error) {
                 console.error('Ошибка:', error);
                 alert('Ошибка соединения с сервером. Попробуйте позже.');
-                
-                // Возвращаем кнопку в исходное состояние
                 submitButton.textContent = originalText;
                 submitButton.disabled = false;
-            }
-        });
-
-        // Проверка, если пользователь уже авторизован
-        window.addEventListener('DOMContentLoaded', () => {
-            const user = localStorage.getItem('user');
-            if (user) {
-                const userData = JSON.parse(user);
-                const confirmRedirect = confirm(`Вы уже авторизованы как ${userData.username}. Перейти на главную страницу?`);
-                if (confirmRedirect) {
-                    window.location.href = '/';
-                }
             }
         });
     </script>
