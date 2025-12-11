@@ -1,0 +1,9 @@
+{
+  "test_type": "question_generation",
+  "total_candidates": 10,
+  "successful_generations": 10,
+  "failed_generations": 0,
+  "vacancy_position": null,
+  "test_timestamp": 1765375015,
+  "results_folder": "ml/evaluation/test_questions_results"
+}

@@ -1,0 +1,57 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311928",
+    "current_position": "Frontend-разработчик"
+  },
+  "matching_results": {
+    "overall_score": 65,
+    "is_suitable": false,
+    "critical_issues": [
+      "Отсутствие высшего технического образования"
+    ],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 80,
+        "weight": 0.2,
+        "weighted_score": 0.16,
+        "explanation": "Кандидат имеет опыт работы как Frontend-разработчик, что соответствует должности Middle Frontend Developer (React)."
+      },
+      "education_match": {
+        "score": 0,
+        "weight": 0.15,
+        "weighted_score": 0,
+        "explanation": "Кандидат имеет только среднее образование, что не соответствует требованию высшего технического образования."
+      },
+      "experience_match": {
+        "score": 80,
+        "weight": 0.25,
+        "weighted_score": 0.2,
+        "explanation": "Кандидат имеет 8 лет опыта работы как Frontend-разработчик, что превышает требуемые 2 года. Однако отсутствует опыт работы с React, что снижает оценку."
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать полный день, что соответствует требованиям вакансии."
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать в гибридном формате, что соответствует требованиям вакансии."
+      },
+      "additional_match": {
+        "score": 60,
+        "weight": 0.2,
+        "weighted_score": 0.12,
+        "explanation": "Кандидат имеет опыт работы с TypeScript, но отсутствует опыт работы с React, Redux, современными инструментами сборки и тестирования, а также знание английского языка на уровне чтения технической документации."
+      }
+    }
+  },
+  "recommendation": {
+    "level": "не рекомендован",
+    "reason": "Отсутствие высшего технического образования и опыта работы с React.",
+    "suggested_salary": "180000 руб.",
+    "interview_priority": "низкий"
+  }
+}
