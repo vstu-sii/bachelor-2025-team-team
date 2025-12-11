@@ -1,0 +1,36 @@
+{
+  "test_id": "matching_variant_a_20251212_0002",
+  "variant": "variant_a",
+  "task_type": "matching_evaluation",
+  "timestamp": "20251212_013313",
+  "input_hash": "8c9b9af6eb8a",
+  "metadata": {
+    "variant": "variant_a",
+    "duration_seconds": 1.31,
+    "vacancy_title": "Senior Python Developer",
+    "weights_used": {
+      "job_title_weight": 20,
+      "education_weight": 15,
+      "experience_weight": 25,
+      "schedule_weight": 5,
+      "format_weight": 5,
+      "additional_weight": 30
+    },
+    "timestamp": "2025-12-12T01:33:13.053763"
+  },
+  "data": {
+    "evaluation_result": {
+      "evaluation": {
+        "position": 100,
+        "education": 100,
+        "experience": 100,
+        "schedule": 100,
+        "format": 100,
+        "additional_requirements": 100
+      },
+      "recommendation": "Кандидат полностью соответствует всем требованиям вакансии и идеально подходит для позиции Senior Python Developer."
+    },
+    "processing_time": 1.3078618049621582,
+    "prompt_hash": "b7fcc5a5d2be"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "test_id": "questions_variant_a_20251212_0003",
+  "variant": "variant_a",
+  "task_type": "question_generation",
+  "timestamp": "20251212_011910",
+  "input_hash": "664ccd9dff57",
+  "metadata": {
+    "variant": "variant_a",
+    "duration_seconds": 5.61,
+    "questions_count": 0,
+    "quality_score": 0,
+    "timestamp": "2025-12-12T01:19:10.884915"
+  },
+  "data": {
+    "generated_questions": {
+      "interview_questions": [
+        {
+          "type": "technical",
+          "question": "Как вы оптимизировали производительность микросервисов на FastAPI в вашем последнем проекте?",
+          "meta": {
+            "skill": "FastAPI",
+            "experience": "Senior Python Developer"
+          }
+        },
+        {
+          "type": "technical",
+          "question": "Какие подходы вы использовали для интеграции с внешними API в вашем проекте на Django?",
+          "meta": {
+            "skill": "Django",
+            "experience": "Middle Python Developer"
+          }
+        },
+        {
+          "type": "technical",
+          "question": "Как вы организовываете работу с Docker в своих проектах?",
+          "meta": {
+            "skill": "Docker",
+            "experience": "Senior Python Developer"
+          }
+        },
+        {
+          "type": "behavioral",
+          "question": "Опишите сложный кейс, с которым вы столкнулись при разработке микросервисов, и как вы его решили.",
+          "meta": {
+            "experience": "Senior Python Developer"
+          }
+        },
+        {
+          "type": "behavioral",
+          "question": "Как вы взаимодействовали с командой при разработке backend на Django?",
+          "meta": {
+            "experience": "Middle Python Developer"
+          }
+        },
+        {
+          "type": "motivational",
+          "question": "Какие цели вы ставите перед собой в профессиональном развитии?",
+          "meta": {}
+        },
+        {
+          "type": "motivational",
+          "question": "Почему вы хотите работать в нашей компании?",
+          "meta": {}
+        },
+        {
+          "type": "cultural",
+          "question": "Как вы предпочитаете организовывать свой рабочий процесс?",
+          "meta": {}
+        },
+        {
+          "type": "cultural",
+          "question": "Какие ценности для вас важны в рабочей среде?",
+          "meta": {}
+        }
+      ]
+    },
+    "questions_count": 0,
+    "quality_check": {
+      "success": true,
+      "relevance_score": 0,
+      "diversity_score": 0,
+      "specificity_score": 0,
+      "usefulness_score": 0,
+      "balance_score": 0,
+      "overall_score": 0,
+      "strengths": [],
+      "weaknesses": [
+        "Отсутствие вопросов"
+      ],
+      "recommendations": [
+        "Сгенерировать вопросы для оценки кандидата"
+      ]
+    },
+    "processing_time": 5.612952470779419,
+    "prompt_hash": "4abf0b139df2"
+  }
+}

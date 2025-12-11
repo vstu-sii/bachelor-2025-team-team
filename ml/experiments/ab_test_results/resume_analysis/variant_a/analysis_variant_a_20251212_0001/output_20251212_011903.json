@@ -1,0 +1,81 @@
+{
+  "test_id": "analysis_variant_a_20251212_0001",
+  "variant": "variant_a",
+  "task_type": "resume_analysis",
+  "timestamp": "20251212_011903",
+  "input_hash": "8d666bfd42c7",
+  "metadata": {
+    "variant": "variant_a",
+    "duration_seconds": 2.77,
+    "quality_score": 100,
+    "resume_hash": "8fc5a513c73e",
+    "timestamp": "2025-12-12T01:19:03.663219"
+  },
+  "data": {
+    "extracted_data": {
+      "name": "Иванов Иван Иванович",
+      "position": "Python разработчик",
+      "contacts": {
+        "email": "ivan@example.com",
+        "phone": "+7-999-123-45-67",
+        "city": "Москва"
+      },
+      "skills": [
+        "Python",
+        "Django",
+        "FastAPI",
+        "PostgreSQL",
+        "Redis",
+        "Docker",
+        "Git",
+        "Английский (Intermediate)"
+      ],
+      "experience": [
+        {
+          "position": "Senior Python Developer",
+          "company": "TechCorp",
+          "start_date": "2021",
+          "end_date": "2024",
+          "responsibilities": [
+            "Разработка микросервисов на FastAPI",
+            "Оптимизация производительности"
+          ]
+        },
+        {
+          "position": "Middle Python Developer",
+          "company": "Startup Inc",
+          "start_date": "2019",
+          "end_date": "2021",
+          "responsibilities": [
+            "Разработка backend на Django",
+            "Интеграция с внешними API"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "institution": "МГТУ им. Баумана, Факультет информатики",
+          "specialization": "Специалист",
+          "year": "2019"
+        }
+      ],
+      "total_experience_years": 5
+    },
+    "quality_check": {
+      "success": true,
+      "completeness_score": 100,
+      "accuracy_score": 100,
+      "structure_score": 100,
+      "consistency_score": 100,
+      "overall_score": 100,
+      "missing_fields": [],
+      "incorrect_data": [],
+      "suggestions": [
+        "Добавьте поле 'total_experience_years' в исходный текст резюме для большей ясности.",
+        "Рассмотрите возможность добавления уровня владения английским языком в отдельное поле для более точного извлечения."
+      ]
+    },
+    "processing_time": 2.7674410343170166,
+    "prompt_hash": "2b5c5e32acde"
+  }
+}

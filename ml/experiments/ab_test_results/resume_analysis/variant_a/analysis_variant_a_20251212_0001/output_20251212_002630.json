@@ -1,0 +1,46 @@
+{
+  "test_id": "analysis_variant_a_20251212_0001",
+  "variant": "variant_a",
+  "task_type": "resume_analysis",
+  "timestamp": "20251212_002630",
+  "input_hash": "b9ab67ec6772",
+  "metadata": {
+    "variant": "variant_a",
+    "duration_seconds": 1.09,
+    "quality_score": 50,
+    "resume_hash": "4cc3f84d078f",
+    "timestamp": "2025-12-12T00:26:30.845001"
+  },
+  "data": {
+    "extracted_data": {
+      "name": "Иванов Иван Иванович",
+      "contacts": {},
+      "skills": [],
+      "experience": {
+        "total": 0
+      },
+      "education": []
+    },
+    "quality_check": {
+      "success": true,
+      "completeness_score": 0,
+      "accuracy_score": 100,
+      "structure_score": 100,
+      "consistency_score": 100,
+      "overall_score": 50,
+      "missing_fields": [
+        "contacts",
+        "skills",
+        "experience",
+        "education"
+      ],
+      "incorrect_data": [],
+      "suggestions": [
+        "Убедитесь, что исходный текст резюме содержит информацию о контактах, навыках, опыте работы и образовании.",
+        "Проверьте, что промпт variant_a настроен на извлечение всех необходимых полей."
+      ]
+    },
+    "processing_time": 1.0925981998443604,
+    "prompt_hash": "510f8d9f90c2"
+  }
+}

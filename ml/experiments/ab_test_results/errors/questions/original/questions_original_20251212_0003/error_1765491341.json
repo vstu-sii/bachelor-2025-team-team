@@ -1,0 +1,6 @@
+{
+  "test_id": "questions_original_20251212_0003",
+  "variant": "original",
+  "error": "Replacement index 0 out of range for positional args tuple",
+  "duration": 0.0
+}

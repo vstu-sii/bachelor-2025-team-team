@@ -1,0 +1,41 @@
+{
+  "test_id": "questions_variant_a_20251212_0003",
+  "variant": "variant_a",
+  "task_type": "question_generation",
+  "timestamp": "20251212_013321",
+  "input_hash": "ba8451887fe5",
+  "metadata": {
+    "variant": "variant_a",
+    "duration_seconds": 6.88,
+    "questions_count": 0,
+    "quality_score": 0,
+    "timestamp": "2025-12-12T01:33:21.780952"
+  },
+  "data": {
+    "generated_questions": {
+      "questions": []
+    },
+    "questions_count": 0,
+    "quality_check": {
+      "success": true,
+      "relevance_score": 0,
+      "diversity_score": 0,
+      "specificity_score": 0,
+      "usefulness_score": 0,
+      "balance_score": 0,
+      "overall_score": 0,
+      "strengths": [],
+      "weaknesses": [
+        "Отсутствие вопросов"
+      ],
+      "recommendations": [
+        "Сгенерировать вопросы, соответствующие профилю кандидата и вакансии",
+        "Включить технические, поведенческие и ситуационные вопросы",
+        "Убедиться, что вопросы конкретные и направлены на оценку ключевых навыков и опыта кандидата",
+        "Обеспечить баланс между разными типами вопросов"
+      ]
+    },
+    "processing_time": 6.875779628753662,
+    "prompt_hash": "ccf68c3f31d8"
+  }
+}

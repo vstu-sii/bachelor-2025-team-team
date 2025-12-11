@@ -1,0 +1,118 @@
+{
+  "test_id": "questions_variant_a_20251212_0003",
+  "variant": "variant_a",
+  "task_type": "question_generation",
+  "timestamp": "20251212_005238",
+  "input_hash": "2f1b1ede2940",
+  "metadata": {
+    "variant": "variant_a",
+    "duration_seconds": 5.94,
+    "questions_count": 9,
+    "quality_score": 89,
+    "timestamp": "2025-12-12T00:52:38.351267"
+  },
+  "data": {
+    "generated_questions": {
+      "questions": [
+        {
+          "type": "technical",
+          "question": "Как вы организуете работу с микросервисами в проекте?",
+          "meta": {
+            "category": "architecture",
+            "difficulty": "medium"
+          }
+        },
+        {
+          "type": "technical",
+          "question": "Как вы используете Docker в своих проектах?",
+          "meta": {
+            "category": "devops",
+            "difficulty": "medium"
+          }
+        },
+        {
+          "type": "technical",
+          "question": "Как вы обеспечиваете безопасность данных в своих приложениях?",
+          "meta": {
+            "category": "security",
+            "difficulty": "medium"
+          }
+        },
+        {
+          "type": "behavioral",
+          "question": "Опишите сложный проект, над которым вы работали, и как вы его реализовали.",
+          "meta": {
+            "category": "project management",
+            "difficulty": "medium"
+          }
+        },
+        {
+          "type": "behavioral",
+          "question": "Как вы справляетесь с конфликтами в команде?",
+          "meta": {
+            "category": "teamwork",
+            "difficulty": "medium"
+          }
+        },
+        {
+          "type": "motivational",
+          "question": "Что вас мотивирует в работе?",
+          "meta": {
+            "category": "motivation",
+            "difficulty": "easy"
+          }
+        },
+        {
+          "type": "motivational",
+          "question": "Какие ваши карьерные цели на ближайшие 5 лет?",
+          "meta": {
+            "category": "career goals",
+            "difficulty": "easy"
+          }
+        },
+        {
+          "type": "cultural",
+          "question": "Как вы предпочитаете работать: удаленно или в офисе?",
+          "meta": {
+            "category": "work preferences",
+            "difficulty": "easy"
+          }
+        },
+        {
+          "type": "cultural",
+          "question": "Какие ценности для вас важны в рабочей среде?",
+          "meta": {
+            "category": "values",
+            "difficulty": "easy"
+          }
+        }
+      ]
+    },
+    "questions_count": 9,
+    "quality_check": {
+      "success": true,
+      "relevance_score": 90,
+      "diversity_score": 95,
+      "specificity_score": 85,
+      "usefulness_score": 85,
+      "balance_score": 90,
+      "overall_score": 89,
+      "strengths": [
+        "Вопросы хорошо соответствуют профилю кандидата и вакансии.",
+        "Хороший баланс между техническими, поведенческими, мотивационными и культурными вопросами.",
+        "Вопросы достаточно конкретные и направлены на оценку ключевых навыков и качеств кандидата."
+      ],
+      "weaknesses": [
+        "Некоторые вопросы могут быть слишком общими, например, вопросы о мотивации и карьерных целях.",
+        "Может потребоваться больше вопросов, связанных с конкретными технологиями и инструментами, используемыми в проектах кандидата."
+      ],
+      "recommendations": [
+        "Добавить больше вопросов, связанных с конкретными технологиями и инструментами, используемыми в проектах кандидата.",
+        "Уточнить некоторые вопросы, чтобы они были более конкретными и направленными на оценку конкретных навыков и опыта.",
+        "Рассмотреть возможность добавления вопросов, связанных с опытом работы с микросервисами и Docker, чтобы лучше оценить соответствие кандидата требованиям вакансии."
+      ]
+    },
+    "processing_time": 5.942707538604736,
+    "prompt_hash": "773668409010"
+  }
+}

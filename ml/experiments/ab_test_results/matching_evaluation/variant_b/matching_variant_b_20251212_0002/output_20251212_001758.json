@@ -1,0 +1,40 @@
+{
+  "test_id": "matching_variant_b_20251212_0002",
+  "variant": "variant_b",
+  "task_type": "matching_evaluation",
+  "timestamp": "20251212_001758",
+  "input_hash": "f5aa1021d67f",
+  "metadata": {
+    "variant": "variant_b",
+    "duration_seconds": 1.79,
+    "vacancy_title": "Senior Python Developer",
+    "weights_used": {
+      "job_title_weight": 20,
+      "education_weight": 15,
+      "experience_weight": 25,
+      "schedule_weight": 5,
+      "format_weight": 50,
+      "additional_weight": 30
+    },
+    "timestamp": "2025-12-12T00:17:58.173641"
+  },
+  "data": {
+    "evaluation_result": {
+      "match_score": 92,
+      "criteria": {
+        "position_match": 100,
+        "education_match": 100,
+        "experience_match": 90,
+        "salary_match": 80,
+        "schedule_match": 100,
+        "format_match": 100,
+        "additional_requirements_match": 100
+      },
+      "critical_mismatches": [],
+      "recommendation": "Strong match. Recommended for hire.",
+      "comments": "The candidate meets all the requirements and has additional relevant experience with microservices and Docker."
+    },
+    "processing_time": 1.7858638763427734,
+    "prompt_hash": "853de1f76733"
+  }
+}

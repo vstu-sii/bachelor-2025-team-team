@@ -10,7 +10,7 @@ import time
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from ml.models.baseline import Gemma3Text
+from ml.models.baseline import HRBaseline
 from ml.utils.file_parser import FileParser
 
 from dotenv import load_dotenv
@@ -45,9 +45,9 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 async def startup_event():
     """Инициализация моделей при запуске"""
     global pipeline
-    pipeline = Gemma3Text()
+    pipeline = HRBaseline()
     print("✅ API сервер запущен с моделями:")
-    print("   - Gemma3Text для анализа резюме")
+    print("   - Mistral для анализа резюме")
 
 @app.get("/")
 async def root():
@@ -77,8 +77,8 @@ async def health_check():
         "timestamp": datetime.now().isoformat()
     }
 
-@app.post("/analyze-resume")
-async def analyze_resume(file: UploadFile = File(...)):
+@app.post("/excruct_resume")
+async def excruct_resume(file: UploadFile = File(...)):
     """Анализ резюме с парсингом файла и трекингом"""
     start_time = time.time()
     
@@ -117,7 +117,7 @@ async def analyze_resume(file: UploadFile = File(...)):
         print(f"✅ Извлечено {len(cleaned_text)} символов")
         
         # Анализируем резюме
-        analysis_result = pipeline.analyze_resume(cleaned_text)
+        analysis_result = await pipeline.extract_data_from_resume(cleaned_text)
         
         if "error" in analysis_result:
             raise HTTPException(status_code=500, detail=analysis_result["error"])
@@ -139,8 +139,8 @@ async def analyze_resume(file: UploadFile = File(...)):
         
         raise HTTPException(status_code=500, detail=f"Ошибка обработки файла: {str(e)}")
 
-@app.post("/analyze-resume-text")
-async def analyze_resume_text(resume_text: str = Form(...)):
+@app.post("/excruct-resume-text")
+async def excruct_resume_text(resume_text: str = Form(...)):
     """Анализ резюме из текста (без загрузки файла)"""
     try:
         if not resume_text or len(resume_text.strip()) < 50:
@@ -150,7 +150,7 @@ async def analyze_resume_text(resume_text: str = Form(...)):
             )
         
         # Анализируем резюме
-        analysis_result = pipeline.analyze_resume(resume_text)
+        analysis_result = await pipeline.extract_data_from_resume(resume_text)
         
         if "error" in analysis_result:
             raise HTTPException(status_code=500, detail=analysis_result["error"])
@@ -189,12 +189,12 @@ async def generate_interview_plan(
             )
         
         # 1. Анализ резюме
-        analysis_result = pipeline.analyze_resume(cleaned_text)
+        analysis_result = await pipeline.extract_data_from_resume(cleaned_text)
         if "error" in analysis_result:
             raise HTTPException(status_code=500, detail=analysis_result["error"])
         
         # 2. Генерация вопросов
-        questions_result = pipeline.generate_questions(
+        questions_result = await pipeline.generate_interview_questions(
             analysis_result=analysis_result,
             vacancy_data=vacancy_requirements,
             question_type=question_type
@@ -238,7 +238,7 @@ async def match_vacancy(
             )
         
         # Анализируем резюме
-        analysis_result = pipeline.analyze_resume(cleaned_text)
+        analysis_result = await pipeline.extract_data_from_resume(cleaned_text)
         if "error" in analysis_result:
             raise HTTPException(status_code=500, detail=analysis_result["error"])
         
@@ -250,7 +250,7 @@ async def match_vacancy(
             vacancy_dict = {"description": vacancy_data}
         
         # Сопоставляем с вакансией
-        matching_result = pipeline.match_vacancy_with_resume(
+        matching_result = await pipeline.evaluate_candidate_match(
             analysis_result, 
             vacancy_dict
         )

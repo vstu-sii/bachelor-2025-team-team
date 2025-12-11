@@ -1,0 +1,22 @@
+{
+  "test_id": "questions_variant_a_20251212_0003",
+  "variant": "variant_a",
+  "task_type": "question_generation",
+  "timestamp": "20251212_020727",
+  "input_hash": "e024526a46f0",
+  "data": {
+    "resume_analysis_keys": [],
+    "vacancy_requirements": {
+      "job_title": "Senior Python Developer",
+      "education": "Высшее техническое",
+      "work_experience": 3,
+      "desired_salary": "200000 руб.",
+      "work_schedule": "Полный день",
+      "work_format": "Удаленно/гибрид",
+      "additional_requirements": "Опыт работы с микросервисами, знание Docker"
+    },
+    "additional_instructions": "",
+    "prompt_variant": "variant_a",
+    "prompt_preview": "Ты — рекрутер, готовящий вопросы для собеседования.\n            Создай персонализированные вопросы на основе резюме кандидата.\n            \n            Типы вопросов:\n            - Технические (проверка навыков)\n            - Поведенческие (опыт, кейсы)\n            - Мотивационные (цели, интересы)\n            - Культурные (ценности, fit)\n            \n            Формат: JSON с вопросами и метаданными.\n            Формат вывода строго в JSON:\n        {\n        \"interview_plan\": {\n            \"dur"
+  }
+}
