@@ -34,7 +34,7 @@ tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
 
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
-MISTRAL_MODEL = "mistral-medium"
+MISTRAL_MODEL = "mistral-medium-2508"
 
 MAX_RETRIES = 3
 RETRY_DELAY = 2  # секунды
@@ -50,8 +50,8 @@ def count_tokens_and_cost(prompt: str, output: str, model: str = "mistral-small"
     total_tokens = input_tokens + output_tokens
 
     # Тарифы для Mistral (примерные)
-    price_per_input = 0.25 / 1_000_000
-    price_per_output = 0.25 / 1_000_000
+    price_per_input = 0.4 / 1_000_000
+    price_per_output = 2 / 1_000_000
     cost = input_tokens * price_per_input + output_tokens * price_per_output
 
     return {
