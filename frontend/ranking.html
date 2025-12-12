@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Ranking - AI HR Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .ranking-section {
+            padding: 60px 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .ranking-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .ranking-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .ranking-header h1 {
+            font-size: 2.5rem;
+            color: #f4d03f;
+            margin-bottom: 10px;
+        }
+
+        .ranking-header p {
+            color: #cccccc;
+            font-size: 1.1rem;
+        }
+
+        .resume-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .resume-card {
+            background-color: #3a3a3a;
+            padding: 25px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            border-left: 5px solid #f4d03f;
+        }
+
+        .resume-card:hover {
+            background-color: #424242;
+            transform: translateX(5px);
+        }
+
+        .resume-info {
+            flex: 1;
+        }
+
+        .resume-rank {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #f4d03f;
+            margin-right: 20px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .resume-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .resume-title {
+            font-size: 1.2rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .resume-meta {
+            display: flex;
+            gap: 20px;
+            color: #888888;
+            font-size: 0.9rem;
+        }
+
+        .resume-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .score-badge {
+            background-color: #f4d03f;
+            color: #000000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .btn-download {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-download:hover {
+            background-color: #f4d03f;
+            color: #000000;
+            transform: translateY(-2px);
+        }
+
+        .no-resumes {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888888;
+        }
+
+        .no-resumes h2 {
+            color: #f4d03f;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #f4d03f;
+            font-size: 1.2rem;
+        }
+
+        .top-3 {
+            border-left-color: #FFD700;
+        }
+
+        .top-5 {
+            border-left-color: #C0C0C0;
+        }
+
+        .top-10 {
+            border-left-color: #CD7F32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a class="logo">The best company in the world</a>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <span id="userGreeting" style="color: #f4d03f;"></span>
+                <a href="#" id="logoutBtn" class="contact-link" style="color: #ff6b6b;">Logout</a>
+            </div>
+        </header>
+    </div>
+
+    <section class="ranking-section">
+        <div class="container">
+            <div class="ranking-container">
+                <div class="ranking-header">
+                    <h1>Resume Ranking</h1>
+                    <p>Best candidates sorted by AI rating</p>
+                </div>
+
+                <div id="loadingIndicator" class="loading">
+                    Loading resumes...
+                </div>
+
+                <div id="resumeList" class="resume-list" style="display: none;"></div>
+
+                <div id="noResumes" class="no-resumes" style="display: none;">
+                    <h2>No resumes found</h2>
+                    <p>Upload resumes to see the ranking</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 The best company in the world. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Проверка авторизации
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                alert('Необходимо войти в систему');
+                window.location.href = '/authorization';
+                return;
+            }
+
+            const userData = JSON.parse(user);
+            document.getElementById('userGreeting').textContent = `Hello, ${userData.username}!`;
+            
+            // Загрузить список резюме
+            loadResumes();
+        });
+
+        // Обработка выхода
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (confirm('Вы действительно хотите выйти?')) {
+                localStorage.removeItem('user');
+                await fetch('/logout');
+                window.location.href = '/authorization?logout=true';
+            }
+        });
+
+        // Загрузка списка резюме
+        async function loadResumes() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const resumeList = document.getElementById('resumeList');
+            const noResumes = document.getElementById('noResumes');
+
+            try {
+                const response = await fetch('/api/resumes/ranked');
+                const data = await response.json();
+
+                loadingIndicator.style.display = 'none';
+
+                if (data.success && data.resumes.length > 0) {
+                    resumeList.style.display = 'flex';
+                    displayResumes(data.resumes);
+                } else {
+                    noResumes.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки резюме:', error);
+                loadingIndicator.style.display = 'none';
+                noResumes.style.display = 'block';
+            }
+        }
+
+        // Отображение резюме
+        function displayResumes(resumes) {
+            const resumeList = document.getElementById('resumeList');
+            resumeList.innerHTML = '';
+
+            resumes.forEach((resume, index) => {
+                const rank = index + 1;
+                const card = document.createElement('div');
+                
+                // Определяем класс для топ резюме
+                let cardClass = 'resume-card';
+                if (rank <= 3) cardClass += ' top-3';
+                else if (rank <= 5) cardClass += ' top-5';
+                else if (rank <= 10) cardClass += ' top-10';
+
+                card.className = cardClass;
+                card.innerHTML = `
+                    <div class="resume-rank">#${rank}</div>
+                    <div class="resume-info">
+                        <div class="resume-details">
+                            <div class="resume-title">Resume #${resume.resume_id}</div>
+                            <div class="resume-meta">
+                                <span>📊 Score: <strong>${resume.number_of_top || 'N/A'}</strong></span>
+                                <span>📅 ${formatDate(resume.how_old)}</span>
+                                <span>📄 ${formatSize(resume.file_size)}</span>
+                                ${resume.vacancy_id ? `<span>🎯 Vacancy #${resume.vacancy_id}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="score-badge">${resume.number_of_top || 0} points</div>
+                    <button class="btn-download" onclick="downloadResume(${resume.resume_id})">
+                        Download PDF
+                    </button>
+                `;
+                resumeList.appendChild(card);
+            });
+        }
+
+        // Скачивание резюме
+        async function downloadResume(id) {
+            try {
+                const response = await fetch(`/api/resumes/download/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error('Ошибка при скачивании');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `resume_${id}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                console.error('Ошибка скачивания:', error);
+                alert('Ошибка при скачивании резюме');
+            }
+        }
+
+        // Форматирование размера файла
+        function formatSize(bytes) {
+            if (!bytes) return 'N/A';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Форматирование даты
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Глобальная функция для скачивания
+        window.downloadResume = downloadResume;
+    </script>
+</body>
+</html>
