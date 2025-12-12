@@ -94,6 +94,6 @@ AI-интеграция: mistral
 
 Очередь задач: Celery + Redis
 
-База данных: PostgreSQL
+База данных: MySQL
 
 Хостинг: Docker + Kubernetes / Cloud
