@@ -1,0 +1,70 @@
+{
+  "test_id": "matching_variant_b_20251212_0002",
+  "variant": "variant_b",
+  "task_type": "matching_evaluation",
+  "timestamp": "20251212_004242",
+  "input_hash": "2ba1a90efc9a",
+  "metadata": {
+    "variant": "variant_b",
+    "duration_seconds": 3.33,
+    "vacancy_title": "Senior Python Developer",
+    "weights_used": {
+      "job_title_weight": 20,
+      "education_weight": 15,
+      "experience_weight": 25,
+      "schedule_weight": 5,
+      "format_weight": 50,
+      "additional_weight": 30
+    },
+    "timestamp": "2025-12-12T00:42:42.389898"
+  },
+  "data": {
+    "evaluation_result": {
+      "match_score": 0,
+      "criteria": {
+        "position": {
+          "match": false,
+          "weight": 0.2,
+          "score": 0
+        },
+        "education": {
+          "match": false,
+          "weight": 0.15,
+          "score": 0
+        },
+        "experience": {
+          "match": false,
+          "weight": 0.2,
+          "score": 0
+        },
+        "salary": {
+          "match": false,
+          "weight": 0.15,
+          "score": 0
+        },
+        "schedule": {
+          "match": false,
+          "weight": 0.1,
+          "score": 0
+        },
+        "format": {
+          "match": false,
+          "weight": 0.1,
+          "score": 0
+        },
+        "additional": {
+          "match": false,
+          "weight": 0.1,
+          "score": 0
+        }
+      },
+      "critical_mismatches": [
+        "Отсутствие информации о кандидате",
+        "Несоответствие по всем критериям"
+      ],
+      "recommendation": "Не рекомендуется к найму"
+    },
+    "processing_time": 3.327953577041626,
+    "prompt_hash": "40b634240a7c"
+  }
+}

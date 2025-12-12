@@ -1,0 +1,6 @@
+{
+  "test_id": "questions_original_20251212_0003",
+  "variant": "original",
+  "error": "KeyError \u0432 \u0444\u043e\u0440\u043c\u0430\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0438 \u043f\u0440\u043e\u043c\u043f\u0442\u0430: Replacement index 0 out of range for positional args tuple",
+  "duration": 0.005982160568237305
+}

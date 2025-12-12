@@ -1,0 +1,82 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+  ArrowColor Black
+}
+
+actor "Пользователь" as User
+actor "AI HR Assistant" as System
+actor "LLM (ИИ-модуль)" as LLM
+
+rectangle "HR / Подбор кандидатов" {
+
+  usecase "Загрузить/Выбрать вакансию" as UC1
+  usecase "Выбрать вариант поиска" as UC2
+  usecase "Парсинг резюме" as UC3
+  usecase "Анализ и ранжирование" as UC4
+  usecase "Выбор кандидатов" as UC5
+  usecase "Генерация вопросов\nи плана интервью" as UC6
+  usecase "Экспорт брифа в PDF" as UC8
+
+  usecase "Загрузить/Выбрать пакет резюме" as UC13
+  usecase "Парсинг вакансии" as UC16
+}
+
+package "Детализация поиска" {
+  usecase "Поиск по умолчанию" as UC9
+  usecase "Поиск по критериям" as UC10
+}
+
+package "Детализация вакансии" {
+  usecase "Загрузить вакансию" as UC11
+  usecase "Выбрать из списка" as UC12
+}
+
+package "Детализация резюме" {
+  usecase "Загрузить пакет" as UC14
+  usecase "Выбрать из списка" as UC15
+}
+
+' --- Акторы ---
+User -down-> UC1
+User -down-> UC13
+User -down-> UC2
+User -down-> UC5
+
+System -down-> UC1
+System -down-> UC2
+System -down-> UC3
+System -down-> UC4
+System -down-> UC5
+System -down-> UC6
+System -down-> UC8
+System -down-> UC16
+
+LLM -down-> UC4
+LLM -down-> UC6
+
+' --- Поток (как дерево) ---
+UC1 --> UC2 : <<extend>>
+UC2 --> UC3 : <<extend>>
+UC3 --> UC4 : <<extend>>
+UC4 --> UC5 : <<extend>>
+UC5 --> UC6 : <<extend>>
+UC6 --> UC8 : <<extend>>
+
+' --- Ветвления ---
+UC2 --> UC9 : <<include>>
+UC2 --> UC10 : <<include>>
+
+UC1 --> UC11 : <<include>>
+UC1 --> UC12 : <<include>>
+
+UC13 --> UC14 : <<include>>
+UC13 --> UC15 : <<include>>
+
+UC13 --> UC16 : <<extend>>
+UC16 --> UC1 : <<extend>>
+
+@enduml

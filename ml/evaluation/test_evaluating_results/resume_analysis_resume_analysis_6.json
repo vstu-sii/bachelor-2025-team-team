@@ -1,0 +1,55 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311919",
+    "current_position": "Frontend-разработчик"
+  },
+  "matching_results": {
+    "overall_score": 85,
+    "is_suitable": true,
+    "critical_issues": [],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 90,
+        "weight": 0.2,
+        "weighted_score": 0.18,
+        "explanation": "Текущая должность кандидата (Frontend-разработчик) соответствует вакансии Middle Frontend Developer (React)."
+      },
+      "education_match": {
+        "score": 80,
+        "weight": 0.15,
+        "weighted_score": 0.12,
+        "explanation": "Кандидат имеет высшее техническое образование, связанное с компьютерными науками и программной инженерией."
+      },
+      "experience_match": {
+        "score": 95,
+        "weight": 0.25,
+        "weighted_score": 0.2375,
+        "explanation": "Кандидат имеет 3.2 года опыта работы в качестве Frontend-разработчика, что соответствует требованию вакансии."
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать полный день."
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать в гибридном формате."
+      },
+      "additional_match": {
+        "score": 90,
+        "weight": 0.2,
+        "weighted_score": 0.18,
+        "explanation": "Кандидат имеет опыт работы с React, TypeScript, Redux, знание современных инструментов сборки и тестирования, понимание принципов UI/UX, знание английского языка на уровне чтения технической документации."
+      }
+    }
+  },
+  "recommendation": {
+    "level": "рекомендован",
+    "reason": "Кандидат соответствует всем требованиям вакансии и имеет значительный опыт работы в области frontend-разработки.",
+    "suggested_salary": "180000 руб.",
+    "interview_priority": "высокий"
+  }
+}

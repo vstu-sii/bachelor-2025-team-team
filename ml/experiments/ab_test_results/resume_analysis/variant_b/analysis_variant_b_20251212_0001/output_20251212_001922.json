@@ -1,0 +1,82 @@
+{
+  "test_id": "analysis_variant_b_20251212_0001",
+  "variant": "variant_b",
+  "task_type": "resume_analysis",
+  "timestamp": "20251212_001922",
+  "input_hash": "d0b0f69e1dd8",
+  "metadata": {
+    "variant": "variant_b",
+    "duration_seconds": 3.25,
+    "quality_score": 97,
+    "resume_hash": "8fc5a513c73e",
+    "timestamp": "2025-12-12T00:19:22.295880"
+  },
+  "data": {
+    "extracted_data": {
+      "Контактная информация": {
+        "Email": "ivan@example.com",
+        "Телефон": "+7-999-123-45-67",
+        "Город": "Москва"
+      },
+      "Навыки": {
+        "Технические": [
+          "Python",
+          "Django",
+          "FastAPI",
+          "PostgreSQL",
+          "Redis",
+          "Docker",
+          "Git"
+        ],
+        "Языки": [
+          {
+            "Язык": "Английский",
+            "Уровень": "Intermediate"
+          }
+        ]
+      },
+      "Опыт работы": [
+        {
+          "Должность": "Senior Python Developer",
+          "Компания": "TechCorp",
+          "Период": "2021-2024",
+          "Обязанности": [
+            "Разработка микросервисов на FastAPI",
+            "Оптимизация производительности"
+          ]
+        },
+        {
+          "Должность": "Middle Python Developer",
+          "Компания": "Startup Inc",
+          "Период": "2019-2021",
+          "Обязанности": [
+            "Разработка backend на Django",
+            "Интеграция с внешними API"
+          ]
+        }
+      ],
+      "Образование": {
+        "Учебное заведение": "МГТУ им. Баумана",
+        "Факультет": "Факультет информатики",
+        "Специальность": "Специалист",
+        "Год окончания": "2019"
+      }
+    },
+    "quality_check": {
+      "success": true,
+      "completeness_score": 100,
+      "accuracy_score": 100,
+      "structure_score": 90,
+      "consistency_score": 100,
+      "overall_score": 97,
+      "missing_fields": [],
+      "incorrect_data": [],
+      "suggestions": [
+        "Добавить поле 'Имя' в контактную информацию для большей полноты.",
+        "Рассмотреть возможность добавления поля 'Описание' для резюме, чтобы включить любые дополнительные детали, которые могут быть полезны."
+      ]
+    },
+    "processing_time": 3.253729820251465,
+    "prompt_hash": "37fdf90f8de8"
+  }
+}

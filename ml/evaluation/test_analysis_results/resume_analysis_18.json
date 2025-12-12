@@ -1,0 +1,83 @@
+{
+  "skills": {
+    "technical": [
+      "Jenkins",
+      "GitLab CI/CD",
+      "GitHub Actions",
+      "ArgoCD",
+      "Yandex Cloud",
+      "AWS (EC2, S3, RDS, IAM)",
+      "Terraform",
+      "Ansible",
+      "Docker",
+      "Docker Compose",
+      "Kubernetes (kubectl, Helm)",
+      "Prometheus",
+      "Grafana",
+      "Loki",
+      "ELK Stack (Elasticsearch, Logstash, Kibana)",
+      "Zabbix",
+      "Linux (Ubuntu, CentOS)",
+      "Bash",
+      "Nginx",
+      "TCP/IP",
+      "DNS",
+      "VPN",
+      "PostgreSQL",
+      "MySQL",
+      "Redis"
+    ],
+    "soft": [],
+    "languages": [
+      "Russian (native)",
+      "English (B1 – Intermediate, technical documentation)"
+    ]
+  },
+  "experience": {
+    "total_years": "6.2",
+    "relevant_years": "6.2",
+    "positions": [
+      {
+        "title": "DevOps Engineer",
+        "company": "ООО \"ТехноПродакшн\"",
+        "years": "5.4",
+        "description": "Построение и поддержка CI/CD пайплайнов (GitLab CI) для 20+ микросервисов, миграция инфраструктуры в Yandex Cloud с Terraform, развертывание и управление Kubernetes‑кластерами, настройка мониторинга (Prometheus, Grafana, Alertmanager) более чем для 100 метрик, обеспечение безопасности инфраструктуры, автоматизация задач с Ansible и Bash‑скриптами."
+      },
+      {
+        "title": "Системный администратор / Младший DevOps",
+        "company": "ООО \"Сетевые решения\"",
+        "years": "0.8",
+        "description": "Администрирование серверов на Linux, настройка веб‑серверов Nginx и баз данных MySQL, PostgreSQL, начальная настройка Jenkins, работа с виртуализацией VMware vSphere."
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Новосибирский государственный технический университет (НГТУ)",
+      "degree": "Бакалавр",
+      "year": "2019",
+      "field": "Информационная безопасность"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Глубокие знания и практический опыт CI/CD (Jenkins, GitLab CI, GitHub Actions, ArgoCD)",
+      "Опыт работы с облачными платформами (Yandex Cloud, AWS) и инфраструктурой как код (Terraform, Ansible)",
+      "Управление Kubernetes‑кластерами и оркестрация контейнеров",
+      "Настройка систем мониторинга и логирования (Prometheus, Grafana, ELK)",
+      "Автоматизация рутинных задач с Bash‑скриптами",
+      "Сертификаты AWS Certified Cloud Practitioner и Kubernetes Fundamentals"
+    ],
+    "gaps": [
+      "Отсутствие явно указанных мягких навыков (коммуникация, лидерство, работа в команде)",
+      "Ограниченный опыт работы с другими облачными провайдерами (Azure, GCP)",
+      "Нет упоминаний о продвинутом программировании (Python, Go и т.п.)",
+      "Уровень английского B1 может ограничивать участие в международных проектах"
+    ],
+    "risk_factors": [
+      "Общий опыт менее 7 лет, что может считаться небольшим для старших позиций",
+      "Разница между заявленными 4 годами опыта и фактическим периодом (~6.2 года) может вызвать вопросы у работодателя",
+      "Отсутствие подтверждённого опыта работы с крупномасштабными высоконагруженными системами"
+    ]
+  }
+}

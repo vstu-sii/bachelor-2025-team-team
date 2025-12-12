@@ -1,0 +1,61 @@
+{
+  "skills": {
+    "technical": [
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "Git",
+      "Express.js",
+      "Vue",
+      "Vuex",
+      "SCSS",
+      "Nuxt",
+      "Pinia",
+      "ООП",
+      "Node.js",
+      "TypeScript"
+    ],
+    "soft": [],
+    "languages": [
+      "Русский"
+    ]
+  },
+  "experience": {
+    "total_years": 5,
+    "relevant_years": 5,
+    "positions": [
+      {
+        "title": "Frontend-разработчик",
+        "company": "СМИ, маркетинг, реклама, BTL, PR, дизайн, продюсирование",
+        "years": 4,
+        "description": "Разработка фронтенда, стек: Vue.js 2(Option API, Composition API), Vue 3, Nuxt 2, 3, опыт миграции с 2 на 3"
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "Shopint Brigade",
+        "years": 1,
+        "description": "разработка фронтенда"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Академия права и управления, Брянский филиал",
+      "degree": "Высшее образование",
+      "year": 2011,
+      "field": "Юридический, Гражданско-правовая"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Опыт работы с Vue.js и Nuxt",
+      "Знание JavaScript, HTML, CSS и Git"
+    ],
+    "gaps": [
+      "Отсутствие опыта работы с другими фреймворками и библиотеками"
+    ],
+    "risk_factors": [
+      "Ограниченный опыт работы в других компаниях"
+    ]
+  }
+}

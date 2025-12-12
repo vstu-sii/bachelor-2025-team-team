@@ -1,0 +1,89 @@
+{
+  "contacts": {
+    "name": "Кандидат",
+    "sex": "мужской",
+    "city": "Санкт-Петербург",
+    "number": null,
+    "email": null,
+    "social": []
+  },
+  "skills": {
+    "technical": [
+      "CSS",
+      "HTML",
+      "React",
+      "Redux",
+      "Redux Toolkit",
+      "Redux-Saga",
+      "Webpack",
+      "HTML5",
+      "CSS3",
+      "npm",
+      "Gitlab",
+      "ES6",
+      "JavaScript",
+      "REST API",
+      "ReactJS",
+      "Agile",
+      "Kanban",
+      "Scrum",
+      "Git",
+      "Jest",
+      "Next",
+      "Vite",
+      "UX",
+      "TypeScript",
+      "Styled Components",
+      "Eslint",
+      "Prettier",
+      "React-hook-form",
+      "React-query",
+      "React-router-dom",
+      "RTK-query",
+      "Webpack Module Federation",
+      "Vue",
+      "Vuex",
+      "Vuetify",
+      "Yii2"
+    ],
+    "soft": [],
+    "languages": [
+      "Русский",
+      "Английский — B1"
+    ]
+  },
+  "experience": {
+    "total_years": 5.42,
+    "relevant_years": 5.42,
+    "positions": [
+      {
+        "title": "Frontend-developer",
+        "company": "МТС ДИДЖИТАЛ",
+        "sphere": "Информационные технологии, системная интеграция, интернет",
+        "years": 4.5,
+        "description": "Участие в разработке проектов: 1) Маркетплейс B2B (Next, React, TypeScript, React-hook-form, React-query) — разработка с нуля, создание UI-kit, CMS, конструктора лендингов. 2) Digital-highway (React, React-router-dom, Redux, Redux-toolkit, Redux-saga, TypeScript, Webpack, SCSS, React-final-form) — разработка клиентского приложения, рефакторинг, динамичный роутинг экранов. 3) Экосистемный модуль лидогенерации (React, Redux, Redux-toolkit, RTK-query, Redux-saga, TypeScript, Webpack Module Federation, SCSS, React-hook-form, React-query) — разработка модуля формы обратной связи, микросервиса ввода адреса. 4) Свой круг — развертывание и настройка проекта, проектирование архитектуры и UX."
+      },
+      {
+        "title": "Fullstack Developer",
+        "company": "Ссдц Дельта",
+        "sphere": null,
+        "years": 0.92,
+        "description": "Разработка модуля по созданию ГОСТ тех. карт в приложении для сварочных компаний. Клиент: Vue/Vuex/Vuetify, сервер: Yii2, общение через REST API."
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Московский финансово-промышленный университет \"Синергия\"",
+      "degree": "Неоконченное высшее образование",
+      "year": 2025,
+      "field": "Разработка, сопровождение и обеспечение безопасности информационных систем"
+    },
+    {
+      "institution": "Яндекс Практикум",
+      "degree": "Курсы повышения квалификации",
+      "year": 2023,
+      "field": "Middle-frontend"
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "candidate_id": "resume_analysis_17.json",
+  "resume_analysis": {
+    "skills": {
+      "technical": [
+        "JavaScript (ES6+)",
+        "TypeScript",
+        "React",
+        "Redux Toolkit",
+        "React Router",
+        "HTML5",
+        "CSS3",
+        "SASS/SCSS",
+        "Styled Components",
+        "Tailwind CSS",
+        "Material-UI",
+        "Webpack",
+        "Vite",
+        "Git",
+        "npm",
+        "yarn",
+        "Jest",
+        "React Testing Library",
+        "Figma",
+        "Chrome DevTools",
+        "REST API",
+        "GraphQL (basic)",
+        "PWA",
+        "Adaptive and cross‑browser layout"
+      ],
+      "soft": [],
+      "languages": [
+        "Russian (native)",
+        "English (C1 – Advanced)"
+      ]
+    },
+    "experience": {
+      "total_years": "2",
+      "relevant_years": "2",
+      "positions": [
+        {
+          "title": "Frontend Разработчик",
+          "company": "Агентство \"КреативДев\"",
+          "years": "3.5",
+          "description": "Разработка пользовательских интерфейсов для клиентских проектов: от лендингов до сложных SPA‑приложений на React. Участие в рефакторинге легаси‑кода на TypeScript. Создание reusable‑компонентов, что ускорило разработку новых фич на 25 %. Тесная работа с UX/UI дизайнерами (Figma) для реализации pixel‑perfect верстки. Оптимизация производительности приложений (Lighthouse score >90)."
+        },
+        {
+          "title": "Стажер Frontend‑разработчик",
+          "company": "ООО \"Стартап Технолоджи\"",
+          "years": "0.25",
+          "description": "Верстка компонентов по готовым макетам. Исправление мелких багов в интерфейсе. Изучение и применение React‑экосистемы в реальных задачах."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Санкт‑Петербургский политехнический университет Петра Великого (СПбПУ)",
+        "degree": "Бакалавр",
+        "year": "2021",
+        "field": "Информационные системы и технологии"
+      }
+    ],
+    "match_analysis": {
+      "strengths": [
+        "Глубокие знания React и TypeScript",
+        "Опыт работы с современными инструментами сборки (Webpack, Vite)",
+        "Умение создавать переиспользуемые UI‑компоненты",
+        "Оптимизация производительности (Lighthouse >90)",
+        "Тестирование с Jest и React Testing Library",
+        "Работа с UI/UX дизайнерами и pixel‑perfect верстка",
+        "Опыт адаптивной и кросс‑браузерной вёрстки",
+        "Базовый опыт работы с GraphQL и PWA",
+        "Активное участие в профессиональном сообществе и ведение блога"
+      ],
+      "gaps": [
+        "Ограниченный опыт бэкенд‑интеграций (только базовый GraphQL, REST без глубоких деталей)",
+        "Отсутствие упоминаний о масштабных архитектурных решениях или лидерстве в команде",
+        "Не указаны навыки DevOps/CI‑CD, контейнеризации"
+      ],
+      "risk_factors": [
+        "Относительно небольшой общий опыт (2 года) для позиции среднего уровня",
+        "Большая часть опыта получена за короткий период (2022 г.)",
+        "Отсутствие явно указанных soft‑skills (коммуникация, управление проектами и т.п.)"
+      ]
+    }
+  },
+  "matching_result": {
+    "candidate_info": {
+      "name": null,
+      "current_position": "Frontend Разработчик"
+    },
+    "matching_results": {
+      "overall_score": 42,
+      "is_suitable": false,
+      "critical_issues": [
+        "Отсутствие опыта разработки на Java/Kotlin и соответствующих технологий (Spring Boot, микросервисы, PostgreSQL, Redis, Docker, Kubernetes)",
+        "Недостаточный общий опыт (2 года вместо требуемых 3 лет) и отсутствие релевантного бэкенд‑опыта"
+      ],
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 0,
+          "weight": 0.25,
+          "weighted_score": 0,
+          "explanation": "Кандидат работает как Frontend разработчик, не имеет опыта Java/Kotlin и соответствующих backend‑технологий, требуемых для позиции Middle Backend Developer."
+        },
+        "education_match": {
+          "score": 85,
+          "weight": 0.15,
+          "weighted_score": 12.75,
+          "explanation": "Имеет высшее техническое образование в области информационных систем и технологий, что соответствует требуемому техническому образованию."
+        },
+        "experience_match": {
+          "score": 30,
+          "weight": 0.3,
+          "weighted_score": 9,
+          "explanation": "Общий опыт 2 года, из которых 2 года – только фронтенд. Требуется минимум 3 года релевантного бэкенд‑опыта."
+        },
+        "schedule_match": {
+          "score": 100,
+          "weight": 0.1,
+          "weighted_score": 10,
+          "explanation": "График полного дня не противоречит требованиям вакансии."
+        },
+        "format_match": {
+          "score": 80,
+          "weight": 0.1,
+          "weighted_score": 8,
+          "explanation": "Формат гибридный не указан в резюме, но отсутствие ограничений позволяет предположить возможность работы в таком режиме."
+        },
+        "additional_match": {
+          "score": 20,
+          "weight": 0.1,
+          "weighted_score": 2,
+          "explanation": "Есть высокий уровень английского, но отсутствуют навыки работы с Java 8+, Kotlin, Spring Boot, микросервисами, PostgreSQL, Redis, Docker, Kubernetes."
+        }
+      }
+    },
+    "recommendation": {
+      "level": "не рекомендован",
+      "reason": "Кандидат не обладает необходимыми backend‑навыками (Java/Kotlin, Spring Boot, микросервисы и др.) и имеет недостаточный опыт работы, поэтому не подходит для позиции Middle Backend Developer.",
+      "suggested_salary": "120000 руб.",
+      "interview_priority": "низкий"
+    }
+  },
+  "overall_score": 42,
+  "is_suitable": false
+}

@@ -1,0 +1,55 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311923",
+    "current_position": "Fullstack-разработчик"
+  },
+  "matching_results": {
+    "overall_score": 85,
+    "is_suitable": true,
+    "critical_issues": [],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 90,
+        "weight": 0.2,
+        "weighted_score": 0.18,
+        "explanation": "Кандидат имеет опыт работы в Fullstack-разработке, что близко к должности Middle Frontend Developer (React)."
+      },
+      "education_match": {
+        "score": 90,
+        "weight": 0.15,
+        "weighted_score": 0.135,
+        "explanation": "Кандидат имеет высшее техническое образование в области информатики и прикладной математики, что соответствует требованиям."
+      },
+      "experience_match": {
+        "score": 90,
+        "weight": 0.25,
+        "weighted_score": 0.225,
+        "explanation": "Кандидат имеет 6 лет релевантного опыта работы, что превышает требуемые 2 года."
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать полный день."
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать в гибридном формате."
+      },
+      "additional_match": {
+        "score": 80,
+        "weight": 0.2,
+        "weighted_score": 0.16,
+        "explanation": "Кандидат имеет опыт работы с React, TypeScript, Redux, современными инструментами сборки и тестирования, а также знание английского языка на уровне чтения технической документации не указано."
+      }
+    }
+  },
+  "recommendation": {
+    "level": "рекомендован",
+    "reason": "Кандидат имеет необходимые навыки и опыт для должности Middle Frontend Developer (React), а также соответствует требованиям по образованию, графику и формату работы.",
+    "suggested_salary": "180000 руб.",
+    "interview_priority": "высокий"
+  }
+}

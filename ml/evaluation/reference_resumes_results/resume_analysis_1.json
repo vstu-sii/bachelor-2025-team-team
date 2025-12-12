@@ -1,0 +1,99 @@
+{
+  "skills": {
+    "technical": [
+      "JavaScript",
+      "React",
+      "Typescript",
+      "Node.js",
+      "HTML5",
+      "JSON API",
+      "CSS",
+      "Redux",
+      "Express",
+      "MongoDB",
+      "Sequelize",
+      "Bootstrap",
+      "Jest",
+      "React Testing Library",
+      "Playwright",
+      "Emotion",
+      "Styled-components",
+      "Formik",
+      "React-hook-form"
+    ],
+    "soft": [
+      "Управление состоянием приложений",
+      "UI/UX дизайн",
+      "Тестирование",
+      "Обеспечение качества",
+      "Поддержка релизов",
+      "Бэкэнд интеграция"
+    ],
+    "languages": [
+      "Русский",
+      "Английский",
+      "Корейский",
+      "Немецкий"
+    ]
+  },
+  "experience": {
+    "total_years": 4,
+    "relevant_years": 4,
+    "positions": [
+      {
+        "title": "Frontend-разработчик",
+        "company": "Glory",
+        "years": 0.3,
+        "description": "Оформление платежных систем на депозит и вывод оплат, проведение Code Review, React, Typescript"
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "Ростов-на-Дону",
+        "years": 0.5,
+        "description": "Frontend-разработка на проекте ПИК, React + Typescript, переведение проектов с js на ts, поддержка релизов, проведение Code Review"
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "Финансовый сектор",
+        "years": 2,
+        "description": "Фронтенд-разработка, управление состоянием приложений, UI/UX дизайн, тестирование, обеспечение качества, поддержка релизов"
+      },
+      {
+        "title": "Fronted-developer",
+        "company": "Информационные технологии, системная интеграция, интернет",
+        "years": 1.5,
+        "description": "React (JavaScript), управление состояниями приложения, обработка асинхронных операций, улучшение взаимодействия между модулями, Emotion, styled-components, Formik"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Волгоградский технологический колледж",
+      "degree": "Среднее специальное образование",
+      "year": 2019,
+      "field": "Туризм"
+    },
+    {
+      "institution": "Knower School",
+      "degree": "Курсы повышения квалификации",
+      "year": 2019,
+      "field": "Изучение 3ds Max"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Опыт работы с React и Typescript",
+      "Знание библиотек Redux и SWR",
+      "Опыт работы с UI/UX дизайном",
+      "Знание тестирования и обеспечения качества"
+    ],
+    "gaps": [
+      "Отсутствие опыта работы с некоторыми технологиями",
+      "Ограниченный опыт работы в команде"
+    ],
+    "risk_factors": [
+      "Нет опыта работы в крупных проектах",
+      "Ограниченный опыт работы с английским языком"
+    ]
+  }
+}

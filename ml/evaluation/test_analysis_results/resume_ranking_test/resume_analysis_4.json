@@ -1,0 +1,91 @@
+{
+  "skills": {
+    "technical": [
+      "Java",
+      "Kotlin",
+      "Android SDK",
+      "Android Layouts",
+      "Material Design",
+      "SQLite",
+      "Room",
+      "Realm",
+      "MVP",
+      "MVVM",
+      "Clean Architecture",
+      "SOLID",
+      "DRY",
+      "KISS",
+      "Android Debug Bridge (ADB)",
+      "Android Monitor",
+      "Firebase Crashlytics",
+      "Espresso",
+      "Robolectric",
+      "Google Play Store (release management)",
+      "Automated testing",
+      "UI optimization",
+      "Performance optimization",
+      "Data security programming"
+    ],
+    "soft": [
+      "Analytical thinking",
+      "Creativity",
+      "Hard work",
+      "High productivity",
+      "Time management",
+      "Responsibility",
+      "Collaboration with designers and developers"
+    ],
+    "languages": [
+      "English (fluent)"
+    ]
+  },
+  "experience": {
+    "total_years": "9",
+    "relevant_years": "9",
+    "positions": [
+      {
+        "title": "Android-разработчик",
+        "company": "Частная практика (фриланс)",
+        "years": "6.8",
+        "description": "Разработка мобильных приложений по требованиям заказчика и анализа рынка; реализация UI и бизнес‑логики; тестирование и исправление ошибок; сотрудничество с другими разработчиками и дизайнерами; внедрение биометрической аутентификации в приложение бронирования авиабилетов; оптимизация кода и производительности; создание игровых и книжных приложений."
+      },
+      {
+        "title": "Android-разработчик",
+        "company": "\"ADV-Apps\"",
+        "years": "3.75",
+        "description": "Разработка приложения онлайн‑магазина: UI, бизнес‑логика, интеграция с платёжной системой; создание дизайна и макетов; тестирование и исправление багов; поддержка и выпуск обновлений; разработка уникального дизайна и однокнопочного процесса покупки, что привело к росту продаж на 20 % в первый месяц."
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Университет Иннополис, г. Казань",
+      "degree": "Высшее образование",
+      "year": "2017",
+      "field": "Разработчик мобильных приложений"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "9 лет практического опыта Android‑разработки",
+      "Глубокие знания Java и Kotlin",
+      "Опыт работы с современными архитектурными паттернами (MVP, MVVM, Clean Architecture)",
+      "Навыки оптимизации производительности и безопасности приложений",
+      "Опыт публикации и поддержки приложений в Google Play Store",
+      "Умение писать автоматические UI‑тесты (Espresso, Robolectric)",
+      "Опыт работы с базами данных SQLite/Room/Realm",
+      "Сильные коммуникативные и аналитические навыки"
+    ],
+    "gaps": [
+      "Отсутствие упоминания о Jetpack Compose",
+      "Нет опыта CI/CD, Docker, облачных сервисов (Firebase Cloud Functions, AWS и пр.)",
+      "Не указаны навыки работы с Kotlin Coroutines/Flow",
+      "Нет подтверждённого опыта руководства командой"
+    ],
+    "risk_factors": [
+      "Готовность к переезду и командировкам отсутствует – ограничивает варианты работы в офисе",
+      "Большая часть текущего опыта – фриланс, что может вызвать вопросы о работе в крупной команде",
+      "Последний указанный опыт работы в компании заканчивается в 2018 г., возможный пробел в командной среде"
+    ]
+  }
+}

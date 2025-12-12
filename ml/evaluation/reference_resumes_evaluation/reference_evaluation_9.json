@@ -1,0 +1,133 @@
+{
+    "skills": {
+    "technical": [
+      "PHP",
+      "Git",
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "jQuery",
+      "Transact-SQL",
+      "1С-Битрикс",
+      "Sass",
+      "PUG",
+      "Gulp",
+      "Bootstrap",
+      "Foundation",
+      "Google Script",
+      "VBA",
+      "Atlassian Jira",
+      "npm",
+      "Vue",
+      "Vue.js",
+      "schema.org",
+      "C#",
+      "Java SE",
+      "MS SQL Server",
+      "MySQL",
+      "Angular",
+      "REST",
+      "Joomla",
+      "WordPress",
+      "MODx",
+      "Bitrix API",
+      "D7",
+      "FTP-клиенты (WinSCP, FileZilla)"
+    ],
+    "soft": [
+      "Трудолюбив",
+      "Стрессоустойчив",
+      "Готовность изучать новое",
+      "Умение \"Гуглить\""
+    ],
+    "languages": [
+      "Русский",
+      "Английский (B2 — Средне-продвинутый)"
+    ]
+  },
+  "experience": {
+    "total_years": 12,
+    "relevant_years": 12,
+    "positions": [
+      {
+        "title": "Frontend-разработчик",
+        "company": "Не указана",
+        "years": 7,
+        "description": "Разработка сайтов на 1C-Bitrix"
+      },
+      {
+        "title": "HTML-верстальщик",
+        "company": "DelisInfo",
+        "years": 0.33,
+        "description": "Верстка информационной системы \"РИО\""
+      },
+      {
+        "title": "Web-программист",
+        "company": "Cetera Labs",
+        "years": 1,
+        "description": "Верстка Web-страниц по PSD-макетам"
+      },
+      {
+        "title": "Инженер",
+        "company": "Финансовый сектор",
+        "years": 5,
+        "description": "Поддержка пользователей на рабочих местах в офисе банка"
+      },
+      {
+        "title": "Google-script разработчик",
+        "company": "ГК Новые технологии",
+        "years": 0.42,
+        "description": "Разработка скриптов под Google Sheets, Google Docs, Gmail"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Самарский Государственный Аэрокосмический Университет",
+      "degree": "Высшее образование",
+      "year": 2013,
+      "field": "Информатики (6), Автоматизированные системы обработки информации и управления"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Большой опыт работы в IT-сфере",
+      "Широкий спектр технических навыков",
+      "Готовность изучать новое"
+    ],
+    "gaps": [
+      "Отсутствие опыта работы с некоторыми технологиями (например, Docker, Kubernetes)"
+    ],
+    "risk_factors": [
+      "Нет информации о сертификатах или лицензиях"
+    ]
+  },
+    "scores": {
+      "job_title_match": {
+        "score": 20,
+        "comment": "WordPress/CMS разработчик с фокусом на анимацию"
+      },
+      "education_match": {
+        "score": 10,
+        "comment": "Только среднее образование"
+      },
+      "experience_match": {
+        "score": 100,
+        "comment": "11 лет опыта значительно превышает требования"
+      },
+      "schedule_match": {
+        "score": 100,
+        "comment": "Полный день - стандартный формат"
+      },
+      "format_match": {
+        "score": 100,
+        "comment": "Гибридный формат приемлем"
+      },
+      "additional_match": {
+        "score": 5,
+        "comment": "Отсутствует React, TypeScript, Redux, современные инструменты"
+      }
+    },
+    "overall_score": 32,
+    "summary_comment": "Веб-дизайнер/разработчик анимации, не React разработчик"
+}
