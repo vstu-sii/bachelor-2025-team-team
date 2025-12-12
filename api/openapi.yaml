@@ -1,0 +1,983 @@
+openapi: 3.0.3
+info:
+  title: AI-HR Assistant API
+  description: API для приложения AI-помощника по анализу и ранжированию резюме кандидатов
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@resumeanalyzer.com
+
+servers:
+  - url: https://api.AI-HRAssistant.com/v1
+    description: Production server
+  - url: https://staging-api.AI-HRAssistant.com/v1
+    description: Staging server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - email
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "hr_manager"
+        email:
+          type: string
+          format: email
+          example: "hr@company.com"
+        password:
+          type: string
+          writeOnly: true
+        role:
+          type: string
+          enum: [admin, recruiter, user]
+          example: "recruiter"
+        created_at:
+          type: string
+          format: date-time
+
+    UserRegistration:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 255
+          example: "hr_manager"
+        email:
+          type: string
+          format: email
+          example: "hr@company.com"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 128
+          example: "SecurePass123!"
+        role:
+          type: string
+          enum: [recruiter, user]
+          default: "user"
+
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "hr@company.com"
+        password:
+          type: string
+          format: password
+          example: "SecurePass123!"
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        user:
+          $ref: '#/components/schemas/User'
+
+    Vacancy:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        job_title:
+          type: string
+          example: "Senior Python Developer"
+        education:
+          type: string
+          example: "Высшее техническое образование"
+        work_experience:
+          type: integer
+          description: "Требуемый опыт работы в годах"
+          example: 5
+        desired_salary:
+          type: integer
+          description: "Желаемая зарплата"
+          example: 200000
+        work_schedule:
+          type: string
+          example: "Полный день"
+        work_format:
+          type: string
+          enum: [remote, office, hybrid]
+          example: "hybrid"
+        additional_requirements:
+          type: string
+          example: "Знание Docker, Kubernetes, опыт с микросервисами"
+        user_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    VacancyCreate:
+      type: object
+      required:
+        - job_title
+      properties:
+        job_title:
+          type: string
+          example: "Senior Python Developer"
+        education:
+          type: string
+          example: "Высшее техническое образование"
+        work_experience:
+          type: integer
+          minimum: 0
+          example: 5
+        desired_salary:
+          type: integer
+          minimum: 0
+          example: 200000
+        work_schedule:
+          type: string
+          example: "Полный день"
+        work_format:
+          type: string
+          enum: [remote, office, hybrid]
+          example: "hybrid"
+        additional_requirements:
+          type: string
+          example: "Знание Docker, Kubernetes"
+
+    Resume:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        how_old:
+          type: boolean
+          description: "Флаг актуальности резюме"
+          example: true
+        user_id:
+          type: integer
+        file_path:
+          type: string
+          description: "Путь к файлу резюме"
+          example: "/uploads/resume_123.pdf"
+        source_url:
+          type: string
+          description: "Ссылка на резюме на внешнем сайте (например, hh.ru)"
+          example: "https://hh.ru/resume/abc123"
+        parsed_data:
+          type: object
+          description: "Распознанные данные из резюме"
+          properties:
+            full_name:
+              type: string
+            position:
+              type: string
+            experience_years:
+              type: integer
+            education:
+              type: string
+            skills:
+              type: array
+              items:
+                type: string
+            salary_expectation:
+              type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    ResumeUploadRequest:
+      type: object
+      required:
+        - file_base64
+      properties:
+        file_base64:
+          type: string
+          description: "PDF файл резюме в формате Base64"
+        file_name:
+          type: string
+          example: "candidate_resume.pdf"
+
+    ResumeUrlRequest:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          format: uri
+          example: "https://hh.ru/resume/abc123def456"
+        source:
+          type: string
+          enum: [hh.ru, superjob.ru, other]
+          default: "hh.ru"
+
+    Score:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        number_of_top:
+          type: integer
+          description: "Позиция в рейтинге (1 - лучший кандидат)"
+          example: 1
+        vacancy_id:
+          type: integer
+        resume_id:
+          type: integer
+        match_score:
+          type: number
+          format: float
+          description: "Процент соответствия вакансии (0-100)"
+          example: 87.5
+        analysis_details:
+          type: object
+          description: "Детальный анализ соответствия"
+          properties:
+            experience_match:
+              type: number
+              example: 90.0
+            education_match:
+              type: number
+              example: 85.0
+            skills_match:
+              type: number
+              example: 88.0
+            salary_match:
+              type: number
+              example: 75.0
+        created_at:
+          type: string
+          format: date-time
+
+    RankedCandidate:
+      type: object
+      properties:
+        resume:
+          $ref: '#/components/schemas/Resume'
+        score:
+          $ref: '#/components/schemas/Score'
+        highlights:
+          type: array
+          description: "Ключевые преимущества кандидата"
+          items:
+            type: string
+        concerns:
+          type: array
+          description: "Потенциальные недостатки"
+          items:
+            type: string
+
+    AnalysisRequest:
+      type: object
+      required:
+        - vacancy_id
+      properties:
+        vacancy_id:
+          type: integer
+          description: "ID вакансии для анализа"
+        resume_ids:
+          type: array
+          items:
+            type: integer
+          description: "Список ID резюме для анализа (если не указан, анализируются все)"
+        top_n:
+          type: integer
+          default: 10
+          description: "Количество лучших кандидатов в результате"
+
+    AnalysisResponse:
+      type: object
+      properties:
+        vacancy:
+          $ref: '#/components/schemas/Vacancy'
+        ranked_candidates:
+          type: array
+          items:
+            $ref: '#/components/schemas/RankedCandidate'
+        total_analyzed:
+          type: integer
+          description: "Общее количество проанализированных резюме"
+        analysis_timestamp:
+          type: string
+          format: date-time
+
+    LLMInteraction:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        prompt_text:
+          type: string
+        response_text:
+          type: string
+        model_used:
+          type: string
+          example: "gpt-4"
+        tokens_used:
+          type: integer
+        interaction_type:
+          type: string
+          enum: [resume_parsing, candidate_ranking, vacancy_analysis, recommendation]
+        created_at:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        code:
+          type: integer
+        details:
+          type: object
+
+paths:
+  # Аутентификация
+  /auth/register:
+    post:
+      summary: Регистрация нового пользователя
+      description: Создание нового аккаунта для работы с системой
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '201':
+          description: Пользователь успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Некорректные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Пользователь с таким email уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      summary: Вход в систему
+      description: Аутентификация пользователя
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Неверные учетные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Управление вакансиями
+  /vacancies:
+    get:
+      summary: Получение списка вакансий
+      description: Получение всех вакансий текущего пользователя
+      tags:
+        - Vacancies
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Список вакансий
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vacancies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vacancy'
+                  total:
+                    type: integer
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Создание новой вакансии
+      description: Создание вакансии для поиска кандидатов
+      tags:
+        - Vacancies
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VacancyCreate'
+      responses:
+        '201':
+          description: Вакансия успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacancy'
+        '400':
+          description: Некорректные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /vacancies/{vacancy_id}:
+    get:
+      summary: Получение детальной информации о вакансии
+      tags:
+        - Vacancies
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: vacancy_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Детали вакансии
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacancy'
+        '404':
+          description: Вакансия не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Обновление вакансии
+      tags:
+        - Vacancies
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: vacancy_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VacancyCreate'
+      responses:
+        '200':
+          description: Вакансия обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacancy'
+        '404':
+          description: Вакансия не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Удаление вакансии
+      tags:
+        - Vacancies
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: vacancy_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Вакансия удалена
+        '404':
+          description: Вакансия не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Управление резюме
+  /resumes:
+    get:
+      summary: Получение списка резюме
+      description: Получение всех загруженных резюме
+      tags:
+        - Resumes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: how_old
+          in: query
+          schema:
+            type: boolean
+          description: Фильтр по актуальности резюме
+      responses:
+        '200':
+          description: Список резюме
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resumes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Resume'
+                  total:
+                    type: integer
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /resumes/upload:
+    post:
+      summary: Загрузка резюме в формате PDF
+      description: |
+        Загрузка PDF файла резюме для дальнейшего анализа.
+        Система автоматически распознает текст и извлекает ключевую информацию.
+      tags:
+        - Resumes
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResumeUploadRequest'
+      responses:
+        '201':
+          description: Резюме успешно загружено и обработано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resume'
+        '400':
+          description: Неверный формат файла или ошибка парсинга
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Файл слишком большой
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /resumes/import-url:
+    post:
+      summary: Импорт резюме по ссылке
+      description: |
+        Импорт резюме с сайтов-агрегаторов (hh.ru, superjob.ru и др.).
+        Система автоматически извлекает данные с указанной страницы.
+      tags:
+        - Resumes
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResumeUrlRequest'
+      responses:
+        '201':
+          description: Резюме успешно импортировано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resume'
+        '400':
+          description: Неверный URL или недоступная страница
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Сервис импорта временно недоступен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /resumes/{resume_id}:
+    get:
+      summary: Получение детальной информации о резюме
+      tags:
+        - Resumes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: resume_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Детали резюме
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resume'
+        '404':
+          description: Резюме не найдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Удаление резюме
+      tags:
+        - Resumes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: resume_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Резюме удалено
+        '404':
+          description: Резюме не найдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # AI анализ и ранжирование
+  /ai/analyze:
+    post:
+      summary: Анализ и ранжирование кандидатов
+      description: |
+        Основная функция системы: анализ резюме кандидатов на соответствие вакансии
+        и формирование ранжированного списка с оценками и рекомендациями.
+        
+        AI модель анализирует:
+        - Соответствие опыта работы
+        - Соответствие образования
+        - Совпадение навыков и компетенций
+        - Соответствие зарплатных ожиданий
+        - Общую релевантность кандидата
+      tags:
+        - AI Analysis
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalysisRequest'
+      responses:
+        '200':
+          description: Анализ завершен успешно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisResponse'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Вакансия или резюме не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Ошибка AI модели
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /ai/reanalyze/{vacancy_id}:
+    post:
+      summary: Повторный анализ всех кандидатов для вакансии
+      description: Запускает повторный анализ всех резюме для указанной вакансии
+      tags:
+        - AI Analysis
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: vacancy_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Повторный анализ завершен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisResponse'
+        '404':
+          description: Вакансия не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Результаты анализа
+  /vacancies/{vacancy_id}/rankings:
+    get:
+      summary: Получение ранжированного списка кандидатов
+      description: Получение результатов анализа кандидатов для конкретной вакансии
+      tags:
+        - Rankings
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: vacancy_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: top_n
+          in: query
+          schema:
+            type: integer
+            default: 10
+          description: Количество лучших кандидатов
+        - name: min_score
+          in: query
+          schema:
+            type: number
+            format: float
+          description: Минимальный процент соответствия
+      responses:
+        '200':
+          description: Список кандидатов с рейтингами
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vacancy:
+                    $ref: '#/components/schemas/Vacancy'
+                  ranked_candidates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RankedCandidate'
+        '404':
+          description: Вакансия не найдена или анализ не проводился
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /scores/{score_id}:
+    get:
+      summary: Получение детальной информации об оценке
+      tags:
+        - Rankings
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: score_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Детали оценки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Score'
+        '404':
+          description: Оценка не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Статистика и история
+  /user/statistics:
+    get:
+      summary: Получение статистики пользователя
+      description: Общая статистика по вакансиям, резюме и анализам
+      tags:
+        - Statistics
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Статистика пользователя
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_vacancies:
+                    type: integer
+                  total_resumes:
+                    type: integer
+                  total_analyses:
+                    type: integer
+                  recent_analyses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        vacancy_id:
+                          type: integer
+                        vacancy_title:
+                          type: string
+                        analyzed_at:
+                          type: string
+                          format: date-time
+                        candidates_count:
+                          type: integer
+
+  /llm-interactions:
+    get:
+      summary: История взаимодействий с AI
+      tags:
+        - Statistics
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: interaction_type
+          in: query
+          schema:
+            type: string
+            enum: [resume_parsing, candidate_ranking, vacancy_analysis, recommendation]
+      responses:
+        '200':
+          description: История взаимодействий
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  interactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LLMInteraction'
+                  total:
+                    type: integer

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - AI HR Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">The best company in the world</a>
+            <a href="#contact" class="contact-link">Contact</a>
+        </header>
+    </div>
+
+    <main>
+        <div class="signin-container">
+            <div class="signin-header">
+                <h1>Sign In</h1>
+                <p>Welcome back to AI HR Assistant</p>
+            </div>
+
+            <form class="signin-form" id="signinForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Sign In</button>
+                </div>
+
+                <div class="form-footer">
+                    Don't have an account? <a href="/registration">Sign Up</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 The best company in the world. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ОЧИСТКА localStorage при загрузке страницы входа
+        window.addEventListener('DOMContentLoaded', () => {
+            // Проверяем, есть ли параметр logout в URL
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('logout') === 'true') {
+                localStorage.removeItem('user');
+                alert('Вы успешно вышли из системы');
+                // Удаляем параметр из URL
+                window.history.replaceState({}, document.title, '/authorization');
+            }
+        });
+
+        // Обработка формы авторизации
+        document.getElementById('signinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const submitButton = document.querySelector('.btn-submit');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Signing In...';
+            submitButton.disabled = true;
+
+            try {
+                const response = await fetch('/api/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`${data.message}\nWelcome, ${data.user.username}!`);
+                    
+                    // Сохраняем данные пользователя
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    // Перенаправление
+                    window.location.href = '/vacancy';
+                } else {
+                    alert(data.message);
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка соединения с сервером. Попробуйте позже.');
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
