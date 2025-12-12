@@ -1,0 +1,103 @@
+{
+  "contacts": {
+    "name": "Не указано",
+    "sex": "Женщина",
+    "city": "Волгоград",
+    "number": "Не указано",
+    "email": "Не указано",
+    "social": []
+  },
+  "skills": {
+    "technical": [
+      "JavaScript",
+      "Jira",
+      "Atlassian Confluence",
+      "JSON API",
+      "HTML5",
+      "NodeJS",
+      "ES6",
+      "ReactJS",
+      "TypeScript",
+      "HTML",
+      "CSS",
+      "React",
+      "Redux",
+      "Express",
+      "Hbs",
+      "MongoDB",
+      "Bootstrap",
+      "API",
+      "Sequelize",
+      "React Testing Library",
+      "Playwright",
+      "Formik",
+      "Emotion",
+      "styled-components",
+      "redux-saga",
+      "swr",
+      "react-hook-form",
+      "jest"
+    ],
+    "soft": [
+      "Проведение Code Review",
+      "Разработка фич",
+      "Разработка ui-kit платформы",
+      "Написание юнит и интеграционных тестов",
+      "Сопровождение постановки на продакшен"
+    ],
+    "languages": [
+      "Русский (родной)",
+      "Английский (B2)",
+      "Корейский (A2)",
+      "Немецкий (A2)"
+    ]
+  },
+  "experience": {
+    "total_years": 4,
+    "relevant_years": 4,
+    "positions": [
+      {
+        "title": "Frontend-разработчик",
+        "company": "Glory",
+        "sphere": "Не указано",
+        "years": 0,
+        "description": "Оформление платежных систем на депозит и вывод оплат, Проведение Code Review, React, Typescript"
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "Не указано",
+        "sphere": "Информационные технологии, системная интеграция, интернет",
+        "years": 0,
+        "description": "React + Typescript, переведение проектов с js на ts, Поддержка релизов, сопровождение процесса постановки новых версий на продакшн, Проведение Code Review"
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "Не указано",
+        "sphere": "Финансовый сектор",
+        "years": 2,
+        "description": "Фронтенд-разработка, Управление состоянием приложений, UI/UX дизайн, Тестирование, Обеспечение качества, Поддержка релизов, Бэкэнд интеграция: Node.js"
+      },
+      {
+        "title": "Fronted-developer",
+        "company": "Не указано",
+        "sphere": "Информационные технологии, системная интеграция, интернет",
+        "years": 1,
+        "description": "React (JavaScript), Redux & redux-saga, Emotion / styled-components, Formik, Активное участие в процессе развития и совершенствования проектов, реализация нового функционала, участие в ревью кода"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Волгоградский технологический колледж",
+      "degree": "Среднее специальное образование",
+      "year": 2019,
+      "field": "Туризм"
+    },
+    {
+      "institution": "Knower School",
+      "degree": "Курсы повышения квалификации",
+      "year": 2019,
+      "field": "Изучение 3ds Max"
+    }
+  ]
+}

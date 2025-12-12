@@ -1,0 +1,17 @@
+{
+  "test_id": "questions_variant_a_20251212_0003",
+  "variant": "variant_a",
+  "task_type": "question_generation",
+  "created_at": "20251212_020727",
+  "updated_at": "20251212_020727",
+  "input_file": "question_generation\\variant_a\\questions_variant_a_20251212_0003\\input_20251212_020727.json",
+  "output_file": "question_generation\\variant_a\\questions_variant_a_20251212_0003\\output_20251212_020727.json",
+  "input_hash": "e024526a46f0",
+  "metadata": {
+    "variant": "variant_a",
+    "duration_seconds": 7.6,
+    "questions_count": 0,
+    "quality_score": 0,
+    "timestamp": "2025-12-12T02:07:27.939013"
+  }
+}

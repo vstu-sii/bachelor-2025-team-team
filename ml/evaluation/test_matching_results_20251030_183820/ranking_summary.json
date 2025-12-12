@@ -1,0 +1,19 @@
+{
+  "vacancy_data": {
+    "job_title": "Python разработчик",
+    "education": "Высшее техническое образование (компьютерные науки, программная инженерия)",
+    "work_experience": 2,
+    "desired_salary": 150000,
+    "work_schedule": "Полный день",
+    "work_format": "Гибридный формат (офис/удаленно)",
+    "additional_requirements": "Опыт работы с Django, FastAPI, PostgreSQL, Docker, знание английского языка"
+  },
+  "processing_date": "2025-10-30T18:39:32.158688",
+  "summary": {
+    "total_candidates": 8,
+    "suitable_candidates": 0,
+    "unsuitable_candidates": 8,
+    "success_rate": "0.0%"
+  },
+  "top_candidates": []
+}

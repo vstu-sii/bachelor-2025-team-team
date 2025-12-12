@@ -1,0 +1,151 @@
+{
+  "candidate_id": "resume_analysis_16.json",
+  "resume_analysis": {
+    "skills": {
+      "technical": [
+        "Java 8/11/17",
+        "Kotlin",
+        "Spring Boot",
+        "Spring MVC",
+        "Spring Data JPA",
+        "Spring Security",
+        "Hibernate",
+        "PostgreSQL",
+        "Redis",
+        "MongoDB",
+        "Docker",
+        "Kafka",
+        "Maven",
+        "Gradle",
+        "Git",
+        "JUnit",
+        "Mockito",
+        "REST API",
+        "Microservices",
+        "Kubernetes (basic knowledge)"
+      ],
+      "soft": [
+        "code review",
+        "mentoring junior developers",
+        "team collaboration",
+        "documentation writing",
+        "problem solving"
+      ],
+      "languages": [
+        "Russian (native)",
+        "English (B2 – Upper-Intermediate)"
+      ]
+    },
+    "experience": {
+      "total_years": "5.1",
+      "relevant_years": "5.1",
+      "positions": [
+        {
+          "title": "Backend Разработчик",
+          "company": "ООО \"ФинТех Солюшнз\"",
+          "years": "4.3",
+          "description": "Разработка и поддержка высоконагруженного микросервисного ядра банковского приложения; реализация новых API для модуля денежных переводов и платежей; оптимизация сложных SQL‑запросов (снижение времени отклика эндпоинтов на 30%); участие в проектировании архитектуры новых сервисов; написание unit‑ и integration‑тестов (покрытие >80%); участие в код‑ревью, менторинг стажеров."
+        },
+        {
+          "title": "Младший Java‑разработчик",
+          "company": "ООО \"ВебСервисы\"",
+          "years": "0.8",
+          "description": "Разработка и поддержка REST API для внутренних сервисов компании; исправление багов и доработка существующего функционала; написание документации по разработанному коду."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Национальный исследовательский университет \"Высшая школа экономики\" (НИУ ВШЭ), Москва",
+        "degree": "Бакалавр",
+        "year": "2020",
+        "field": "Программная инженерия"
+      }
+    ],
+    "match_analysis": {
+      "strengths": [
+        "Глубокие знания Java и Kotlin",
+        "Опыт работы с Spring‑экосистемой и Hibernate",
+        "Практика построения микросервисных систем и работы с Kafka",
+        "Умение работать с реляционными и NoSQL базами (PostgreSQL, Redis, MongoDB)",
+        "Опыт контейнеризации (Docker) и базовых навыков оркестрации (Kubernetes)",
+        "Тестирование (JUnit, Mockito) с высоким покрытием кода",
+        "Навыки код‑ревью и наставничества",
+        "Участие в хакатоне с финтех‑наградами",
+        "Уровень английского B2"
+      ],
+      "gaps": [
+        "Базовые, но не продвинутые знания Kubernetes",
+        "Отсутствие опыта работы с облачными платформами (AWS, GCP, Azure)",
+        "Нет упоминаний о CI/CD, автоматизации деплоя",
+        "Отсутствие опыта в DevOps‑инструментах (Ansible, Terraform и пр.)",
+        "Нет опыта фронтенд‑разработки или работы с UI"
+      ],
+      "risk_factors": [
+        "Общий опыт менее 6 лет, что может ограничивать готовность к старшим позициям",
+        "Базовые знания Kubernetes могут потребовать дополнительного обучения для проектов с интенсивным использованием оркестрации",
+        "Готовность к релокации только в ограниченный набор городов"
+      ]
+    }
+  },
+  "matching_result": {
+    "candidate_info": {
+      "name": null,
+      "current_position": "Backend Разработчик"
+    },
+    "matching_results": {
+      "overall_score": 67,
+      "is_suitable": false,
+      "critical_issues": [
+        "Отсутствие опыта работы с Python",
+        "Отсутствие опыта работы с Django и FastAPI"
+      ],
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 10,
+          "weight": 0.25,
+          "weighted_score": 2.5,
+          "explanation": "Вакансия требует Python разработчика, а кандидат имеет опыт только с Java/Kotlin и не упоминает Python."
+        },
+        "education_match": {
+          "score": 90,
+          "weight": 0.15,
+          "weighted_score": 13.5,
+          "explanation": "Кандидат имеет высшее техническое образование в области программной инженерии, что соответствует требуемому профилю."
+        },
+        "experience_match": {
+          "score": 100,
+          "weight": 0.3,
+          "weighted_score": 30,
+          "explanation": "Общий релевантный опыт 5.1 года, что превышает требуемые 2 года, и полностью относится к backend-разработке."
+        },
+        "schedule_match": {
+          "score": 80,
+          "weight": 0.1,
+          "weighted_score": 8,
+          "explanation": "В резюме нет информации о предпочтениях по графику, предполагается совместимость с полным днем."
+        },
+        "format_match": {
+          "score": 70,
+          "weight": 0.1,
+          "weighted_score": 7,
+          "explanation": "Формат гибридной работы не указан, но отсутствие ограничений позволяет предположить гибкость."
+        },
+        "additional_match": {
+          "score": 60,
+          "weight": 0.1,
+          "weighted_score": 6,
+          "explanation": "Кандидат владеет PostgreSQL и Docker, а также английским на уровне B2, но не имеет опыта с Django и FastAPI."
+        }
+      }
+    },
+    "recommendation": {
+      "level": "не рекомендован",
+      "reason": "Критически важные требования Python и фреймворков Django/FastAPI не покрыты, несмотря на хороший общий опыт и образование.",
+      "suggested_salary": "130000 руб.",
+      "interview_priority": "низкий"
+    }
+  },
+  "overall_score": 67,
+  "is_suitable": false
+}

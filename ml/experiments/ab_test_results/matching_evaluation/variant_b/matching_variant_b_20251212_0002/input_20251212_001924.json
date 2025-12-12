@@ -1,0 +1,37 @@
+{
+  "test_id": "matching_variant_b_20251212_0002",
+  "variant": "variant_b",
+  "task_type": "matching_evaluation",
+  "timestamp": "20251212_001924",
+  "input_hash": "f5aa1021d67f",
+  "data": {
+    "resume_analysis_keys": [
+      "test_id",
+      "variant",
+      "result",
+      "quality_check",
+      "duration",
+      "metadata",
+      "data_saved_to"
+    ],
+    "vacancy_data": {
+      "job_title": "Senior Python Developer",
+      "education": "Высшее техническое",
+      "work_experience": 3,
+      "desired_salary": "200000 руб.",
+      "work_schedule": "Полный день",
+      "work_format": "Удаленно/гибрид",
+      "additional_requirements": "Опыт работы с микросервисами, знание Docker"
+    },
+    "weights": {
+      "job_title_weight": 20,
+      "education_weight": 15,
+      "experience_weight": 25,
+      "schedule_weight": 5,
+      "format_weight": 50,
+      "additional_weight": 30
+    },
+    "prompt_variant": "variant_b",
+    "prompt_preview": "Ты — система оценки соответствия кандидатов.\n        Проведи комплексную оценку match между кандидатом и вакансией.\n        \n        Используй взвешенную оценку по критериям.\n        Выяви критические несоответствия.\n        Дай рекомендацию по найму.\n        \n        Формат ответа — строго JSON.\n\nТребования вакансии:\n- Должность: Senior Python Developer\n- Образование: Высшее техническое\n- Опыт: 3 лет\n- Зарплата: 200000 руб. руб.\n- График: Полный день\n- Формат: Удаленно/гибрид\n- Дополнительно: О"
+  }
+}

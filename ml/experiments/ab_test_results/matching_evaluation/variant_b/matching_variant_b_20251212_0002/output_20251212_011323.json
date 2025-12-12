@@ -1,0 +1,87 @@
+{
+  "test_id": "matching_variant_b_20251212_0002",
+  "variant": "variant_b",
+  "task_type": "matching_evaluation",
+  "timestamp": "20251212_011323",
+  "input_hash": "a7cc5d0b30c6",
+  "metadata": {
+    "variant": "variant_b",
+    "duration_seconds": 6.32,
+    "vacancy_title": "Senior Python Developer",
+    "weights_used": {
+      "job_title_weight": 20,
+      "education_weight": 15,
+      "experience_weight": 25,
+      "schedule_weight": 5,
+      "format_weight": 5,
+      "additional_weight": 30
+    },
+    "timestamp": "2025-12-12T01:13:23.479058"
+  },
+  "data": {
+    "evaluation_result": {
+      "candidate": {
+        "name": "Иванов Иван Иванович",
+        "position": "Python разработчик"
+      },
+      "vacancy": {
+        "position": "Senior Python Developer",
+        "requirements": {
+          "education": "Высшее техническое",
+          "experience": "3 года",
+          "salary": "200000 руб.",
+          "schedule": "Полный день",
+          "format": "Удаленно/гибрид",
+          "additional": [
+            "Опыт работы с микросервисами",
+            "Знание Docker"
+          ]
+        }
+      },
+      "match_score": 95,
+      "criteria": [
+        {
+          "name": "Образование",
+          "weight": 0.1,
+          "match": true,
+          "score": 10
+        },
+        {
+          "name": "Опыт работы",
+          "weight": 0.2,
+          "match": true,
+          "score": 10
+        },
+        {
+          "name": "Зарплата",
+          "weight": 0.15,
+          "match": true,
+          "score": 10
+        },
+        {
+          "name": "График работы",
+          "weight": 0.1,
+          "match": true,
+          "score": 10
+        },
+        {
+          "name": "Формат работы",
+          "weight": 0.1,
+          "match": true,
+          "score": 10
+        },
+        {
+          "name": "Дополнительные навыки",
+          "weight": 0.35,
+          "match": true,
+          "score": 9.5,
+          "notes": "Имеет опыт работы с микросервисами и знание Docker"
+        }
+      ],
+      "critical_mismatches": [],
+      "recommendation": "Рекомендуется к найму. Кандидат полностью соответствует требованиям вакансии и имеет дополнительные навыки, которые могут быть полезны для компании."
+    },
+    "processing_time": 6.322923183441162,
+    "prompt_hash": "5c60283f6840"
+  }
+}

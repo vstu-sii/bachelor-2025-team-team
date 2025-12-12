@@ -1,0 +1,99 @@
+{
+    "skills": {
+    "technical": [
+      "JavaScript",
+      "React",
+      "TypeScript",
+      "Redux",
+      "Redux Toolkit",
+      "MUI",
+      "CSS Modules",
+      "Git",
+      "HTML5",
+      "CSS3",
+      "MySQL",
+      "SQL",
+      "Node.js",
+      "Next.js",
+      "RTK Query",
+      "Styled components"
+    ],
+    "soft": [],
+    "languages": [
+      "Русский",
+      "Английский",
+      "Польский"
+    ]
+  },
+  "experience": {
+    "total_years": 3,
+    "relevant_years": 3,
+    "positions": [
+      {
+        "title": "Frontend-разработчик",
+        "company": "Лесная промышленность, деревообработка",
+        "years": 1,
+        "description": "Разработал компоненты на основе React, TypeScript, Redux Toolkit, MUI и CSS Modules. Работал с формами с помощью react-hook-form, писал кастомные компоненты. Для HTTP-запросов и кэширования использовал RTK Query. Реализовал перехватчик запросов, работу с CSRF-токенами и cookie. Писал unit-тесты на Jest. Оптимизировал приложение с помощью memo, useMemo, useCallback, lazy-loading и debounce."
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "Информационные технологии, системная интеграция, интернет",
+        "years": 2,
+        "description": "Разрабатывал компоненты на основе React, TypeScript, Redux Toolkit, styled-components. Работал с таблицами с использованием React-Table v7. Работал с формами, используя React-Hook-Form и React-Select. Разработал Storybook для компонентов. Реализовал API-сервис для HTTP-запросов и кэширования с помощью RTK Query. Оптимизировал приложение с использованием Memo, UseMemo, UseCallback, lazy-loading, infinite scroll, debounce."
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Белорусский государственный университет информатики и радиоэлектроники",
+      "degree": "Магистр",
+      "year": 2023,
+      "field": "Электронные системы и технологии"
+    },
+    {
+      "institution": "Белорусский государственный университет информатики и радиоэлектроники",
+      "degree": "",
+      "year": 2021,
+      "field": "Программист, бизнес-аналитик"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Глубокие знания React.js, TypeScript, JavaScript, Redux и современной архитектуры фронтенда",
+      "Опыт работы с Node.js, Next.js, MUI, RTK Query, Styled components",
+      "Подтверждённый опыт разработки масштабируемых решений, улучшающих пользовательский опыт и достигающих целей бизнеса"
+    ],
+    "gaps": [],
+    "risk_factors": [
+      "Не готов к командировкам"
+    ]
+  },
+    "scores": {
+      "job_title_match": {
+        "score": 95,
+        "comment": "Идеальное соответствие уровню Middle+"
+      },
+      "education_match": {
+        "score": 100,
+        "comment": "Профильное высшее техническое образование"
+      },
+      "experience_match": {
+        "score": 85,
+        "comment": "3 года опыта превышает требования"
+      },
+      "schedule_match": {
+        "score": 100,
+        "comment": "Полный день - стандартный формат"
+      },
+      "format_match": {
+        "score": 100,
+        "comment": "Гибридный формат приемлем"
+      },
+      "additional_match": {
+        "score": 95,
+        "comment": "Полное соответствие всем техническим требованиям + дополнительные навыки"
+      }
+    },
+    "overall_score": 94,
+    "summary_comment": "Идеальный кандидат, полное соответствие всем требованиям"
+}

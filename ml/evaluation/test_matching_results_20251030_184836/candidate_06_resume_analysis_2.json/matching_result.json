@@ -1,0 +1,150 @@
+{
+  "candidate_id": "resume_analysis_2.json",
+  "resume_analysis": {
+    "skills": {
+      "technical": [
+        "Agile",
+        "SCRUM",
+        "Strategic infrastructure planning",
+        "Data storage systems",
+        "Business process development",
+        "IT procedures",
+        "VMware virtualization",
+        "Server administration",
+        "Database management",
+        "Data protection and recovery",
+        "Implementation and testing of new technologies"
+      ],
+      "soft": [
+        "Client interaction",
+        "Expectation management",
+        "Stakeholder engagement",
+        "Leadership",
+        "Team coordination"
+      ],
+      "languages": [
+        "English (B2)"
+      ]
+    },
+    "experience": {
+      "total_years": 15,
+      "relevant_years": 11,
+      "positions": [
+        {
+          "title": "Менеджер IT-проектов",
+          "company": "ООО Polygon Solutions",
+          "years": 11.5,
+          "description": "Руководство IT‑отделом, управление крупными IT‑проектами (Agile, SCRUM), взаимодействие с заказчиками, совместное утверждение проектов, внедрение новых решений и стратегическое планирование инфраструктуры."
+        },
+        {
+          "title": "Системный администратор",
+          "company": "Vermillion Services",
+          "years": 4.1,
+          "description": "Сервисное обслуживание серверов, ликвидирование неполадок, управление базами данных, защита и восстановление информации, внедрение и тестирование новых технологий."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Онлайн‑курсы «Все об ИТ»",
+        "degree": "Сертификат",
+        "year": 2014,
+        "field": null
+      },
+      {
+        "institution": "Компьютерная академия NextGen",
+        "degree": "Сертификат",
+        "year": 2013,
+        "field": "Информационные инфраструктуры"
+      },
+      {
+        "institution": "Санкт‑Петербургский политехнический университет Петра Великого",
+        "degree": "Высшее образование (диплом)",
+        "year": 2010,
+        "field": "Математическое обеспечение и администрирование информационных систем"
+      }
+    ],
+    "match_analysis": {
+      "strengths": [
+        "Более 10 лет опыта управления IT‑проектами",
+        "Глубокие знания Agile и SCRUM",
+        "Опыт стратегического планирования инфраструктуры",
+        "Практика виртуализации на базе VMware",
+        "Навыки работы с клиентами и управления ожиданиями",
+        "Лидерские качества и управление командой"
+      ],
+      "gaps": [
+        "Отсутствие официальных сертификатов PMP/ITIL",
+        "Нет указаний на опыт работы с облачными платформами (AWS, Azure, GCP)",
+        "Ограниченный уровень английского (B2) для международных проектов",
+        "Отсутствие упоминаний о современных DevOps‑инструментах"
+      ],
+      "risk_factors": [
+        "Последнее формальное образование получено в 2010 году, возможна необходимость актуализации знаний",
+        "Зависимость от одного работодателя с 2014 года – риск ограниченной гибкости",
+        "Отсутствие указаний на участие в крупных международных проектах"
+      ]
+    }
+  },
+  "matching_result": {
+    "candidate_info": {
+      "name": "",
+      "current_position": "Менеджер IT-проектов"
+    },
+    "matching_results": {
+      "overall_score": 41,
+      "is_suitable": false,
+      "critical_issues": [
+        "Отсутствие опыта разработки backend на Java/Kotlin",
+        "Нет указаний на работу с Spring Boot, микросервисной архитектурой, PostgreSQL, Redis, Docker, Kubernetes",
+        "Текущая должность не соответствует требуемой позиции Middle Backend Developer"
+      ],
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 0,
+          "weight": 0.25,
+          "weighted_score": 0,
+          "explanation": "Кандидат работает менеджером IT‑проектов и системным администратором, опыта разработки на Java/Kotlin не указано."
+        },
+        "education_match": {
+          "score": 85,
+          "weight": 0.15,
+          "weighted_score": 12.75,
+          "explanation": "Имеется высшее техническое образование в области информационных систем, что соответствует требуемому уровню."
+        },
+        "experience_match": {
+          "score": 30,
+          "weight": 0.3,
+          "weighted_score": 9,
+          "explanation": "Общий опыт 15 лет, из них 11 лет релевантны IT‑управлению, но нет опыта разработки backend, требуемого в вакансии."
+        },
+        "schedule_match": {
+          "score": 100,
+          "weight": 0.1,
+          "weighted_score": 10,
+          "explanation": "Не указано иное, предполагается готовность к полному рабочему дню."
+        },
+        "format_match": {
+          "score": 70,
+          "weight": 0.1,
+          "weighted_score": 7,
+          "explanation": "Формат гибридный не уточнён в резюме, но отсутствие противоречий позволяет предположить возможность работы в таком режиме."
+        },
+        "additional_match": {
+          "score": 20,
+          "weight": 0.1,
+          "weighted_score": 2,
+          "explanation": "Отсутствуют упоминания о Java 8+, Kotlin, Spring Boot, микросервисах, PostgreSQL, Redis, Docker, Kubernetes; уровень английского B2 достаточен только для чтения документации."
+        }
+      }
+    },
+    "recommendation": {
+      "level": "не рекомендован",
+      "reason": "Кандидат не обладает необходимыми навыками разработки на Java/Kotlin и опытом работы с требуемыми технологиями, а также его текущая роль не соответствует позиции Middle Backend Developer.",
+      "suggested_salary": "не применимо",
+      "interview_priority": "низкий"
+    }
+  },
+  "overall_score": 41,
+  "is_suitable": false
+}

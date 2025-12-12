@@ -1,0 +1,1230 @@
+{
+  "evaluation_results": {
+    "reference_evaluation_1": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Fronted-developer"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 75,
+            "weight": 0.25,
+            "weighted_score": 18.75,
+            "explanation": "4 года релевантного опыта, но частая смена работы (4 компании за 4 года)"
+          },
+          "education_match": {
+            "score": 20,
+            "weight": 0.15,
+            "weighted_score": 3,
+            "explanation": "Среднее специальное образование по туризму, не соответствует требованиям"
+          },
+          "experience_match": {
+            "score": 90,
+            "weight": 0.2,
+            "weighted_score": 18,
+            "explanation": "4 года опыта превышает требования"
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Полный день - стандартный формат"
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Гибридный формат приемлем"
+          },
+          "additional_match": {
+            "score": 95,
+            "weight": 0.25,
+            "weighted_score": 23.75,
+            "explanation": "Полное соответствие тех. стеку: React, TypeScript, Redux, Jest, RTL"
+          }
+        },
+        "overall_score": 83.5,
+        "is_suitable": true,
+        "critical_issues": [
+          "Среднее специальное образование по туризму, не соответствует требованиям"
+        ]
+      },
+      "recommendation": {
+        "level": "рекомендован",
+        "reason": "Технически сильный кандидат с полным соответствием стеку, но риски из-за образования и частой смены работы",
+        "suggested_salary": "180000 руб.",
+        "interview_priority": "высокий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 71,
+        "current_overall_score": 83.5,
+        "score_difference": 12.5,
+        "deviation_analysis": "Итоговая оценка выше эталонной на 12.5 баллов. Разница обусловлена более высокой оценкой соответствия должности, опыта работы и дополнительных требований.",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_1",
+        "benchmark_used": 71,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_1.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:42:10.146782"
+      }
+    },
+    "reference_evaluation_10": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Senior Frontend Developer"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 90,
+            "weight": 0.25,
+            "weighted_score": 22.5,
+            "explanation": "Senior уровень с 6-летним опытом, превышает требования Middle позиции"
+          },
+          "education_match": {
+            "score": 70,
+            "weight": 0.15,
+            "weighted_score": 10.5,
+            "explanation": "Неоконченное высшее техническое образование, но по профильной специальности"
+          },
+          "experience_match": {
+            "score": 95,
+            "weight": 0.2,
+            "weighted_score": 19,
+            "explanation": "6 лет релевантного опыта, работа в финансовом секторе и ЦДС"
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Полный день - стандартный формат"
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Гибридный формат приемлем"
+          },
+          "additional_match": {
+            "score": 95,
+            "weight": 0.25,
+            "weighted_score": 23.75,
+            "explanation": "Полное соответствие тех. стеку: React, TypeScript, RTK, RTK Query, Jest, Cypress, Webpack"
+          }
+        },
+        "overall_score": 95.75,
+        "is_suitable": true,
+        "critical_issues": [
+          "Неоконченное высшее образование"
+        ]
+      },
+      "recommendation": {
+        "level": "рекомендован",
+        "reason": "Сильный Senior кандидат с отличным техническим соответствием. Опыт в enterprise-проектах финансового сектора.",
+        "suggested_salary": "200000 руб.",
+        "interview_priority": "высокий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 89,
+        "current_overall_score": 95.75,
+        "score_difference": 6.75,
+        "deviation_analysis": "Итоговая оценка выше эталонной на 6.75 баллов. Это связано с более высокой оценкой опыта работы и дополнительных требований.",
+        "consistency_level": "высокий"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_10",
+        "benchmark_used": 89,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_10.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:42:16.548775"
+      }
+    },
+    "reference_evaluation_11": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Frontend-разработчик"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 45,
+            "weight": 0.25,
+            "weighted_score": 11.25,
+            "explanation": "Junior уровень с 1 годом опыта, недостаточно для Middle позиции"
+          },
+          "education_match": {
+            "score": 30,
+            "weight": 0.15,
+            "weighted_score": 4.5,
+            "explanation": "Среднее специальное образование, еще не завершено"
+          },
+          "experience_match": {
+            "score": 50,
+            "weight": 0.2,
+            "weighted_score": 10,
+            "explanation": "1 год опыта ниже требований (2+ года)"
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Полный день - стандартный формат"
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Гибридный формат приемлем"
+          },
+          "additional_match": {
+            "score": 95,
+            "weight": 0.25,
+            "weighted_score": 23.75,
+            "explanation": "Отличное техническое соответствие: React, TypeScript, Redux, RTK Query, Jest, Next.js"
+          }
+        },
+        "overall_score": 69.5,
+        "is_suitable": false,
+        "critical_issues": [
+          "Недостаточный опыт работы для Middle позиции",
+          "Среднее специальное образование"
+        ]
+      },
+      "recommendation": {
+        "level": "не рекомендован",
+        "reason": "Недостаточный опыт работы и уровень образования для Middle позиции",
+        "suggested_salary": "120000 руб.",
+        "interview_priority": "низкий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 58,
+        "current_overall_score": 69.5,
+        "score_difference": 11.5,
+        "deviation_analysis": "Итоговая оценка выше эталонной на 11.5 баллов, что может быть связано с высоким техническим соответствием и гибким подходом к оценке опыта.",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_11",
+        "benchmark_used": 58,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_11.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:42:22.534686"
+      }
+    },
+    "reference_evaluation_12": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Fullstack-разработчик"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 20,
+            "weight": 0.25,
+            "weighted_score": 5,
+            "explanation": "Веб-дизайнер/CMS разработчик с фокусом на анимацию, не React разработчик"
+          },
+          "education_match": {
+            "score": 10,
+            "weight": 0.15,
+            "weighted_score": 1.5,
+            "explanation": "Только среднее образование, не соответствует требованиям"
+          },
+          "experience_match": {
+            "score": 100,
+            "weight": 0.2,
+            "weighted_score": 20,
+            "explanation": "11 лет опыта значительно превышает требования"
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Полный день - стандартный формат"
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Гибридный формат приемлем"
+          },
+          "additional_match": {
+            "score": 5,
+            "weight": 0.25,
+            "weighted_score": 1.25,
+            "explanation": "Полное несоответствие: отсутствует React, TypeScript, Redux, современные инструменты фронтенда"
+          }
+        },
+        "overall_score": 47.75,
+        "is_suitable": false,
+        "critical_issues": [
+          "Отсутствие высшего технического образования",
+          "Отсутствие опыта работы с React, TypeScript, Redux и современными инструментами фронтенда"
+        ]
+      },
+      "recommendation": {
+        "level": "не рекомендован",
+        "reason": "Кандидат не соответствует ключевым требованиям вакансии, включая образование и необходимые технические навыки.",
+        "suggested_salary": "Не применимо",
+        "interview_priority": "низкий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 32,
+        "current_overall_score": 47.75,
+        "score_difference": 15.75,
+        "deviation_analysis": "Итоговая оценка кандидата выше эталонной на 15.75 баллов. Это расхождение может быть связано с тем, что кандидат имеет значительный опыт работы, что положительно влияет на общую оценку, несмотря на отсутствие соответствия ключевым требованиям вакансии.",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_12",
+        "benchmark_used": 32,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_12.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:42:28.916603"
+      }
+    },
+    "reference_evaluation_13": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Fullstack-разработчик / Преподаватель"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 50,
+            "weight": 0.25,
+            "weighted_score": 12.5,
+            "explanation": "Кандидат имеет опыт работы Fullstack-разработчиком, что близко к требуемой должности Middle Frontend Developer (React), но не полностью соответствует."
+          },
+          "education_match": {
+            "score": 0,
+            "weight": 0.15,
+            "weighted_score": 0,
+            "explanation": "Образование кандидата не соответствует требованиям высшего технического образования в области компьютерных наук, программной инженерии или информационных технологий."
+          },
+          "experience_match": {
+            "score": 60,
+            "weight": 0.2,
+            "weighted_score": 12,
+            "explanation": "Кандидат имеет 5 лет общего опыта, но только 1 год в роли Fullstack-разработчика, что ниже требуемых 2 лет."
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать полный день, что соответствует требованиям вакансии."
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать в гибридном формате, что соответствует требованиям вакансии."
+          },
+          "additional_match": {
+            "score": 95,
+            "weight": 0.25,
+            "weighted_score": 23.75,
+            "explanation": "Кандидат имеет опыт работы с React, TypeScript, и другими современными инструментами, а также знает английский язык на уровне чтения технической документации."
+          }
+        },
+        "overall_score": 68.25,
+        "is_suitable": true,
+        "critical_issues": [
+          "Образование не соответствует требованиям"
+        ]
+      },
+      "recommendation": {
+        "level": "условно рекомендован",
+        "reason": "Кандидат имеет необходимые технические навыки и опыт работы с требуемыми технологиями, но его образование не соответствует требованиям вакансии.",
+        "suggested_salary": "180000 руб.",
+        "interview_priority": "средний"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 58,
+        "current_overall_score": 68.25,
+        "score_difference": 10.25,
+        "deviation_analysis": "Итоговая оценка кандидата выше эталонной на 10.25 баллов. Это связано с более высокой оценкой соответствия дополнительным требованиям и опыту работы.",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_13",
+        "benchmark_used": 58,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_13.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:42:37.273142"
+      }
+    },
+    "reference_evaluation_14": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Fullstack-разработчик"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 80,
+            "weight": 0.25,
+            "weighted_score": 20,
+            "explanation": "Fullstack-разработчик с 6-летним опытом, соответствует уровню Middle+"
+          },
+          "education_match": {
+            "score": 100,
+            "weight": 0.15,
+            "weighted_score": 15,
+            "explanation": "Профильное высшее техническое образование (Компьютерная инженерия)"
+          },
+          "experience_match": {
+            "score": 90,
+            "weight": 0.2,
+            "weighted_score": 18,
+            "explanation": "6 лет опыта превышает требования"
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Полный день - стандартный формат"
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Гибридный формат приемлем"
+          },
+          "additional_match": {
+            "score": 75,
+            "weight": 0.25,
+            "weighted_score": 18.75,
+            "explanation": "Хорошее соответствие: React, TypeScript, Jest, но отсутствует Redux"
+          }
+        },
+        "overall_score": 91.75,
+        "is_suitable": true,
+        "critical_issues": [
+          "Отсутствие опыта работы с Redux"
+        ]
+      },
+      "recommendation": {
+        "level": "рекомендован",
+        "reason": "Сильный кандидат с хорошим образованием и опытом, но требует проверки знания Redux",
+        "suggested_salary": "180000 руб.",
+        "interview_priority": "высокий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 74,
+        "current_overall_score": 91.75,
+        "score_difference": 17.75,
+        "deviation_analysis": "Итоговая оценка кандидата выше эталонной на 17.75 баллов. Это может быть связано с более высоким опытом работы и дополнительными навыками, которые не были учтены в эталонной оценке.",
+        "consistency_level": "высокий"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_14",
+        "benchmark_used": 74,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_14.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:42:41.975565"
+      }
+    },
+    "reference_evaluation_15": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Fullstack-разработчик"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 85,
+            "weight": 0.25,
+            "weighted_score": 21.25,
+            "explanation": "Fullstack-разработчик с международным коммерческим опытом, соответствует Middle+ уровню"
+          },
+          "education_match": {
+            "score": 60,
+            "weight": 0.15,
+            "weighted_score": 9,
+            "explanation": "Экономическое образование, но компенсируется курсами CS50 и практическим опытом"
+          },
+          "experience_match": {
+            "score": 85,
+            "weight": 0.2,
+            "weighted_score": 17,
+            "explanation": "4 года опыта превышает требования, международные проекты"
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Полный день - стандартный формат"
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Гибридный формат приемлем"
+          },
+          "additional_match": {
+            "score": 95,
+            "weight": 0.25,
+            "weighted_score": 23.75,
+            "explanation": "Отличное соответствие: React, TypeScript, Redux, Next.js, Jest, Playwright"
+          }
+        },
+        "overall_score": 82,
+        "is_suitable": true,
+        "critical_issues": []
+      },
+      "recommendation": {
+        "level": "рекомендован",
+        "reason": "Очень сильный кандидат с международным коммерческим опытом и полным техническим соответствием",
+        "suggested_salary": "180000 руб.",
+        "interview_priority": "высокий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 82,
+        "current_overall_score": 82,
+        "score_difference": 0,
+        "deviation_analysis": "Итоговая оценка совпадает с эталонной оценкой",
+        "consistency_level": "высокий"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_15",
+        "benchmark_used": 82,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_15.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:42:51.331691"
+      }
+    },
+    "reference_evaluation_2": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Frontend-devolper"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 85,
+            "weight": 0.25,
+            "weighted_score": 21.25,
+            "explanation": "Кандидат имеет 5 лет опыта в качестве Frontend-devolper, что соответствует должности Middle Frontend Developer (React)."
+          },
+          "education_match": {
+            "score": 60,
+            "weight": 0.15,
+            "weighted_score": 9,
+            "explanation": "Кандидат имеет неоконченное высшее образование по профильной специальности, что частично соответствует требованию высшего технического образования."
+          },
+          "experience_match": {
+            "score": 95,
+            "weight": 0.2,
+            "weighted_score": 19,
+            "explanation": "Кандидат имеет 5 лет опыта, что значительно превышает требуемые 2 года."
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать полный день, что соответствует требованиям вакансии."
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать в гибридном формате, что соответствует требованиям вакансии."
+          },
+          "additional_match": {
+            "score": 90,
+            "weight": 0.25,
+            "weighted_score": 22.5,
+            "explanation": "Кандидат имеет опыт работы с React, Redux, TypeScript и другими современными технологиями, но отсутствует опыт с тестированием."
+          }
+        },
+        "overall_score": 91.75,
+        "is_suitable": true,
+        "critical_issues": [
+          "Неоконченное высшее образование",
+          "Отсутствие опыта с тестированием"
+        ]
+      },
+      "recommendation": {
+        "level": "рекомендован",
+        "reason": "Кандидат имеет значительный опыт работы с соответствующими технологиями и готов работать в требуемом формате.",
+        "suggested_salary": "180000 руб.",
+        "interview_priority": "высокий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 86,
+        "current_overall_score": 91.75,
+        "score_difference": 5.75,
+        "deviation_analysis": "Итоговая оценка кандидата выше эталонной на 5.75 баллов. Это связано с более высокой оценкой опыта работы и дополнительных требований.",
+        "consistency_level": "высокий"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_2",
+        "benchmark_used": 86,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_2.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:42:56.552317"
+      }
+    },
+    "reference_evaluation_3": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Senior frontend developer"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 40,
+            "weight": 0.25,
+            "weighted_score": 10,
+            "explanation": "Кандидат имеет 14 лет опыта в качестве frontend разработчика, но его текущая должность - Senior frontend developer, что не полностью соответствует требованиям Middle Frontend Developer (React)."
+          },
+          "education_match": {
+            "score": 30,
+            "weight": 0.15,
+            "weighted_score": 4.5,
+            "explanation": "Образование кандидата в области экономики не соответствует требованиям высшего технического образования в области компьютерных наук, программной инженерии или информационных технологий."
+          },
+          "experience_match": {
+            "score": 100,
+            "weight": 0.2,
+            "weighted_score": 20,
+            "explanation": "Кандидат имеет 14 лет опыта работы в качестве frontend разработчика, что значительно превышает требуемые 2 года опыта."
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать полный день, что соответствует требованиям вакансии."
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать в гибридном формате, что соответствует требованиям вакансии."
+          },
+          "additional_match": {
+            "score": 10,
+            "weight": 0.25,
+            "weighted_score": 2.5,
+            "explanation": "Кандидат имеет опыт работы с TypeScript, но его уровень английского языка (A1) недостаточен для чтения технической документации, и его опыт работы с React ограничен."
+          }
+        },
+        "overall_score": 57,
+        "is_suitable": false,
+        "critical_issues": [
+          "Образование не соответствует требованиям",
+          "Недостаточный уровень английского языка",
+          "Ограниченный опыт работы с React"
+        ]
+      },
+      "recommendation": {
+        "level": "не рекомендован",
+        "reason": "Кандидат не соответствует ключевым требованиям вакансии, таким как образование, уровень английского языка и опыт работы с React.",
+        "suggested_salary": "Не применимо",
+        "interview_priority": "низкий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 47,
+        "current_overall_score": 57,
+        "score_difference": 10,
+        "deviation_analysis": "Итоговая оценка кандидата выше эталонной на 10 баллов. Это расхождение может быть связано с тем, что кандидат имеет значительный опыт работы, который был высоко оценен в критериях опыта работы и графика работы.",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_3",
+        "benchmark_used": 47,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_3.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:43:02.882571"
+      }
+    },
+    "reference_evaluation_4": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Frontend-разработчик"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 50,
+            "weight": 0.25,
+            "weighted_score": 12.5,
+            "explanation": "Кандидат является Frontend-разработчиком, что соответствует должности Middle Frontend Developer, но специализируется на Vue.js, а не React."
+          },
+          "education_match": {
+            "score": 0,
+            "weight": 0.15,
+            "weighted_score": 0,
+            "explanation": "Юридическое образование не соответствует требованиям высшего технического образования в области компьютерных наук, программной инженерии или информационных технологий."
+          },
+          "experience_match": {
+            "score": 100,
+            "weight": 0.2,
+            "weighted_score": 20,
+            "explanation": "5 лет опыта работы в качестве Frontend-разработчика превышает требуемые 2 года."
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать полный день, что соответствует требованиям вакансии."
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать в гибридном формате, что соответствует требованиям вакансии."
+          },
+          "additional_match": {
+            "score": 10,
+            "weight": 0.25,
+            "weighted_score": 2.5,
+            "explanation": "Кандидат имеет опыт работы с TypeScript, но не имеет опыта работы с React, Redux, современными инструментами сборки и тестирования, а также знания английского языка на уровне чтения технической документации."
+          }
+        },
+        "overall_score": 55,
+        "is_suitable": false,
+        "critical_issues": [
+          "Отсутствие опыта работы с React и Redux",
+          "Отсутствие знания английского языка на уровне чтения технической документации",
+          "Юридическое образование"
+        ]
+      },
+      "recommendation": {
+        "level": "не рекомендован",
+        "reason": "Кандидат не имеет опыта работы с React и Redux, не знает английского языка на уровне чтения технической документации и имеет юридическое образование, что не соответствует требованиям вакансии.",
+        "suggested_salary": "180000 руб.",
+        "interview_priority": "низкий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 28,
+        "current_overall_score": 55,
+        "score_difference": 27,
+        "deviation_analysis": "Расхождение в оценках связано с тем, что эталонная оценка не учитывает опыт работы кандидата и его готовность работать в гибридном формате, а также знание TypeScript.",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_4",
+        "benchmark_used": 28,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_4.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:43:10.144076"
+      }
+    },
+    "reference_evaluation_5": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Программист"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 30,
+            "weight": 0.25,
+            "weighted_score": 7.5,
+            "explanation": "Должность кандидата (Программист) частично соответствует требуемой (Middle Frontend Developer (React))"
+          },
+          "education_match": {
+            "score": 0,
+            "weight": 0.15,
+            "weighted_score": 0,
+            "explanation": "Отсутствует высшее техническое образование, имеется только среднее специальное юридическое образование"
+          },
+          "experience_match": {
+            "score": 100,
+            "weight": 0.2,
+            "weighted_score": 20,
+            "explanation": "Общий опыт работы 5 лет, что превышает требуемые 2 года"
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать полный день"
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать в гибридном формате"
+          },
+          "additional_match": {
+            "score": 0,
+            "weight": 0.25,
+            "weighted_score": 0,
+            "explanation": "Отсутствует опыт работы с React, TypeScript, Redux, современными инструментами сборки и тестирования, знание английского языка на уровне чтения технической документации"
+          }
+        },
+        "overall_score": 47.5,
+        "is_suitable": false,
+        "critical_issues": [
+          "Отсутствие высшего технического образования",
+          "Отсутствие опыта работы с React, TypeScript, Redux",
+          "Отсутствие знания английского языка на уровне чтения технической документации"
+        ]
+      },
+      "recommendation": {
+        "level": "не рекомендован",
+        "reason": "Кандидат не соответствует ключевым требованиям вакансии, таким как образование, опыт работы с необходимыми технологиями и знание английского языка",
+        "suggested_salary": "Не применимо",
+        "interview_priority": "низкий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 12,
+        "current_overall_score": 47.5,
+        "score_difference": 35.5,
+        "deviation_analysis": "Итоговая оценка кандидата значительно выше эталонной оценки, что может свидетельствовать о более строгих критериях оценки в эталоне или о неполных данных в резюме кандидата",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_5",
+        "benchmark_used": 12,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_5.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:43:15.931068"
+      }
+    },
+    "reference_evaluation_6": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Frontend-разработчик"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 95,
+            "weight": 0.25,
+            "weighted_score": 23.75,
+            "explanation": "Идеальное соответствие уровню Middle+"
+          },
+          "education_match": {
+            "score": 100,
+            "weight": 0.15,
+            "weighted_score": 15,
+            "explanation": "Профильное высшее техническое образование"
+          },
+          "experience_match": {
+            "score": 85,
+            "weight": 0.2,
+            "weighted_score": 17,
+            "explanation": "3 года опыта превышает требования"
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Полный день - стандартный формат"
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Гибридный формат приемлем"
+          },
+          "additional_match": {
+            "score": 95,
+            "weight": 0.25,
+            "weighted_score": 23.75,
+            "explanation": "Полное соответствие всем техническим требованиям + дополнительные навыки"
+          }
+        },
+        "overall_score": 99.5,
+        "is_suitable": true,
+        "critical_issues": []
+      },
+      "recommendation": {
+        "level": "рекомендован",
+        "reason": "Идеальный кандидат, полное соответствие всем требованиям",
+        "suggested_salary": "180000 руб.",
+        "interview_priority": "высокий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 94,
+        "current_overall_score": 99.5,
+        "score_difference": 5.5,
+        "deviation_analysis": "Итоговая оценка выше эталонной на 5.5 баллов, что может быть связано с более высокой оценкой соответствия должности и дополнительным опытом кандидата.",
+        "consistency_level": "высокий"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_6",
+        "benchmark_used": 94,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_6.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:43:22.035297"
+      }
+    },
+    "reference_evaluation_7": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Fullstack-разработчик"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 70,
+            "weight": 0.25,
+            "weighted_score": 17.5,
+            "explanation": "Кандидат имеет опыт работы Fullstack-разработчиком, что близко к требуемой должности Middle Frontend Developer (React), но требует проверки опыта с React."
+          },
+          "education_match": {
+            "score": 100,
+            "weight": 0.15,
+            "weighted_score": 15,
+            "explanation": "Кандидат имеет высшее техническое образование в области информатики и прикладной математики, что соответствует требованиям вакансии."
+          },
+          "experience_match": {
+            "score": 80,
+            "weight": 0.2,
+            "weighted_score": 16,
+            "explanation": "Кандидат имеет 10 лет опыта работы, что значительно превышает требуемые 2 года, но требует проверки опыта с React."
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать полный день, что соответствует требованиям вакансии."
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать в гибридном формате, что соответствует требованиям вакансии."
+          },
+          "additional_match": {
+            "score": 50,
+            "weight": 0.25,
+            "weighted_score": 12.5,
+            "explanation": "Кандидат имеет опыт работы с React, но отсутствует информация о знании современных инструментов сборки и тестирования, а также о знании английского языка на уровне чтения технической документации."
+          }
+        },
+        "overall_score": 76,
+        "is_suitable": true,
+        "critical_issues": [
+          "Отсутствие информации о знании английского языка на уровне чтения технической документации",
+          "Отсутствие информации о знании современных инструментов сборки и тестирования"
+        ]
+      },
+      "recommendation": {
+        "level": "условно рекомендован",
+        "reason": "Кандидат имеет богатый технический опыт и соответствует большинству требований вакансии, но требует проверки опыта с React и знания английского языка.",
+        "suggested_salary": "180000 руб.",
+        "interview_priority": "средний"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 65,
+        "current_overall_score": 76,
+        "score_difference": 11,
+        "deviation_analysis": "Итоговая оценка кандидата выше эталонной на 11 баллов. Это связано с тем, что кандидат имеет значительный опыт работы и соответствует большинству требований вакансии.",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_7",
+        "benchmark_used": 65,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_7.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:43:31.053956"
+      }
+    },
+    "reference_evaluation_8": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Frontend-разработчик"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 35,
+            "weight": 0.25,
+            "weighted_score": 8.75,
+            "explanation": "Кандидат имеет опыт работы как Frontend-разработчик, но специализируется на Angular, а не на React."
+          },
+          "education_match": {
+            "score": 10,
+            "weight": 0.15,
+            "weighted_score": 1.5,
+            "explanation": "Кандидат имеет только среднее образование, тогда как требуется высшее техническое образование."
+          },
+          "experience_match": {
+            "score": 95,
+            "weight": 0.2,
+            "weighted_score": 19,
+            "explanation": "Кандидат имеет 8 лет опыта работы, что значительно превышает требуемые 2 года."
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать полный день, что соответствует требованиям вакансии."
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать в гибридном формате, что соответствует требованиям вакансии."
+          },
+          "additional_match": {
+            "score": 10,
+            "weight": 0.25,
+            "weighted_score": 2.5,
+            "explanation": "Кандидат не имеет опыта работы с React, TypeScript, Redux и современными инструментами сборки и тестирования."
+          }
+        },
+        "overall_score": 51.75,
+        "is_suitable": false,
+        "critical_issues": [
+          "Отсутствие опыта работы с React, TypeScript, Redux",
+          "Отсутствие высшего технического образования"
+        ]
+      },
+      "recommendation": {
+        "level": "не рекомендован",
+        "reason": "Кандидат не соответствует ключевым требованиям вакансии, таким как опыт работы с React и высшее техническое образование.",
+        "suggested_salary": "180000 руб.",
+        "interview_priority": "низкий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 38,
+        "current_overall_score": 51.75,
+        "score_difference": 13.75,
+        "deviation_analysis": "Итоговая оценка кандидата выше эталонной оценки, что может быть связано с значительным опытом работы и соответствием по графику и формату работы.",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_8",
+        "benchmark_used": 38,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_8.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:43:37.841379"
+      }
+    },
+    "reference_evaluation_9": {
+      "candidate_info": {
+        "name": "Не указано",
+        "current_position": "Frontend-разработчик"
+      },
+      "matching_results": {
+        "match_breakdown": {
+          "job_title_match": {
+            "score": 40,
+            "weight": 0.25,
+            "weighted_score": 10,
+            "explanation": "Текущая должность кандидата (Frontend-разработчик) частично соответствует требуемой должности (Middle Frontend Developer (React))"
+          },
+          "education_match": {
+            "score": 100,
+            "weight": 0.15,
+            "weighted_score": 15,
+            "explanation": "Кандидат имеет высшее техническое образование в области информатики, что соответствует требованиям вакансии"
+          },
+          "experience_match": {
+            "score": 100,
+            "weight": 0.2,
+            "weighted_score": 20,
+            "explanation": "Кандидат имеет 12 лет общего опыта работы, что значительно превышает требуемые 2 года"
+          },
+          "schedule_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать полный день, что соответствует требованиям вакансии"
+          },
+          "format_match": {
+            "score": 100,
+            "weight": 0.1,
+            "weighted_score": 10,
+            "explanation": "Кандидат готов работать в гибридном формате, что соответствует требованиям вакансии"
+          },
+          "additional_match": {
+            "score": 0,
+            "weight": 0.25,
+            "weighted_score": 0,
+            "explanation": "Кандидат не имеет опыта работы с React, TypeScript, Redux, современными инструментами сборки и тестирования, а также знания английского языка на уровне чтения технической документации"
+          }
+        },
+        "overall_score": 55,
+        "is_suitable": false,
+        "critical_issues": [
+          "Отсутствие опыта работы с React, TypeScript, Redux, современными инструментами сборки и тестирования",
+          "Отсутствие знания английского языка на уровне чтения технической документации"
+        ]
+      },
+      "recommendation": {
+        "level": "не рекомендован",
+        "reason": "Кандидат не соответствует ключевым требованиям вакансии, таким как опыт работы с React, TypeScript, Redux и знание английского языка",
+        "suggested_salary": "Не применимо",
+        "interview_priority": "низкий"
+      },
+      "benchmark_comparison": {
+        "benchmark_overall_score": 32,
+        "current_overall_score": 55,
+        "score_difference": 23,
+        "deviation_analysis": "Расхождение в оценках связано с тем, что эталонная оценка, вероятно, была основана на других критериях или имела доступ к дополнительной информации о кандидате",
+        "consistency_level": "средний"
+      },
+      "evaluation_metadata": {
+        "candidate_id": "reference_evaluation_9",
+        "benchmark_used": 32,
+        "criteria_weights": {
+          "job_title_weight": 25,
+          "education_weight": 15,
+          "experience_weight": 20,
+          "schedule_weight": 10,
+          "format_weight": 10,
+          "additional_weight": 25
+        },
+        "resume_file": "ml\\evaluation\\reference_resumes_evaluation\\reference_evaluation_9.json",
+        "job_file": "ml/evaluation/reference_resumes_results/vacancy.json",
+        "evaluation_timestamp": "2025-11-14T01:43:44.249260"
+      }
+    }
+  },
+  "summary": {
+    "total_evaluated": 15,
+    "evaluation_timestamp": "2025-11-14T01:43:44.249260"
+  },
+  "batch_analysis": {
+    "total_candidates": 15,
+    "successful_evaluations": 15,
+    "average_score_difference": 13.73,
+    "consistency_breakdown": {
+      "high_consistency": 1,
+      "medium_consistency": 9,
+      "low_consistency": 5
+    },
+    "recommendation_breakdown": {
+      "recommended": 15,
+      "conditionally_recommended": 0,
+      "not_recommended": 0
+    },
+    "candidates_by_priority": {
+      "high": [],
+      "medium": [],
+      "low": []
+    },
+    "score_ranges": {
+      "0-20": 0,
+      "21-40": 0,
+      "41-60": 6,
+      "61-80": 3,
+      "81-100": 6
+    },
+    "average_current_score": 71.47,
+    "average_benchmark_score": 57.73
+  }
+}

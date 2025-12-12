@@ -1,0 +1,55 @@
+{
+  "candidate_info": {
+    "candidate_id": "candidate_1765311890",
+    "current_position": "Fronted-developer"
+  },
+  "matching_results": {
+    "overall_score": 78.5,
+    "is_suitable": true,
+    "critical_issues": [],
+    "match_breakdown": {
+      "job_title_match": {
+        "score": 100,
+        "weight": 0.2,
+        "weighted_score": 0.2,
+        "explanation": "Текущая должность кандидата полностью соответствует требуемой должности."
+      },
+      "education_match": {
+        "score": 0,
+        "weight": 0.15,
+        "weighted_score": 0,
+        "explanation": "Кандидат имеет среднее специальное образование и курсы повышения квалификации, что не соответствует требованию высшего технического образования."
+      },
+      "experience_match": {
+        "score": 100,
+        "weight": 0.25,
+        "weighted_score": 0.25,
+        "explanation": "Кандидат имеет 4 года опыта работы с React и TypeScript, что соответствует и превышает требуемый опыт."
+      },
+      "schedule_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать полный день."
+      },
+      "format_match": {
+        "score": 100,
+        "weight": 0.1,
+        "weighted_score": 0.1,
+        "explanation": "Кандидат готов работать в гибридном формате."
+      },
+      "additional_match": {
+        "score": 95,
+        "weight": 0.2,
+        "weighted_score": 0.19,
+        "explanation": "Кандидат имеет опыт работы с React, TypeScript, Redux, инструментами тестирования и знание английского языка на уровне чтения технической документации."
+      }
+    }
+  },
+  "recommendation": {
+    "level": "условно рекомендован",
+    "reason": "Кандидат соответствует большинству требований, но отсутствие высшего технического образования может быть критичным.",
+    "suggested_salary": "180000 руб.",
+    "interview_priority": "средний"
+  }
+}

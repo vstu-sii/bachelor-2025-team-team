@@ -1,0 +1,143 @@
+{
+    "skills": {
+    "technical": [
+      "React",
+      "Next.js",
+      "JavaScript",
+      "TypeScript",
+      "MySQL",
+      "HTML",
+      "API",
+      "CSS",
+      "Less",
+      "Frontend",
+      "Node.js",
+      "PostgreSQL",
+      "Git",
+      "Redux",
+      "SQL",
+      "Linux",
+      "Docker",
+      "Nest.js",
+      "Express",
+      "TypeORM",
+      "GraphQl",
+      "Jest",
+      "Playwright",
+      "Postman",
+      "Stripe",
+      "Amazon",
+      "CDEK",
+      "Yandex",
+      "Tailwind",
+      "Python",
+      "TensorFlow",
+      "cuDNN",
+      "Flask"
+    ],
+    "soft": [
+      "Командная разработка",
+      "Самостоятельная разработка",
+      "Проектирование",
+      "Оптимизация",
+      "Тестирование"
+    ],
+    "languages": [
+      "Русский",
+      "Английский",
+      "Испанский"
+    ]
+  },
+  "experience": {
+    "total_years": 4,
+    "relevant_years": 4,
+    "positions": [
+      {
+        "title": "Fullstack-разработчик",
+        "company": "AkMedia",
+        "years": 1,
+        "description": "Командная разработка B2B2P-портала для продажи контактных линз в Германии."
+      },
+      {
+        "title": "Fullstack-разработчик",
+        "company": "Хангук Моторс",
+        "years": 1,
+        "description": "Разработка сайта для продажи авто из Кореи и полная переработка сайта для различных автомобильных услуг."
+      },
+      {
+        "title": "Fullstack-разработчик",
+        "company": "Windbloom",
+        "years": 1,
+        "description": "Разработка e-commerce интернет-магазина для увеличения продаж и разработка второй версии интернет-магазина."
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Пензенский государственный университет",
+      "degree": "Высшее образование",
+      "year": 2018,
+      "field": "Экономика, Мировая экономика"
+    },
+    {
+      "institution": "Harvard CS50",
+      "degree": "Курсы повышения квалификации",
+      "year": 2023,
+      "field": "Full Computer Science"
+    },
+    {
+      "institution": "Traversy Media",
+      "degree": "Курсы повышения квалификации",
+      "year": 2022,
+      "field": "Advanced software engineer"
+    },
+    {
+      "institution": "Udemy",
+      "degree": "Курсы повышения квалификации",
+      "year": 2020,
+      "field": "Web разработчик"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Опыт командной и самостоятельной разработки",
+      "Знание различных технологий и фреймворков",
+      "Опыт работы с различными базами данных и системами управления версиями"
+    ],
+    "gaps": [
+      "Отсутствие опыта работы с некоторыми технологиями и фреймворками",
+      "Ограниченный опыт работы в команде"
+    ],
+    "risk_factors": [
+      "Возможность отсутствия мотивации для дальнейшего развития и обучения"
+    ]
+  },
+    "scores": {
+    "job_title_match": {
+      "score": 85,
+      "comment": "Fullstack-разработчик с международным коммерческим опытом, соответствует Middle+ уровню"
+    },
+    "education_match": {
+      "score": 60,
+      "comment": "Экономическое образование, но компенсируется курсами CS50 и практическим опытом"
+    },
+    "experience_match": {
+      "score": 85,
+      "comment": "4 года опыта превышает требования, международные проекты"
+    },
+    "schedule_match": {
+      "score": 100,
+      "comment": "Полный день - стандартный формат"
+    },
+    "format_match": {
+      "score": 100,
+      "comment": "Гибридный формат приемлем"
+    },
+    "additional_match": {
+      "score": 95,
+      "comment": "Отличное соответствие: React, TypeScript, Redux, Next.js, Jest, Playwright"
+    }
+  },
+  "overall_score": 82,
+  "summary_comment": "Очень сильный кандидат с международным коммерческим опытом и полным техническим соответствием"
+}

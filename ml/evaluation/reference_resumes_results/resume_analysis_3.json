@@ -1,0 +1,108 @@
+{
+  "skills": {
+    "technical": [
+      "JavaScript",
+      "Node.js",
+      "HTML",
+      "CSS",
+      "HTML5",
+      "TypeScript",
+      "Microfrontends",
+      "FSD",
+      "Vue 3",
+      "VueJS",
+      "Tailwind",
+      "TailwindCSS",
+      "React",
+      "Gitlab",
+      "PHP",
+      "Angular",
+      "ES6",
+      "ExtJs",
+      "SCSS",
+      "Archimate",
+      "UML Class Diagrams",
+      "ООП"
+    ],
+    "soft": [
+      "Хорошо взаимодействую с командой",
+      "Умею принимать самостоятельные решения",
+      "Ответственен",
+      "Трудолюбив"
+    ],
+    "languages": [
+      "Русский",
+      "Английский (A1)",
+      "Немецкий (A1)"
+    ]
+  },
+  "experience": {
+    "total_years": 14,
+    "relevant_years": 14,
+    "positions": [
+      {
+        "title": "Senior frontend developer",
+        "company": "Информационные технологии, системная интеграция, интернет",
+        "years": 4,
+        "description": "Работа над проектами TSP, Платформа РС 20, Платформа."
+      },
+      {
+        "title": "Senior frontend developer",
+        "company": "ООО ТД Технодар",
+        "years": 3,
+        "description": "Работа над системой мониторинга транспорта DOTS."
+      },
+      {
+        "title": "Middle frontend developer",
+        "company": "Dankolab",
+        "years": 0.5,
+        "description": "Создание официальной веб-версии игры Физрук (ТНТ)."
+      },
+      {
+        "title": "Middle frontend developer",
+        "company": "ООО Медиавеб",
+        "years": 1,
+        "description": "Кроссбраузерная адаптивная верстка сайтов из PDF."
+      },
+      {
+        "title": "Junior backend developer",
+        "company": "ООО ВирТел",
+        "years": 0.3,
+        "description": "IP телефония на Asterisk и асинхронном js."
+      },
+      {
+        "title": "Frontend developer",
+        "company": "http://tregion.ru/",
+        "years": 3,
+        "description": "Проектная работа. Верстка сайтов из PDF."
+      },
+      {
+        "title": "Junior frontend developer",
+        "company": "Интернет-компания Фарбик",
+        "years": 1,
+        "description": "Верстка сайтов. Привязка сайтов к CMS Joomla."
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Современная гуманитарная академия, Москва",
+      "degree": "Бакалавр",
+      "year": 2007,
+      "field": "Экономика, финансы и кредит"
+    }
+  ],
+  "match_analysis": {
+    "strengths": [
+      "Большой опыт работы в качестве frontend разработчика",
+      "Широкий спектр технических навыков",
+      "Хорошо взаимодействует с командой и умеет принимать самостоятельные решения"
+    ],
+    "gaps": [
+      "Ограниченный опыт работы с некоторыми технологиями (например, React, Angular)"
+    ],
+    "risk_factors": [
+      "Не готов к переезду, что может ограничить возможности трудоустройства"
+    ]
+  }
+}

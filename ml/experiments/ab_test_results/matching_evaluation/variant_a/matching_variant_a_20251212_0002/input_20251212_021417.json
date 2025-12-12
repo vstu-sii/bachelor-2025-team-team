@@ -1,0 +1,34 @@
+{
+  "test_id": "matching_variant_a_20251212_0002",
+  "variant": "variant_a",
+  "task_type": "matching_evaluation",
+  "timestamp": "20251212_021417",
+  "input_hash": "8c9b9af6eb8a",
+  "data": {
+    "resume_analysis_keys": [
+      "contacts",
+      "skills",
+      "experience",
+      "education"
+    ],
+    "vacancy_data": {
+      "job_title": "Senior Python Developer",
+      "education": "Высшее техническое",
+      "work_experience": 3,
+      "desired_salary": "200000 руб.",
+      "work_schedule": "Полный день",
+      "work_format": "Удаленно/гибрид",
+      "additional_requirements": "Опыт работы с микросервисами, знание Docker"
+    },
+    "weights": {
+      "job_title_weight": 20,
+      "education_weight": 15,
+      "experience_weight": 25,
+      "schedule_weight": 5,
+      "format_weight": 5,
+      "additional_weight": 30
+    },
+    "prompt_variant": "variant_a",
+    "prompt_preview": "Ты — эксперт по оценке кандидатов.\n            Сравни профиль кандидата с требованиями вакансии.\n            \n            Оцени по 6 критериям с весами:\n            1. Должность (20%)\n            2. Образование (15%) \n            3. Опыт (25%)\n            4. График (5%)\n            5. Формат (5%)\n            6. Доп. требования (30%)\n            \n            Верни JSON с оценкой и рекомендацией.\n\nВакансия: Senior Python Developer\n    Требования: образование=Высшее техническое, опыт=3 лет, зарплат"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "test_id": "analysis_variant_a_20251212_0001",
+  "variant": "variant_a",
+  "task_type": "resume_analysis",
+  "timestamp": "20251212_001756",
+  "input_hash": "1441471553c2",
+  "data": {
+    "resume_text_preview": "Иванов Иван Иванович\n    Python разработчик\n    \n    Контакты:\n    Email: ivan@example.com\n    Телефон: +7-999-123-45-67\n    Город: Москва\n    \n    Навыки:\n    - Python, Django, FastAPI\n    - PostgreSQL, Redis\n    - Docker, Git\n    - Английский (Intermediate)\n    \n    Опыт работы:\n    Senior Python Developer, TechCorp (2021-2024)\n    - Разработка микросервисов на FastAPI\n    - Оптимизация производительности\n    \n    Middle Python Developer, Startup Inc (2019-2021)\n    - Разработка backend на Django\n    - Интеграция с внешними API\n    \n    Образование:\n    МГТУ им. Баумана, Факультет информатики\n    Специалист, 2019 год\n    ",
+    "resume_length": 631,
+    "file_path": null,
+    "prompt_variant": "variant_a",
+    "prompt_preview": "Ты — опытный HR-специалист по анализу резюме.\n        Извлеки структурированную информацию из текста резюме.\n        \n        ВАЖНЫЕ ПРАВИЛА:\n        1. Извлекай только явно указанную информацию\n        2. Для контактов - только если явно указаны\n        3. Навыки - только те, что перечислены\n        4. Опыт - рассчитай общий стаж из указанных периодов\n        5. Образование - все указанные учебные заведения\n        \n        Формат вывода строго в JSON.\n\nРезюме кандидата:\nИванов Иван Иванович\n  "
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "test_id": "questions_variant_a_20251212_0003",
+  "variant": "variant_a",
+  "task_type": "question_generation",
+  "timestamp": "20251212_020727",
+  "input_hash": "e024526a46f0",
+  "metadata": {
+    "variant": "variant_a",
+    "duration_seconds": 7.6,
+    "questions_count": 0,
+    "quality_score": 0,
+    "timestamp": "2025-12-12T02:07:27.939013"
+  },
+  "data": {
+    "generated_questions": {
+      "error": "API call failed"
+    },
+    "questions_count": 0,
+    "quality_check": {
+      "success": true,
+      "relevance_score": 0,
+      "diversity_score": 0,
+      "specificity_score": 0,
+      "usefulness_score": 0,
+      "balance_score": 0,
+      "overall_score": 0,
+      "strengths": [],
+      "weaknesses": [
+        "Отсутствие вопросов"
+      ],
+      "recommendations": [
+        "Сгенерировать вопросы для оценки кандидата на вакансию Senior Python Developer"
+      ]
+    },
+    "processing_time": 7.604234457015991,
+    "prompt_hash": "6c43ef737a84"
+  }
+}

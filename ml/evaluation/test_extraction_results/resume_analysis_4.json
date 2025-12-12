@@ -1,0 +1,63 @@
+{
+  "contacts": {
+    "name": "Не указано",
+    "sex": "мужской",
+    "city": "Брянск",
+    "number": "Не указано",
+    "email": "Не указано",
+    "social": []
+  },
+  "skills": {
+    "technical": [
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "Git",
+      "Express.js",
+      "Vue",
+      "Vuex",
+      "SCSS",
+      "Nuxt",
+      "Pinia",
+      "ООП",
+      "Node.js",
+      "TypeScript",
+      "Vue.js 2 (Option API, Composition API)",
+      "Vue 3",
+      "Nuxt 2",
+      "Nuxt 3"
+    ],
+    "soft": [],
+    "languages": [
+      "Русский"
+    ]
+  },
+  "experience": {
+    "total_years": 5.5,
+    "relevant_years": 5.5,
+    "positions": [
+      {
+        "title": "Frontend-разработчик",
+        "company": "Не указано (СМИ, маркетинг, реклама, BTL, PR, дизайн, продюсирование)",
+        "sphere": "СМИ, маркетинг, реклама, BTL, PR, дизайн, продюсирование",
+        "years": 4.58,
+        "description": "Разработка фронтенда, стек: Vue.js 2 (Option API, Composition API), Vue 3, Nuxt 2, 3, опыт миграции с 2 на 3"
+      },
+      {
+        "title": "Frontend-разработчик",
+        "company": "Shopint Brigade",
+        "sphere": "Не указано",
+        "years": 1,
+        "description": "Разработка фронтенда"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "Академия права и управления, Брянский филиал",
+      "degree": "Высшее образование",
+      "year": "2011",
+      "field": "Юридический, Гражданско-правовая"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "test_id": "matching_variant_a_20251212_0002",
+  "variant": "variant_a",
+  "task_type": "matching_evaluation",
+  "timestamp": "20251212_005321",
+  "input_hash": "7a2465d53a14",
+  "metadata": {
+    "variant": "variant_a",
+    "duration_seconds": 3.79,
+    "vacancy_title": "Senior Python Developer",
+    "weights_used": {
+      "job_title_weight": 20,
+      "education_weight": 15,
+      "experience_weight": 25,
+      "schedule_weight": 5,
+      "format_weight": 5,
+      "additional_weight": 30
+    },
+    "timestamp": "2025-12-12T00:53:21.800457"
+  },
+  "data": {
+    "evaluation_result": {
+      "candidate_profile": {
+        "contact_info": {
+          "email": "ivan@example.com",
+          "phone": "+7-999-123-45-67",
+          "city": "Москва"
+        },
+        "skills": {
+          "technical": [
+            "Python",
+            "Django",
+            "FastAPI",
+            "PostgreSQL",
+            "Redis",
+            "Docker",
+            "Git"
+          ],
+          "languages": [
+            "Английский (Intermediate)"
+          ]
+        },
+        "experience": [
+          {
+            "position": "Senior Python Developer",
+            "company": "TechCorp",
+            "period": "2021-2024",
+            "responsibilities": [
+              "Разработка микросервисов на FastAPI",
+              "Оптимизация производительности"
+            ]
+          },
+          {
+            "position": "Middle Python Developer",
+            "company": "Startup Inc",
+            "period": "2019-2021",
+            "responsibilities": [
+              "Разработка backend на Django",
+              "Интеграция с внешними API"
+            ]
+          }
+        ],
+        "education": {
+          "institution": "МГТУ им. Баумана, Факультет информатики",
+          "specialty": "Специалист",
+          "year": "2019"
+        }
+      },
+      "job_requirements": {
+        "position": "Senior Python Developer",
+        "education": "Высшее техническое",
+        "experience": "3 года",
+        "salary": "200000 руб.",
+        "schedule": "Полный день",
+        "format": "Удаленно/гибрид",
+        "additional": [
+          "Опыт работы с микросервисами",
+          "Знание Docker"
+        ]
+      },
+      "evaluation": {
+        "position": 100,
+        "education": 100,
+        "experience": 100,
+        "schedule": 100,
+        "format": 100,
+        "additional": 100
+      },
+      "recommendation": "Отлично подходит"
+    },
+    "processing_time": 3.7907869815826416,
+    "prompt_hash": "ec1a4c03a4c9"
+  }
+}

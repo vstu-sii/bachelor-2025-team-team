@@ -1,0 +1,152 @@
+{
+  "candidate_id": "resume_analysis_16.json",
+  "resume_analysis": {
+    "skills": {
+      "technical": [
+        "Java 8/11/17",
+        "Kotlin",
+        "Spring Boot",
+        "Spring MVC",
+        "Spring Data JPA",
+        "Spring Security",
+        "Hibernate",
+        "PostgreSQL",
+        "Redis",
+        "MongoDB",
+        "Docker",
+        "Kafka",
+        "Maven",
+        "Gradle",
+        "Git",
+        "JUnit",
+        "Mockito",
+        "REST API",
+        "Microservices",
+        "Kubernetes (basic knowledge)"
+      ],
+      "soft": [
+        "code review",
+        "mentoring junior developers",
+        "team collaboration",
+        "documentation writing",
+        "problem solving"
+      ],
+      "languages": [
+        "Russian (native)",
+        "English (B2 – Upper-Intermediate)"
+      ]
+    },
+    "experience": {
+      "total_years": "5.1",
+      "relevant_years": "5.1",
+      "positions": [
+        {
+          "title": "Backend Разработчик",
+          "company": "ООО \"ФинТех Солюшнз\"",
+          "years": "4.3",
+          "description": "Разработка и поддержка высоконагруженного микросервисного ядра банковского приложения; реализация новых API для модуля денежных переводов и платежей; оптимизация сложных SQL‑запросов (снижение времени отклика эндпоинтов на 30%); участие в проектировании архитектуры новых сервисов; написание unit‑ и integration‑тестов (покрытие >80%); участие в код‑ревью, менторинг стажеров."
+        },
+        {
+          "title": "Младший Java‑разработчик",
+          "company": "ООО \"ВебСервисы\"",
+          "years": "0.8",
+          "description": "Разработка и поддержка REST API для внутренних сервисов компании; исправление багов и доработка существующего функционала; написание документации по разработанному коду."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Национальный исследовательский университет \"Высшая школа экономики\" (НИУ ВШЭ), Москва",
+        "degree": "Бакалавр",
+        "year": "2020",
+        "field": "Программная инженерия"
+      }
+    ],
+    "match_analysis": {
+      "strengths": [
+        "Глубокие знания Java и Kotlin",
+        "Опыт работы с Spring‑экосистемой и Hibernate",
+        "Практика построения микросервисных систем и работы с Kafka",
+        "Умение работать с реляционными и NoSQL базами (PostgreSQL, Redis, MongoDB)",
+        "Опыт контейнеризации (Docker) и базовых навыков оркестрации (Kubernetes)",
+        "Тестирование (JUnit, Mockito) с высоким покрытием кода",
+        "Навыки код‑ревью и наставничества",
+        "Участие в хакатоне с финтех‑наградами",
+        "Уровень английского B2"
+      ],
+      "gaps": [
+        "Базовые, но не продвинутые знания Kubernetes",
+        "Отсутствие опыта работы с облачными платформами (AWS, GCP, Azure)",
+        "Нет упоминаний о CI/CD, автоматизации деплоя",
+        "Отсутствие опыта в DevOps‑инструментах (Ansible, Terraform и пр.)",
+        "Нет опыта фронтенд‑разработки или работы с UI"
+      ],
+      "risk_factors": [
+        "Общий опыт менее 6 лет, что может ограничивать готовность к старшим позициям",
+        "Базовые знания Kubernetes могут потребовать дополнительного обучения для проектов с интенсивным использованием оркестрации",
+        "Готовность к релокации только в ограниченный набор городов"
+      ]
+    }
+  },
+  "matching_result": {
+    "candidate_info": {
+      "name": "",
+      "current_position": "Backend Разработчик"
+    },
+    "matching_results": {
+      "overall_score": 88.5,
+      "is_suitable": true,
+      "critical_issues": [
+        "Не указано согласие на гибридный формат работы (2‑3 дня в офисе)",
+        "Не указано предпочтение полного рабочего дня",
+        "Базовые знания Kubernetes, а не продвинутый опыт"
+      ],
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 100,
+          "weight": 0.25,
+          "weighted_score": 25,
+          "explanation": "Кандидат имеет 5+ лет опыта в backend-разработке, использует Java и Kotlin, соответствует уровню Middle."
+        },
+        "education_match": {
+          "score": 100,
+          "weight": 0.15,
+          "weighted_score": 15,
+          "explanation": "Бакалавр программной инженерии – требуемое высшее техническое образование."
+        },
+        "experience_match": {
+          "score": 100,
+          "weight": 0.3,
+          "weighted_score": 30,
+          "explanation": "Общий релевантный опыт 5.1 года (требуется минимум 3 года). Опыт работы с Java, Kotlin, Spring Boot, микросервисами, PostgreSQL, Redis, Docker."
+        },
+        "schedule_match": {
+          "score": 50,
+          "weight": 0.1,
+          "weighted_score": 5,
+          "explanation": "В резюме нет информации о предпочтительном графике; невозможно подтвердить соответствие полному дню."
+        },
+        "format_match": {
+          "score": 50,
+          "weight": 0.1,
+          "weighted_score": 5,
+          "explanation": "Не указано готовность к гибридному формату (2‑3 дня в офисе)."
+        },
+        "additional_match": {
+          "score": 85,
+          "weight": 0.1,
+          "weighted_score": 8.5,
+          "explanation": "Полный набор требуемых технологий присутствует, но Kubernetes указан как базовый уровень, а опыт CI/CD и облачных платформ отсутствует."
+        }
+      }
+    },
+    "recommendation": {
+      "level": "рекомендован",
+      "reason": "Кандидат полностью удовлетворяет ключевые технические требования и имеет достаточный опыт, однако требуется уточнение готовности к гибридному формату и полному рабочему дню, а также развитие навыков Kubernetes.",
+      "suggested_salary": "190000 руб.",
+      "interview_priority": "высокий"
+    }
+  },
+  "overall_score": 88.5,
+  "is_suitable": true
+}
