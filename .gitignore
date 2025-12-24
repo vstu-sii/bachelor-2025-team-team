@@ -1,5 +1,5 @@
-node_modules/
+#node_modules/
 keys.json
-uploads/
+#uploads/
 .env
 cmd.md
