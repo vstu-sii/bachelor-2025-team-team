@@ -1,0 +1,253 @@
+{
+  "status": "success",
+  "filename": "6.docx",
+  "analysis": {
+    "contacts": {
+      "name": "Кандидат",
+      "sex": "Мужчина",
+      "city": "Минск",
+      "number": "",
+      "email": "",
+      "social": []
+    },
+    "skills": {
+      "technical": [
+        "JavaScript",
+        "Git",
+        "React",
+        "HTML5",
+        "CSS3",
+        "Redux",
+        "TypeScript",
+        "MySQL",
+        "SQL",
+        "ООП",
+        "Node.js",
+        "React.js",
+        "Next.js",
+        "MUI",
+        "RTK Query",
+        "Styled components",
+        "React-hook-form",
+        "Jest",
+        "React-Table v7",
+        "React-Hook-Form",
+        "React-Select",
+        "Storybook",
+        "Memo",
+        "UseMemo",
+        "UseCallback",
+        "lazy-loading",
+        "infinite scroll",
+        "debounce"
+      ],
+      "soft": [],
+      "languages": [
+        "Английский",
+        "Польский",
+        "Русский"
+      ]
+    },
+    "experience": {
+      "total_years": 3,
+      "relevant_years": 3,
+      "positions": [
+        {
+          "title": "Frontend-разработчик",
+          "company": "Не указана",
+          "sphere": "Лесная промышленность, деревообработка",
+          "years": 1,
+          "description": "Разработал компоненты на основе React, TypeScript, Redux Toolkit, MUI и CSS Modules. Работал с формами с помощью react-hook-form, писал кастомные компоненты. Для HTTP-запросов и кэширования использовал RTK Query. Реализовал перехватчик запросов, работу с CSRF-токенами и cookie. Писал unit-тесты на Jest. Оптимизировал приложение с помощью memo, useMemo, useCallback, lazy-loading и debounce."
+        },
+        {
+          "title": "Frontend-разработчик",
+          "company": "Не указана",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 2,
+          "description": "Разрабатывал компоненты на основе React, TypeScript, Redux Toolkit, styled-components. Работал с таблицами с использованием React-Table v7. Работал с формами, используя React-Hook-Form и React-Select. Разработал Storybook для компонентов. Реализовал API-сервис для HTTP-запросов и кэширования с помощью RTK Query. Оптимизировал приложение с использованием Memo, UseMemo, UseCallback, lazy-loading, infinite scroll, debounce."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Белорусский государственный университет информатики и радиоэлектроники",
+        "degree": "Магистр",
+        "year": 2023,
+        "field": "Электронные системы и технологии"
+      },
+      {
+        "institution": "Белорусский государственный университет информатики и радиоэлектроники",
+        "degree": "Программист, бизнес-аналитик",
+        "year": 2021,
+        "field": "Факультет компьютерного проектирования"
+      }
+    ]
+  },
+  "interview_plan": {
+    "interview_plan": {
+      "duration_minutes": "60",
+      "structure": [
+        {
+          "section": "введение",
+          "time_allocation": "5 минут",
+          "purpose": "знакомство и разогрев"
+        },
+        {
+          "section": "технические вопросы",
+          "time_allocation": "25 минут",
+          "purpose": "оценка технических навыков"
+        },
+        {
+          "section": "поведенческие вопросы",
+          "time_allocation": "15 минут",
+          "purpose": "оценка soft skills и опыта работы"
+        },
+        {
+          "section": "мотивационные вопросы",
+          "time_allocation": "10 минут",
+          "purpose": "понимание мотивации и культурной соответствия"
+        },
+        {
+          "section": "вопросы кандидата",
+          "time_allocation": "5 минут",
+          "purpose": "ответы на вопросы кандидата"
+        }
+      ]
+    },
+    "questions": [
+      {
+        "type": "технический",
+        "question": "Расскажите, как вы используете React Hooks, такие как useMemo, useCallback и memo, для оптимизации производительности приложений.",
+        "purpose": "оценка понимания оптимизации производительности в React",
+        "expected_answer_indicators": [
+          "упоминание конкретных примеров использования",
+          "объяснение различий между useMemo, useCallback и memo",
+          "понимание принципов оптимизации"
+        ],
+        "time_estimate": "3 минуты"
+      },
+      {
+        "type": "технический",
+        "question": "Как вы реализуете работу с формами в React? Какие библиотеки вы используете и почему?",
+        "purpose": "оценка опыта работы с формами в React",
+        "expected_answer_indicators": [
+          "упоминание react-hook-form и React-Hook-Form",
+          "объяснение преимуществ использования этих библиотек",
+          "примеры реализации"
+        ],
+        "time_estimate": "3 минуты"
+      },
+      {
+        "type": "технический",
+        "question": "Объясните, как вы используете RTK Query для управления HTTP-запросами и кэшированием.",
+        "purpose": "оценка опыта работы с RTK Query",
+        "expected_answer_indicators": [
+          "объяснение принципов работы RTK Query",
+          "примеры использования",
+          "понимание кэширования"
+        ],
+        "time_estimate": "3 минуты"
+      },
+      {
+        "type": "технический",
+        "question": "Как вы тестируете свои React-компоненты? Какие инструменты и подходы вы используете?",
+        "purpose": "оценка опыта тестирования React-компонентов",
+        "expected_answer_indicators": [
+          "упоминание Jest",
+          "объяснение подходов к тестированию",
+          "примеры тестов"
+        ],
+        "time_estimate": "3 минуты"
+      },
+      {
+        "type": "поведенческий",
+        "question": "Расскажите о случае, когда вам пришлось решать сложную техническую проблему. Как вы подходили к её решению?",
+        "purpose": "оценка навыков решения проблем",
+        "expected_answer_indicators": [
+          "структурированный подход к решению проблемы",
+          "упоминание конкретных действий",
+          "результат"
+        ],
+        "time_estimate": "3 минуты"
+      },
+      {
+        "type": "поведенческий",
+        "question": "Как вы организуете свою работу в команде? Приведите пример успешного сотрудничества.",
+        "purpose": "оценка навыков командной работы",
+        "expected_answer_indicators": [
+          "упоминание конкретных примеров",
+          "объяснение роли в команде",
+          "результат сотрудничества"
+        ],
+        "time_estimate": "3 минуты"
+      },
+      {
+        "type": "мотивационный",
+        "question": "Почему вы решили стать frontend-разработчиком?",
+        "purpose": "понимание мотивации кандидата",
+        "expected_answer_indicators": [
+          "личная история",
+          "страсть к разработке",
+          "цели и устремления"
+        ],
+        "time_estimate": "2 минуты"
+      },
+      {
+        "type": "мотивационный",
+        "question": "Какие технологии вы хотели бы изучить в будущем и почему?",
+        "purpose": "оценка стремления к развитию",
+        "expected_answer_indicators": [
+          "конкретные технологии",
+          "объяснение выбора",
+          "планы по изучению"
+        ],
+        "time_estimate": "2 минуты"
+      },
+      {
+        "type": "культурный",
+        "question": "Какие ценности для вас важны в рабочей среде?",
+        "purpose": "оценка культурной соответствия",
+        "expected_answer_indicators": [
+          "упоминание конкретных ценностей",
+          "объяснение выбора",
+          "соответствие ценностям компании"
+        ],
+        "time_estimate": "2 минуты"
+      },
+      {
+        "type": "технический",
+        "question": "Как вы реализуете lazy-loading и infinite scroll в своих проектах?",
+        "purpose": "оценка опыта работы с lazy-loading и infinite scroll",
+        "expected_answer_indicators": [
+          "объяснение принципов работы",
+          "примеры использования",
+          "понимание преимуществ"
+        ],
+        "time_estimate": "3 минуты"
+      },
+      {
+        "type": "технический",
+        "question": "Как вы работаете с таблицами в React? Какие библиотеки вы используете и почему?",
+        "purpose": "оценка опыта работы с таблицами в React",
+        "expected_answer_indicators": [
+          "упоминание React-Table v7",
+          "объяснение преимуществ использования",
+          "примеры реализации"
+        ],
+        "time_estimate": "3 минуты"
+      },
+      {
+        "type": "поведенческий",
+        "question": "Расскажите о случае, когда вам пришлось объяснять сложные технические концепции нетехническому коллеге. Как вы это сделали?",
+        "purpose": "оценка навыков коммуникации",
+        "expected_answer_indicators": [
+          "структурированный подход к объяснению",
+          "упоминание конкретных примеров",
+          "результат"
+        ],
+        "time_estimate": "3 минуты"
+      }
+    ]
+  },
+  "vacancy_requirements": "C:\\Users\\67181\\OneDrive\\Dokumenty\\bachelor-2025-team-team\\data\\test_resumes\\vacansy.json"
+}

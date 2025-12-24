@@ -1,0 +1,70 @@
+LOCUST LOAD TEST REPORT
+======================
+
+Timestamp: 2025-12-23 20:08:02
+Active users: 0
+
+--- REQUEST STATISTICS ---
+
+extract_resume POST
+  Requests: 200
+  Failures: 0
+  Avg response time: 8808.63 ms
+  P95 response time: 25000.00 ms
+  RPS: 0.00
+
+match_vacancy POST
+  Requests: 200
+  Failures: 0
+  Avg response time: 5945.05 ms
+  P95 response time: 13000.00 ms
+  RPS: 0.00
+
+generate_questions POST
+  Requests: 200
+  Failures: 0
+  Avg response time: 8626.39 ms
+  P95 response time: 24000.00 ms
+  RPS: 0.00
+
+--- PIPELINE STATISTICS ---
+
+Full pipeline:
+  Completed: 0
+  Failed: 0
+  Avg total time: 0.00 ms
+  P95 total time: 0.00 ms
+
+
+
+Статистика по запросам
+
+  extract_resume
+
+    Запросов: 200, неудачных: 0 → все запросы успешны
+
+    Среднее время ответа: 8808.63 ms (~8.8 с)
+
+    P95: 25 000 ms → 5% самых медленных запросов занимали до 25 секунд
+
+    RPS: 0.00 → низкая частота запросов из-за последовательной обработки каждого файла одним пользователем
+
+  match_vacancy
+
+    Запросов: 200, неудачных: 0
+
+    Среднее время ответа: 5945.05 ms (~5.9 с)
+
+    P95: 13 000 ms
+
+    RPS: 0.00
+
+  generate_questions
+
+    Запросов: 200, неудачных: 0
+
+    Среднее время ответа: 8626.39 ms (~8.6 с)
+
+    P95: 24 000 ms → очень медленные отдельные запросы
+
+    RPS: 0.00

@@ -1,177 +1,257 @@
-from fastapi import FastAPI, HTTPException
-from pathlib import Path
-import uuid
-import pika
+from fastapi import FastAPI, UploadFile, Form, HTTPException, File, Body
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 import json
-import subprocess
-import logging
-from dotenv import load_dotenv
-
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from ml.models.baseline import HRBaseline
+import shutil
+from datetime import datetime
+import time
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
+from ml.models.baseline import HRBaseline
+from ml.utils.file_parser import FileParser
+
+from dotenv import load_dotenv
+
+# ЗАГРУЖАЕМ ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ ПЕРВЫМ ДЕЛОМ
 load_dotenv()
 
 app = FastAPI(
-    title="HR Evaluation API",
-    description="API для оценки кандидатов и генерации вопросов для интервью",
-    version="1.0"
+    title="HR AI Assistant API",
+    description="API для анализа резюме, генерации вопросов для интервью и сопоставления с вакансиями",
+    version="1.0.0"
 )
 
-hr_system = HRBaseline()
-logging.basicConfig(level=logging.INFO)
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Запуск HR worker при старте сервера
+# Глобальные модели
+pipeline = None
+
+# Создаем директорию для загруженных файлов
+UPLOAD_DIR = "./data/uploaded_resumes"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+
 @app.on_event("startup")
-def launch_hr_worker():
-    subprocess.Popen(["python", "-m", "backend.routers.worker"])
+async def startup_event():
+    """Инициализация моделей при запуске"""
+    global pipeline
+    pipeline = HRBaseline()
+    print("✅ API сервер запущен с моделями:")
+    print("   - Mistral для анализа резюме")
 
-@app.post("/evaluate-candidate", tags=["HR"], summary="Оценить соответствие кандидата вакансии")
-async def evaluate_candidate(
-    resume_analysis: dict,
-    vacancy_data: dict,
-    criteria_weights: dict = None,
-    candidate_id: str = None
-):
-    task_id = str(uuid.uuid4())
-    
-    try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
-        channel = connection.channel()
-        channel.queue_declare(queue="hr_tasks_queue")
-        
-        message = {
-            "task_id": task_id,
-            "task_type": "evaluation",
-            "task_data": {
-                "resume_analysis": resume_analysis,
-                "vacancy_data": vacancy_data,
-                "criteria_weights": criteria_weights,
-                "candidate_id": candidate_id or f"candidate_{task_id}"
-            }
+@app.get("/")
+async def root():
+    """Корневой endpoint"""
+    return {
+        "message": "HR AI Assistant API",
+        "status": "running",
+        "timestamp": datetime.now().isoformat(),
+        "endpoints": {
+            "health": "/health",
+            "analyze_resume": "/analyze-resume",
+            "generate_interview": "/generate-interview-plan", 
+            "match_vacancy": "/match-vacancy",
+            "test_parser": "/test-file-parser"
         }
-        
-        channel.basic_publish(
-            exchange="", 
-            routing_key="hr_tasks_queue", 
-            body=json.dumps(message)
+    }
+
+@app.get("/health")
+async def health_check():
+    """Проверка здоровья сервера"""
+    pipeline_status = "available" if pipeline else "unavailable"
+    
+    return {
+        "status": "healthy",
+        "pipeline_model": pipeline_status,
+        "upload_directory": UPLOAD_DIR,
+        "timestamp": datetime.now().isoformat()
+    }
+
+@app.post("/excract-resume")
+async def excract_resume(file: UploadFile = File(...)):
+    """Анализ резюме с парсингом файла и трекингом"""
+    start_time = time.time()
+    
+    if not pipeline:
+        raise HTTPException(status_code=503, detail="Модель анализа резюме не доступна")
+    
+    # Проверяем формат файла
+    allowed_extensions = ['.pdf', '.docx', '.doc', '.txt']
+    file_ext = os.path.splitext(file.filename)[1].lower()
+    
+    if file_ext not in allowed_extensions:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Неподдерживаемый формат файла. Разрешены: {', '.join(allowed_extensions)}"
         )
-        connection.close()
-        
-    except Exception as e:
-        logging.error(f"Ошибка очереди: {e}")
-        raise HTTPException(status_code=500, detail=f"Ошибка очереди: {e}")
-
-    return {"task_id": task_id, "status": "queued", "type": "evaluation"}
-
-@app.post("/generate-questions", tags=["HR"], summary="Сгенерировать вопросы для интервью")
-async def generate_questions(
-    resume_analysis: dict,
-    vacancy_requirements: dict,
-    skill_gaps: list = None,
-    strengths: list = None,
-    experience_summary: str = None
-):
-    task_id = str(uuid.uuid4())
+    
+    # Сохраняем файл
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
+    with open(file_path, "wb") as f:
+        shutil.copyfileobj(file.file, f)
     
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
-        channel = connection.channel()
-        channel.queue_declare(queue="hr_tasks_queue")
+        # Извлекаем текст из файла
+        print(f"📄 Извлекаем текст из {file.filename}...")
+        resume_text = FileParser.extract_text_from_file(file_path)
         
-        message = {
-            "task_id": task_id,
-            "task_type": "questions",
-            "task_data": {
-                "resume_analysis": resume_analysis,
-                "vacancy_requirements": vacancy_requirements,
-                "skill_gaps": skill_gaps or [],
-                "strengths": strengths or [],
-                "experience_summary": experience_summary or ""
-            }
-        }
+        # Очищаем текст
+        cleaned_text = FileParser.clean_extracted_text(resume_text)
         
-        channel.basic_publish(
-            exchange="", 
-            routing_key="hr_tasks_queue", 
-            body=json.dumps(message)
-        )
-        connection.close()
+        if not cleaned_text or cleaned_text.startswith("Не удалось"):
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Не удалось извлечь текст из файла: {cleaned_text}"
+            )
         
-    except Exception as e:
-        logging.error(f"Ошибка очереди: {e}")
-        raise HTTPException(status_code=500, detail=f"Ошибка очереди: {e}")
-
-    return {"task_id": task_id, "status": "queued", "type": "questions"}
-
-@app.get("/task-result/{task_id}", tags=["HR"], summary="Получить результат задачи")
-async def get_task_result(task_id: str):
-    # Проверяем оба возможных пути результатов
-    evaluation_path = Path(f"./hr_results/{task_id}_evaluation.json")
-    questions_path = Path(f"./hr_results/{task_id}_questions.json")
-    
-    result_path = None
-    task_type = None
-    
-    if evaluation_path.exists():
-        result_path = evaluation_path
-        task_type = "evaluation"
-    elif questions_path.exists():
-        result_path = questions_path
-        task_type = "questions"
-    else:
-        return {"status": "processing", "task_id": task_id}
-
-    try:
-        with open(result_path, "r", encoding="utf-8") as f:
-            result_data = json.load(f)
+        print(f"✅ Извлечено {len(cleaned_text)} символов")
         
-        if "error" in result_data.get("result", {}):
-            return {
-                "status": "error", 
-                "task_id": task_id,
-                "error": result_data["result"]["error"]
-            }
+        # Анализируем резюме
+        analysis_result = await pipeline.extract_data_from_resume(cleaned_text)
+        
+        if "error" in analysis_result:
+            raise HTTPException(status_code=500, detail=analysis_result["error"])
+        
+        # Трекинг успешного запроса
+        latency = (time.time() - start_time) * 1000
         
         return {
-            "status": "completed",
-            "task_id": task_id,
-            "task_type": task_type,
-            "processed_at": result_data.get("processed_at"),
-            "result": result_data.get("result")
+            "status": "success",
+            "filename": file.filename,
+            "text_length": len(cleaned_text),
+            "analysis": analysis_result
         }
         
     except Exception as e:
-        logging.error(f"Ошибка чтения результата: {e}")
-        return {"status": "error", "task_id": task_id, "error": str(e)}
+        # Трекинг ошибки
+        latency = (time.time() - start_time) * 1000
+       
+        
+        raise HTTPException(status_code=500, detail=f"Ошибка обработки файла: {str(e)}")
 
-@app.post("/full-evaluation", tags=["HR"], summary="Полная оценка кандидата (синхронно)")
-async def full_evaluation_sync(
-    resume_analysis: dict,
-    vacancy_data: dict,
-    criteria_weights: dict = None,
-    candidate_id: str = None
+@app.post("/match-vacancy")
+async def match_vacancy(
+    analysis_result: dict = Body(...),
+    vacancy_data: str = Form(...)
 ):
-    """Синхронная оценка без использования очереди"""
+    """Сопоставление резюме с вакансией по готовому анализу"""
     try:
-        result = hr_system.evaluate_candidate_full(
-            resume_analysis=resume_analysis,
-            vacancy_data=vacancy_data,
-            criteria_weights=criteria_weights,
-            candidate_id=candidate_id
+        # Проверяем готовый результат анализа
+        if not analysis_result or "error" in analysis_result:
+            raise HTTPException(status_code=400, detail="Неверный анализ резюме")
+
+        # Парсим данные вакансии
+        try:
+            vacancy_dict = json.loads(vacancy_data)
+        except:
+            vacancy_dict = {"description": vacancy_data}
+
+        # Сопоставляем с вакансией
+        matching_result = await pipeline.evaluate_candidate_match(
+            analysis_result,
+            vacancy_dict
         )
-        
-        if "error" in result:
-            raise HTTPException(status_code=500, detail=result["error"])
-            
-        return result
-        
+
+        if "error" in matching_result:
+            raise HTTPException(status_code=500, detail=matching_result["error"])
+
+        return {
+            "status": "success",
+            "resume_analysis": analysis_result,
+            "vacancy_data": vacancy_dict,
+            "matching_result": matching_result
+        }
+
     except Exception as e:
-        logging.error(f"Ошибка оценки: {e}")
-        raise HTTPException(status_code=500, detail=f"Ошибка оценки: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Ошибка сопоставления: {str(e)}")
+
+@app.post("/generate-interview-plan")
+async def generate_interview_plan(
+    analysis_result: dict = Body(...),
+    vacancy_requirements: str = Form("")
+):
+    """Генерация вопросов по готовому анализу резюме"""
+    try:
+        if not analysis_result or "error" in analysis_result:
+            raise HTTPException(status_code=400, detail="Неверный анализ резюме")
+
+        questions_result = await pipeline.generate_interview_questions(
+            resume_analysis=analysis_result,
+            vacancy_requirements=vacancy_requirements
+        )
+
+        if "error" in questions_result:
+            raise HTTPException(status_code=500, detail=questions_result["error"])
+
+        return {
+            "status": "success",
+            "analysis": analysis_result,
+            "interview_plan": questions_result,
+            "vacancy_requirements": vacancy_requirements
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Ошибка обработки: {str(e)}")
+
+@app.get("/test-file-parser")
+async def test_file_parser():
+    """Тестовый endpoint для проверки парсера"""
+    try:
+        # Создаем тестовый файл
+        test_file_path = os.path.join(UPLOAD_DIR, "test_resume.txt")
+        with open(test_file_path, "w", encoding="utf-8") as f:
+            f.write("Тестовое резюме\nPython разработчик\nОпыт: 3 года\nНавыки: Python, Django, PostgreSQL")
+        
+        text = FileParser.extract_text_from_file(test_file_path)
+        cleaned_text = FileParser.clean_extracted_text(text)
+        
+        return {
+            "status": "success",
+            "original_text": text,
+            "cleaned_text": cleaned_text,
+            "original_length": len(text),
+            "cleaned_length": len(cleaned_text)
+        }
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+@app.get("/list-uploaded-files")
+async def list_uploaded_files():
+    """Список загруженных файлов"""
+    try:
+        files = []
+        for filename in os.listdir(UPLOAD_DIR):
+            file_path = os.path.join(UPLOAD_DIR, filename)
+            if os.path.isfile(file_path):
+                stats = os.stat(file_path)
+                files.append({
+                    "filename": filename,
+                    "size": stats.st_size,
+                    "modified": datetime.fromtimestamp(stats.st_mtime).isoformat()
+                })
+        
+        return {
+            "status": "success",
+            "upload_directory": UPLOAD_DIR,
+            "files": files
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Ошибка чтения директории: {str(e)}")
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(
+        "server:app",  # или ваш путь к файлу
+        host="0.0.0.0",
+        port=8000,
+        reload=True
+    )

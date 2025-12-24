@@ -1,6 +1,0 @@
-{
-  "test_id": "matching_original_20251212_0002",
-  "variant": "original",
-  "error": "Replacement index 0 out of range for positional args tuple",
-  "duration": 0.006688594818115234
-}

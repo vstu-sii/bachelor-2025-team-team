@@ -1,0 +1,184 @@
+{
+  "status": "success",
+  "filename": "3.docx",
+  "resume_analysis": {
+    "contacts": {
+      "name": "Кандидат",
+      "sex": "Мужчина",
+      "city": "Москва",
+      "number": null,
+      "email": null,
+      "social": []
+    },
+    "skills": {
+      "technical": [
+        "JavaScript",
+        "Node.js",
+        "HTML",
+        "CSS",
+        "HTML5",
+        "TypeScript",
+        "Microfrontends",
+        "FSD",
+        "Vue 3",
+        "Git",
+        "VueJS",
+        "TailwindCSS",
+        "React",
+        "GitLab",
+        "PHP",
+        "Angular",
+        "ES6",
+        "Vue 2",
+        "Mercurial",
+        "Backbone",
+        "Android Studio",
+        "Leaflet",
+        "Cocos2d-jsx",
+        "Stylus",
+        "Three.js",
+        "SilverStripe",
+        "Asterisk",
+        "ExtJs",
+        "SCSS",
+        "Archimate",
+        "UML Class Diagrams",
+        "ООП"
+      ],
+      "soft": [
+        "Взаимодействие с командой",
+        "Принятие самостоятельных решений",
+        "Ответственность",
+        "Трудолюбие"
+      ],
+      "languages": [
+        "Русский",
+        "Английский (A1)",
+        "Немецкий (A1)"
+      ]
+    },
+    "experience": {
+      "total_years": 14,
+      "relevant_years": 14,
+      "positions": [
+        {
+          "title": "Senior frontend developer",
+          "company": "Санкт-Петербург",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 4,
+          "description": "Проект TSP. Система мониторинга транспорта. Масштабное обновление функционала существующей системы мониторинга. Редизайн и переосмысление взаимодействия с пользователем. Платформа РС 20. Создание программы учета и моделирования электросетей для Россети. Платформа. Собственный продукт компании, идейный продолжатель базы, заложенной Платформой РС 20."
+        },
+        {
+          "title": "Senior frontend developer",
+          "company": "ООО ТД Технодар",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 3,
+          "description": "Система мониторинга транспорта DOTS (Distant Objects Tracking System). Добавление нового функционала и поддержка существующего."
+        },
+        {
+          "title": "Middle frontend developer",
+          "company": "Dankolab",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 0.58,
+          "description": "Физрук (ТНТ) для соцсетей. Создание официальной веб-версии игры Физрук (ТНТ). Небольшие игровые vuejs проекты."
+        },
+        {
+          "title": "Middle frontend developer",
+          "company": "ООО \"Медиавеб\"",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 1,
+          "description": "Кроссбраузерная адаптивная верстка сайтов из PDF. Привязка сайтов к CMS (модифицированная SilverStripe). Бизнес-логика на JS."
+        },
+        {
+          "title": "Junior backend developer",
+          "company": "ООО \"ВирТел\"",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 0.33,
+          "description": "IP телефония на Asterisk и асинхронном js. Программирование модулей для AGI на JavaScript (NodeJS). Администрирование логики вызовов клиента. Программирование логики обработки звонка."
+        },
+        {
+          "title": "Frontend developer",
+          "company": "http://tregion.ru/",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 3.33,
+          "description": "Проектная работа. Верстка сайтов из PDF. Привязка сайтов к CMS (кастомная). Бизнес-логика на JS."
+        },
+        {
+          "title": "Junior frontend developer",
+          "company": "Интернет-компания \"Фарбик\"",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 1.25,
+          "description": "Верстка сайтов. Привязка сайтов к CMS Joomla. Создание/модификация PHP компонентов CMS."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Современная гуманитарная академия",
+        "degree": "Бакалавр",
+        "year": 2007,
+        "field": "Экономика, финансы и кредит"
+      }
+    ]
+  },
+  "vacancy_data": {
+    "description": "C:\\Users\\67181\\OneDrive\\Dokumenty\\bachelor-2025-team-team\\data\\test_resumes\\vacansy.json"
+  },
+  "matching_result": {
+    "candidate_info": {
+      "candidate_id": "candidate_1766484826",
+      "current_position": "Senior frontend developer"
+    },
+    "matching_results": {
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 0,
+          "weight": 0.2,
+          "weighted_score": 0,
+          "explanation": "Должность не указана в требованиях вакансии"
+        },
+        "education_match": {
+          "score": 0,
+          "weight": 0.15,
+          "weighted_score": 0,
+          "explanation": "Образование не указано в требованиях вакансии"
+        },
+        "experience_match": {
+          "score": 100,
+          "weight": 0.25,
+          "weighted_score": 0.25,
+          "explanation": "Кандидат имеет 14 лет опыта, что превышает требуемый опыт в 0 лет"
+        },
+        "schedule_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "График работы не указан в требованиях вакансии"
+        },
+        "format_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "Формат работы не указан в требованиях вакансии"
+        },
+        "additional_match": {
+          "score": 0,
+          "weight": 0.3,
+          "weighted_score": 0,
+          "explanation": "Дополнительные требования не указаны в требованиях вакансии"
+        }
+      },
+      "overall_score": 25,
+      "is_suitable": false,
+      "critical_issues": [
+        "Отсутствие информации о должности, образовании, графике работы, формате работы и дополнительных требованиях в вакансии"
+      ]
+    },
+    "recommendation": {
+      "level": "не рекомендован",
+      "reason": "Недостаточно данных для оценки соответствия кандидата вакансии",
+      "suggested_salary": "Не определена из-за отсутствия данных",
+      "interview_priority": "низкий"
+    }
+  }
+}

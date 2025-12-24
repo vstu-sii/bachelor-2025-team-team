@@ -1,7 +1,0 @@
-{
-  "test_id": "analysis_original_20251212_0001",
-  "variant": "original",
-  "error": "Replacement index 0 out of range for positional args tuple",
-  "duration": 0.0010056495666503906,
-  "timestamp": "2025-12-12T01:15:41.707984"
-}

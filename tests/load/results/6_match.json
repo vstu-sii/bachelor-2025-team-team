@@ -1,0 +1,140 @@
+{
+  "status": "success",
+  "filename": "6.docx",
+  "resume_analysis": {
+    "contacts": {
+      "name": "Кандидат",
+      "sex": "Мужчина",
+      "city": "Минск",
+      "number": null,
+      "email": null,
+      "social": []
+    },
+    "skills": {
+      "technical": [
+        "JavaScript",
+        "Git",
+        "React",
+        "HTML5",
+        "CSS3",
+        "Redux",
+        "TypeScript",
+        "MySQL",
+        "SQL",
+        "ООП",
+        "Node.js",
+        "React-Hook-Form",
+        "React-Select",
+        "Storybook",
+        "RTK Query",
+        "Memo",
+        "UseMemo",
+        "UseCallback",
+        "lazy-loading",
+        "infinite scroll",
+        "debounce",
+        "MUI",
+        "Next.js",
+        "Styled components"
+      ],
+      "soft": [],
+      "languages": [
+        "Русский",
+        "Английский",
+        "Польский"
+      ]
+    },
+    "experience": {
+      "total_years": 3,
+      "relevant_years": 3,
+      "positions": [
+        {
+          "title": "Frontend-разработчик",
+          "company": null,
+          "sphere": "Лесная промышленность, деревообработка",
+          "years": 1,
+          "description": "Разработал компоненты на основе React, TypeScript, Redux Toolkit, MUI и CSS Modules. Работал с формами с помощью react-hook-form, писал кастомные компоненты. Для HTTP-запросов и кэширования использовал RTK Query. Реализовал перехватчик запросов, работу с CSRF-токенами и cookie. Писал unit-тесты на Jest. Оптимизировал приложение с помощью memo, useMemo, useCallback, lazy-loading и debounce."
+        },
+        {
+          "title": "Frontend-разработчик",
+          "company": null,
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 2,
+          "description": "Разрабатывал компоненты на основе React, TypeScript, Redux Toolkit, styled-components. Работал с таблицами с использованием React-Table v7. Работал с формами, используя React-Hook-Form и React-Select. Разработал Storybook для компонентов. Реализовал API-сервис для HTTP-запросов и кэширования с помощью RTK Query. Оптимизировал приложение с использованием Memo, UseMemo, UseCallback, lazy-loading, infinite scroll, debounce."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Белорусский государственный университет информатики и радиоэлектроники",
+        "degree": "Магистр",
+        "year": 2023,
+        "field": "Электронные системы и технологии"
+      },
+      {
+        "institution": "Белорусский государственный университет информатики и радиоэлектроники",
+        "degree": null,
+        "year": 2021,
+        "field": "Программист, бизнес-аналитик"
+      }
+    ]
+  },
+  "vacancy_data": {
+    "description": "C:\\Users\\67181\\OneDrive\\Dokumenty\\bachelor-2025-team-team\\data\\test_resumes\\vacansy.json"
+  },
+  "matching_result": {
+    "candidate_info": {
+      "candidate_id": "candidate_1766484966",
+      "current_position": "Frontend-разработчик"
+    },
+    "matching_results": {
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 100,
+          "weight": 0.2,
+          "weighted_score": 0.2,
+          "explanation": "Должность кандидата полностью соответствует требуемой."
+        },
+        "education_match": {
+          "score": 100,
+          "weight": 0.15,
+          "weighted_score": 0.15,
+          "explanation": "Образование кандидата соответствует требованиям."
+        },
+        "experience_match": {
+          "score": 100,
+          "weight": 0.25,
+          "weighted_score": 0.25,
+          "explanation": "Опыт работы кандидата полностью соответствует требуемому."
+        },
+        "schedule_match": {
+          "score": 100,
+          "weight": 0.05,
+          "weighted_score": 0.05,
+          "explanation": "График работы не указан, предполагается полное соответствие."
+        },
+        "format_match": {
+          "score": 100,
+          "weight": 0.05,
+          "weighted_score": 0.05,
+          "explanation": "Формат работы не указан, предполагается полное соответствие."
+        },
+        "additional_match": {
+          "score": 100,
+          "weight": 0.3,
+          "weighted_score": 0.3,
+          "explanation": "Дополнительные требования не указаны, предполагается полное соответствие."
+        }
+      },
+      "overall_score": 100,
+      "is_suitable": true,
+      "critical_issues": []
+    },
+    "recommendation": {
+      "level": "рекомендован",
+      "reason": "Кандидат полностью соответствует всем указанным требованиям.",
+      "suggested_salary": "не указана",
+      "interview_priority": "высокий"
+    }
+  }
+}

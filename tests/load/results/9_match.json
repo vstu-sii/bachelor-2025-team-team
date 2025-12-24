@@ -1,0 +1,193 @@
+{
+  "status": "success",
+  "filename": "9.docx",
+  "resume_analysis": {
+    "contacts": {
+      "name": "Кандидат",
+      "sex": "Мужчина",
+      "city": "Тольятти",
+      "number": null,
+      "email": null,
+      "social": [
+        "Github",
+        "http://fenix-63.hol.es/bulvar/",
+        "http://fenix-63.hol.es/truck/",
+        "http://trikolor-orenburg.ru/"
+      ]
+    },
+    "skills": {
+      "technical": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "jQuery",
+        "Transact-SQL",
+        "1С-Битрикс",
+        "Sass",
+        "PUG",
+        "Gulp",
+        "Bootstrap",
+        "Foundation",
+        "Google Script",
+        "VBA",
+        "Atlassian Jira",
+        "npm",
+        "Адаптивная верстка",
+        "Vue",
+        "Vue.js",
+        "schema.org",
+        "C#",
+        "Java SE",
+        "MS SQL Server",
+        "MySQL",
+        "HTML5",
+        "CSS3",
+        "Flexbox",
+        "Grid Layout",
+        "Media Queries",
+        "Bootstrap 3",
+        "Bootstrap 4",
+        "Angular",
+        "AJAX",
+        "REST",
+        "PHP",
+        "Joomla",
+        "WordPress",
+        "MODx",
+        "Bitrix API",
+        "Git",
+        "API Контур-Фокус",
+        "AmoCRM API",
+        "API Яндекс карт",
+        "API Google-карт",
+        "FTP-клиенты (WinSCP, FileZilla)"
+      ],
+      "soft": [
+        "Трудолюбив",
+        "Стрессоустойчив"
+      ],
+      "languages": [
+        "Русский",
+        "Английский (B2)"
+      ]
+    },
+    "experience": {
+      "total_years": 12,
+      "relevant_years": 12,
+      "positions": [
+        {
+          "title": "Web-программист",
+          "company": "1C-Bitrix",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 7,
+          "description": "Разработка сайтов на 1C-Bitrix"
+        },
+        {
+          "title": "HTML-верстальщик",
+          "company": "DelisInfo",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 0,
+          "description": "Верстка информационной системы РИО - система направленная на оптимизацию процесса оцифровки бумажных документов. Верстка с использованием Bootstrap4. Проектная работа."
+        },
+        {
+          "title": "Web-программист",
+          "company": "Cetera Labs",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 1,
+          "description": "Верстка Web-страниц по PSD-макетам. Натягивание верстки на CMS 1C-Bitrix. Работа с готовыми компонентами 1C-Bitrix и их кастомизация под конкретные задачи клиента. Выполнял небольшие доработки в плане верстки и функционала. Разработка на HTML+CSS+Javascript(jQuery), PHP+MySQL. Верстка с использованием PUG, SCSS, CSS-фреймворка Foundation (включая адаптив). Интеграция сторонних сервисов по API. Настройка сервиса Roistat. Для сборки фронтенда применял Gulp. Для командной разработки использовал Git. Работа в Jira. Удаленная работа."
+        },
+        {
+          "title": "Инженер",
+          "company": null,
+          "sphere": "Финансовый сектор",
+          "years": 5,
+          "description": "Поддержка пользователей на рабочих местах в офисе банка (18 ПК). Работал с терминальным сервером Citrix Metaframe XP. Поддержка принтеров и других периферийных устройств. Работа с ПО БОСС-Референт. Поддержка пользователей, и парка компьютерной техники (18 ПК) Периодическое использование Radmin, VNC. Подключение новых пользователей к системам Интернет-Банк и их сопровождение. Проведение плановой инвентаризации оргтехники, в случае необходимости закупка новой техники или комплектующих. Составление карт доступа пользователей ИС; организация электронного документооборота с ЭЦП; консультирование по системам удаленного доступа; Обслуживание POS-терминалов; Работа с системой электронного документооборота БОСС-Референт. Небольшой опыт работы с ОС Linux Fedora 16. Инкассация банкоматов и терминалов."
+        },
+        {
+          "title": "Google-script разработчик",
+          "company": "ГК Новые технологии",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 0,
+          "description": "Разработка скриптов под Google Sheets, Google Docs, Gmail для автоматизации документооборота организации. Верстка email рассылок. Работа была проектная, на удаленной основе."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Самарский Государственный Аэрокосмический Университет",
+        "degree": "Высшее образование",
+        "year": 2013,
+        "field": "Информатики, Автоматизированные системы обработки информации и управления"
+      },
+      {
+        "institution": "Epam Systems",
+        "degree": ".NET (C#)",
+        "year": 2017,
+        "field": null
+      }
+    ]
+  },
+  "vacancy_data": {
+    "description": "C:\\Users\\67181\\OneDrive\\Dokumenty\\bachelor-2025-team-team\\data\\test_resumes\\vacansy.json"
+  },
+  "matching_result": {
+    "candidate_info": {
+      "candidate_id": "candidate_1766485103",
+      "current_position": "Web-программист"
+    },
+    "matching_results": {
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 0,
+          "weight": 0.2,
+          "weighted_score": 0,
+          "explanation": "Должность не указана в требованиях вакансии"
+        },
+        "education_match": {
+          "score": 100,
+          "weight": 0.15,
+          "weighted_score": 0.15,
+          "explanation": "Образование кандидата соответствует требованиям"
+        },
+        "experience_match": {
+          "score": 100,
+          "weight": 0.25,
+          "weighted_score": 0.25,
+          "explanation": "Опыт работы кандидата значительно превышает требуемый"
+        },
+        "schedule_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "График работы не указан в требованиях вакансии"
+        },
+        "format_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "Формат работы не указан в требованиях вакансии"
+        },
+        "additional_match": {
+          "score": 0,
+          "weight": 0.3,
+          "weighted_score": 0,
+          "explanation": "Дополнительные требования не указаны в требованиях вакансии"
+        }
+      },
+      "overall_score": 40,
+      "is_suitable": false,
+      "critical_issues": [
+        "Не указана должность",
+        "Не указан график работы",
+        "Не указан формат работы",
+        "Не указаны дополнительные требования"
+      ]
+    },
+    "recommendation": {
+      "level": "не рекомендован",
+      "reason": "Недостаточно данных для оценки соответствия кандидата вакансии",
+      "suggested_salary": "Не определена",
+      "interview_priority": "низкий"
+    }
+  }
+}

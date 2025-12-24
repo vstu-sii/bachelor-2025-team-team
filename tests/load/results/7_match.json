@@ -1,0 +1,164 @@
+{
+  "status": "success",
+  "filename": "7.docx",
+  "resume_analysis": {
+    "contacts": {
+      "name": "Кандидат",
+      "sex": "мужской",
+      "city": "Мурманск",
+      "number": "не указан",
+      "email": "не указан",
+      "social": []
+    },
+    "skills": {
+      "technical": [
+        "JavaScript",
+        "Docker",
+        "Git",
+        "HTML",
+        "API",
+        "CSS",
+        "Linux",
+        "PostgreSQL",
+        "HTML5",
+        "CSS3",
+        "TypeScript",
+        "React",
+        "Redux",
+        "Webpack",
+        "Vite",
+        "Node.js",
+        "Express",
+        "Nest.js",
+        "MongoDB",
+        "Nginx",
+        "Bash",
+        "BAT/CMD",
+        "PowerShell",
+        "Sass",
+        "REST API"
+      ],
+      "soft": [
+        "коммуникативные навыки",
+        "умение эффективно взаимодействовать в команде",
+        "точность",
+        "ответственность",
+        "стрессоустойчивость"
+      ],
+      "languages": [
+        "Русский",
+        "Английский — B1"
+      ]
+    },
+    "experience": {
+      "total_years": 10,
+      "relevant_years": 10,
+      "positions": [
+        {
+          "title": "Fullstack-разработчик",
+          "company": "Проектная деятельность",
+          "sphere": "IT",
+          "years": 1,
+          "description": "Разработка инфраструктуры API, реализация бронирования билетов, настройка баз данных, организация журналирования, докеризация проектов и деплой."
+        },
+        {
+          "title": "Ведущий инженер отдела поддержки пользователей",
+          "company": "Центр информационных технологий Мурманской области",
+          "sphere": "IT",
+          "years": 6,
+          "description": "Автоматизация установки ПО, администрирование пользовательских АРМ, обработка обращений пользователей, настройка инфраструктуры связи, диагностика аппаратных сбоев, введение в эксплуатацию офисной техники."
+        },
+        {
+          "title": "Программист",
+          "company": "Центральная городская библиотека города Мурманск",
+          "sphere": "IT",
+          "years": 3,
+          "description": "Создание тем для мобильных устройств, разработка модулей для CMS Drupal, поддержка и развитие САБ ИРБИС64, работа с виртуализацией, администрирование серверов, настройка рабочей среды сотрудников."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Кольский филиал Петрозаводского государственного университета",
+        "degree": "Высшее образование",
+        "year": 2015,
+        "field": "Информатика и прикладная математика, Автоматизированные системы обработки информации и управления"
+      },
+      {
+        "institution": "Яндекс Практикум",
+        "degree": "Фулстек-разработчик",
+        "year": 2025,
+        "field": "Программист"
+      },
+      {
+        "institution": "SoftLine",
+        "degree": "Администрирование операционной системы AstraLinux",
+        "year": 2021,
+        "field": "Расширенное администрирование ALSE-1603"
+      }
+    ]
+  },
+  "vacancy_data": {
+    "description": "C:\\Users\\67181\\OneDrive\\Dokumenty\\bachelor-2025-team-team\\data\\test_resumes\\vacansy.json"
+  },
+  "matching_result": {
+    "candidate_info": {
+      "candidate_id": "candidate_1766485006",
+      "current_position": "Fullstack-разработчик"
+    },
+    "matching_results": {
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 0,
+          "weight": 0.2,
+          "weighted_score": 0,
+          "explanation": "Должность не указана в требованиях вакансии"
+        },
+        "education_match": {
+          "score": 100,
+          "weight": 0.15,
+          "weighted_score": 0.15,
+          "explanation": "Кандидат имеет высшее образование в соответствующей области"
+        },
+        "experience_match": {
+          "score": 100,
+          "weight": 0.25,
+          "weighted_score": 0.25,
+          "explanation": "Кандидат имеет 10 лет опыта, что превышает требуемый опыт"
+        },
+        "schedule_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "График работы не указан в требованиях вакансии"
+        },
+        "format_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "Формат работы не указан в требованиях вакансии"
+        },
+        "additional_match": {
+          "score": 0,
+          "weight": 0.3,
+          "weighted_score": 0,
+          "explanation": "Дополнительные требования не указаны в требованиях вакансии"
+        }
+      },
+      "overall_score": 40,
+      "is_suitable": false,
+      "critical_issues": [
+        "Отсутствие информации о должности",
+        "Отсутствие информации о графике работы",
+        "Отсутствие информации о формате работы",
+        "Отсутствие дополнительных требований"
+      ]
+    },
+    "recommendation": {
+      "level": "не рекомендован",
+      "reason": "Недостаточно информации для оценки соответствия",
+      "suggested_salary": "не определена",
+      "interview_priority": "низкий"
+    }
+  }
+}

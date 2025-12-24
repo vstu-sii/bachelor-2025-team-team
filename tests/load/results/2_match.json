@@ -1,0 +1,145 @@
+{
+  "status": "success",
+  "filename": "2.docx",
+  "resume_analysis": {
+    "contacts": {
+      "name": "Кандидат",
+      "sex": "мужской",
+      "city": "Санкт-Петербург",
+      "number": "не указан",
+      "email": "не указан",
+      "social": []
+    },
+    "skills": {
+      "technical": [
+        "CSS",
+        "HTML",
+        "React",
+        "Redux",
+        "redux toolkit",
+        "redux saga",
+        "Webpack",
+        "HTML5",
+        "CSS3",
+        "npm",
+        "Gitlab",
+        "ES6",
+        "JavaScript",
+        "REST API",
+        "ReactJS",
+        "Agile",
+        "Kanban",
+        "Scrum",
+        "Git",
+        "jest",
+        "Next",
+        "vite",
+        "UX",
+        "TypeScript",
+        "Styled Components",
+        "Eslint",
+        "Prettier"
+      ],
+      "soft": [],
+      "languages": [
+        "Русский",
+        "Английский — B1"
+      ]
+    },
+    "experience": {
+      "total_years": 5,
+      "relevant_years": 5,
+      "positions": [
+        {
+          "title": "frontend-devolper",
+          "company": "МТС ДИДЖИТАЛ",
+          "sphere": "Информационные технологии, системная интеграция, интернет",
+          "years": 4,
+          "description": "Учавствовал в разработке с нуля маркетплейса для B2B сегмента МТС. Разрабатывал клиентское приложение для покупки товаров и генерации счетов. Разрабатывал экосистемный модуль лидогенерации. Разрабатывал проект для подключения и активации продуктов ранее проданных бизнесу."
+        },
+        {
+          "title": "fullstack devolper",
+          "company": "Ссдц Дельта",
+          "sphere": "",
+          "years": 1,
+          "description": "Разрабатывал модуль по созданию ГОСТ тех. карт в большом приложении для сварочных компаний."
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Московский финансово-промышленный университет \"Синергия\"",
+        "degree": "Неоконченное высшее образование",
+        "year": 2025,
+        "field": "Веб-разработка, Разработка, сопровождение и обеспечение безопасности информационных систем"
+      },
+      {
+        "institution": "Яндекс практикум",
+        "degree": "Курсы повышения квалификации",
+        "year": 2023,
+        "field": "middle-frontend"
+      }
+    ]
+  },
+  "vacancy_data": {
+    "description": "C:\\Users\\67181\\OneDrive\\Dokumenty\\bachelor-2025-team-team\\data\\test_resumes\\vacansy.json"
+  },
+  "matching_result": {
+    "candidate_info": {
+      "candidate_id": "candidate_1766484776",
+      "current_position": "frontend-devolper"
+    },
+    "matching_results": {
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 80,
+          "weight": 0.2,
+          "weighted_score": 0.16,
+          "explanation": "Текущая должность кандидата близка к требуемой, но есть расхождения в написании."
+        },
+        "education_match": {
+          "score": 70,
+          "weight": 0.15,
+          "weighted_score": 0.105,
+          "explanation": "Кандидат имеет неоконченное высшее образование и курсы повышения квалификации, что частично соответствует требованиям."
+        },
+        "experience_match": {
+          "score": 100,
+          "weight": 0.25,
+          "weighted_score": 0.25,
+          "explanation": "Кандидат имеет 5 лет опыта работы, что превышает требуемые 0 лет."
+        },
+        "schedule_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "Информация о графике работы отсутствует."
+        },
+        "format_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "Информация о формате работы отсутствует."
+        },
+        "additional_match": {
+          "score": 90,
+          "weight": 0.3,
+          "weighted_score": 0.27,
+          "explanation": "Кандидат обладает широким набором технических навыков и знанием английского языка, что соответствует дополнительным требованиям."
+        },
+        "overall_score": 78.5,
+        "is_suitable": true,
+        "critical_issues": [
+          "Отсутствие информации о графике работы",
+          "Отсутствие информации о формате работы"
+        ]
+      },
+      "recommendation": {
+        "level": "рекомендован",
+        "reason": "Кандидат имеет значительный опыт работы и навыки, соответствующие требованиям вакансии.",
+        "suggested_salary": "не указана",
+        "interview_priority": "высокий"
+      }
+    }
+  }
+}

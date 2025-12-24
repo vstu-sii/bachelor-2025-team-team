@@ -1,0 +1,126 @@
+{
+  "status": "success",
+  "filename": "4.docx",
+  "resume_analysis": {
+    "contacts": {
+      "name": "Кандидат",
+      "sex": "Мужчина",
+      "city": "Брянск",
+      "number": null,
+      "email": null,
+      "social": []
+    },
+    "skills": {
+      "technical": [
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "Git",
+        "Express.js",
+        "Vue",
+        "Vuex",
+        "SCSS",
+        "Nuxt",
+        "Pinia",
+        "ООП",
+        "Node.js",
+        "TypeScript"
+      ],
+      "soft": [],
+      "languages": [
+        "Русский"
+      ]
+    },
+    "experience": {
+      "total_years": 5.5,
+      "relevant_years": 5.5,
+      "positions": [
+        {
+          "title": "Frontend-разработчик",
+          "company": "СМИ, маркетинг, реклама, BTL, PR, дизайн, продюсирование",
+          "sphere": "СМИ, маркетинг, реклама, BTL, PR, дизайн, продюсирование",
+          "years": 4.5,
+          "description": "Разработка фронтенда, стек: Vue.js 2(Option API, Composition API), Vue 3, Nuxt 2, 3, опыт миграции с 2 на 3"
+        },
+        {
+          "title": "Frontend-разработчик",
+          "company": "Shopint Brigade",
+          "sphere": null,
+          "years": 1,
+          "description": "разработка фронтенда"
+        }
+      ]
+    },
+    "education": [
+      {
+        "institution": "Академия права и управления, Брянский филиал",
+        "degree": "Высшее образование",
+        "year": 2011,
+        "field": "Юридический, Гражданско-правовая"
+      }
+    ]
+  },
+  "vacancy_data": {
+    "description": "C:\\Users\\67181\\OneDrive\\Dokumenty\\bachelor-2025-team-team\\data\\test_resumes\\vacansy.json"
+  },
+  "matching_result": {
+    "candidate_info": {
+      "candidate_id": "candidate_1766484873",
+      "current_position": "Frontend-разработчик"
+    },
+    "matching_results": {
+      "match_breakdown": {
+        "job_title_match": {
+          "score": 0,
+          "weight": 0.2,
+          "weighted_score": 0,
+          "explanation": "Должность не указана в требованиях вакансии"
+        },
+        "education_match": {
+          "score": 50,
+          "weight": 0.15,
+          "weighted_score": 0.075,
+          "explanation": "Образование кандидата не соответствует требуемому, но имеет высшее образование"
+        },
+        "experience_match": {
+          "score": 100,
+          "weight": 0.25,
+          "weighted_score": 0.25,
+          "explanation": "Кандидат имеет значительный опыт работы, что превышает требуемый опыт"
+        },
+        "schedule_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "График работы не указан в требованиях вакансии"
+        },
+        "format_match": {
+          "score": 0,
+          "weight": 0.05,
+          "weighted_score": 0,
+          "explanation": "Формат работы не указан в требованиях вакансии"
+        },
+        "additional_match": {
+          "score": 0,
+          "weight": 0.3,
+          "weighted_score": 0,
+          "explanation": "Дополнительные требования не указаны в требованиях вакансии"
+        }
+      },
+      "overall_score": 32.5,
+      "is_suitable": false,
+      "critical_issues": [
+        "Должность не указана",
+        "График работы не указан",
+        "Формат работы не указан",
+        "Дополнительные требования не указаны"
+      ]
+    },
+    "recommendation": {
+      "level": "не рекомендован",
+      "reason": "Недостаточно данных для оценки соответствия вакансии",
+      "suggested_salary": "Не определена из-за недостатка данных",
+      "interview_priority": "низкий"
+    }
+  }
+}

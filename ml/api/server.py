@@ -1,7 +1,8 @@
-from fastapi import FastAPI, UploadFile, Form, HTTPException, File
+from fastapi import FastAPI, UploadFile, Form, HTTPException, File, Body
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import json
+from pydantic import BaseModel
 import os
 import sys
 import shutil
@@ -24,6 +25,15 @@ app = FastAPI(
     version="1.0.0"
 )
 
+class MatchRequest(BaseModel):
+    analysis_result: dict
+    vacancy_data: dict  # или str, если текст вакансии
+
+class QuestionsRequest(BaseModel):
+    analysis_result: dict
+    vacancy_requirements: dict  # или str
+
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -37,7 +47,7 @@ app.add_middleware(
 pipeline = None
 
 # Создаем директорию для загруженных файлов
-UPLOAD_DIR = "./data/uploaded_resumes"
+UPLOAD_DIR = "../../data/uploaded_resumes"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
@@ -77,197 +87,44 @@ async def health_check():
         "timestamp": datetime.now().isoformat()
     }
 
-@app.post("/excruct_resume")
-async def excruct_resume(file: UploadFile = File(...)):
-    """Анализ резюме с парсингом файла и трекингом"""
-    start_time = time.time()
-    
-    if not pipeline:
-        raise HTTPException(status_code=503, detail="Модель анализа резюме не доступна")
-    
-    # Проверяем формат файла
-    allowed_extensions = ['.pdf', '.docx', '.doc', '.txt']
-    file_ext = os.path.splitext(file.filename)[1].lower()
-    
-    if file_ext not in allowed_extensions:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Неподдерживаемый формат файла. Разрешены: {', '.join(allowed_extensions)}"
-        )
-    
-    # Сохраняем файл
+@app.post("/extract-resume")
+async def extract_resume(file: UploadFile):
     file_path = os.path.join(UPLOAD_DIR, file.filename)
     with open(file_path, "wb") as f:
         shutil.copyfileobj(file.file, f)
-    
-    try:
-        # Извлекаем текст из файла
-        print(f"📄 Извлекаем текст из {file.filename}...")
-        resume_text = FileParser.extract_text_from_file(file_path)
-        
-        # Очищаем текст
-        cleaned_text = FileParser.clean_extracted_text(resume_text)
-        
-        if not cleaned_text or cleaned_text.startswith("Не удалось"):
-            raise HTTPException(
-                status_code=400, 
-                detail=f"Не удалось извлечь текст из файла: {cleaned_text}"
-            )
-        
-        print(f"✅ Извлечено {len(cleaned_text)} символов")
-        
-        # Анализируем резюме
-        analysis_result = await pipeline.extract_data_from_resume(cleaned_text)
-        
-        if "error" in analysis_result:
-            raise HTTPException(status_code=500, detail=analysis_result["error"])
-        
-        # Трекинг успешного запроса
-        latency = (time.time() - start_time) * 1000
-        
-        return {
-            "status": "success",
-            "filename": file.filename,
-            "text_length": len(cleaned_text),
-            "analysis": analysis_result
-        }
-        
-    except Exception as e:
-        # Трекинг ошибки
-        latency = (time.time() - start_time) * 1000
-       
-        
-        raise HTTPException(status_code=500, detail=f"Ошибка обработки файла: {str(e)}")
 
-@app.post("/excruct-resume-text")
-async def excruct_resume_text(resume_text: str = Form(...)):
-    """Анализ резюме из текста (без загрузки файла)"""
-    try:
-        if not resume_text or len(resume_text.strip()) < 50:
-            raise HTTPException(
-                status_code=400, 
-                detail="Текст резюме слишком короткий (минимум 50 символов)"
-            )
-        
-        # Анализируем резюме
-        analysis_result = await pipeline.extract_data_from_resume(resume_text)
-        
-        if "error" in analysis_result:
-            raise HTTPException(status_code=500, detail=analysis_result["error"])
-        
-        return {
-            "status": "success",
-            "text_length": len(resume_text),
-            "analysis": analysis_result
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка анализа текста: {str(e)}")
+    resume_text = FileParser.extract_text_from_file(file_path)
+    cleaned_text = FileParser.clean_extracted_text(resume_text)
 
-@app.post("/generate-interview-plan")
-async def generate_interview_plan(
-    file: UploadFile = File(...),
-    vacancy_requirements: str = Form(""),
-    question_type: str = Form("mixed")
-):
-    """Полный пайплайн с парсингом файла и генерацией вопросов"""
-    
-    # Сохраняем и парсим файл
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
-    with open(file_path, "wb") as f:
-        shutil.copyfileobj(file.file, f)
-    
-    try:
-        # Извлекаем текст
-        resume_text = FileParser.extract_text_from_file(file_path)
-        cleaned_text = FileParser.clean_extracted_text(resume_text)
-        
-        if not cleaned_text or cleaned_text.startswith("Не удалось"):
-            raise HTTPException(
-                status_code=400, 
-                detail=f"Не удалось извлечь текст из файла: {cleaned_text}"
-            )
-        
-        # 1. Анализ резюме
-        analysis_result = await pipeline.extract_data_from_resume(cleaned_text)
-        if "error" in analysis_result:
-            raise HTTPException(status_code=500, detail=analysis_result["error"])
-        
-        # 2. Генерация вопросов
-        questions_result = await pipeline.generate_interview_questions(
-            analysis_result=analysis_result,
-            vacancy_data=vacancy_requirements,
-            question_type=question_type
-        )
-        
-        if "error" in questions_result:
-            raise HTTPException(status_code=500, detail=questions_result["error"])
-        
-        return {
-            "status": "success",
-            "filename": file.filename,
-            "analysis": analysis_result,
-            "interview_plan": questions_result,
-            "vacancy_requirements": vacancy_requirements
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка обработки: {str(e)}")
+    analysis_result = await pipeline.extract_data_from_resume(cleaned_text)
+    return {"status": "success", "analysis_result": analysis_result}
+
 
 @app.post("/match-vacancy")
-async def match_vacancy(
-    file: UploadFile = File(...),
-    vacancy_data: str = Form(...)
-):
-    """Сопоставление резюме с вакансией"""
-    
-    try:
-        # Сохраняем и парсим файл
-        file_path = os.path.join(UPLOAD_DIR, file.filename)
-        with open(file_path, "wb") as f:
-            shutil.copyfileobj(file.file, f)
-        
-        # Извлекаем текст
-        resume_text = FileParser.extract_text_from_file(file_path)
-        cleaned_text = FileParser.clean_extracted_text(resume_text)
-        
-        if not cleaned_text or cleaned_text.startswith("Не удалось"):
-            raise HTTPException(
-                status_code=400, 
-                detail=f"Не удалось извлечь текст из файла: {cleaned_text}"
-            )
-        
-        # Анализируем резюме
-        analysis_result = await pipeline.extract_data_from_resume(cleaned_text)
-        if "error" in analysis_result:
-            raise HTTPException(status_code=500, detail=analysis_result["error"])
-        
-        # Парсим данные вакансии
-        try:
-            vacancy_dict = json.loads(vacancy_data)
-        except:
-            # Если не JSON, используем как простой текст
-            vacancy_dict = {"description": vacancy_data}
-        
-        # Сопоставляем с вакансией
-        matching_result = await pipeline.evaluate_candidate_match(
-            analysis_result, 
-            vacancy_dict
-        )
-        
-        if "error" in matching_result:
-            raise HTTPException(status_code=500, detail=matching_result["error"])
-        
-        return {
-            "status": "success",
-            "filename": file.filename,
-            "resume_analysis": analysis_result,
-            "vacancy_data": vacancy_dict,
-            "matching_result": matching_result
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка сопоставления: {str(e)}")
+async def match_vacancy(request: MatchRequest):
+    matching_result = await pipeline.evaluate_candidate_match(
+        request.analysis_result, request.vacancy_data
+    )
+    return {
+        "status": "success",
+        "resume_analysis": request.analysis_result,
+        "vacancy_data": request.vacancy_data,
+        "matching_result": matching_result
+    }
+
+
+@app.post("/generate-interview-plan")
+async def generate_interview_plan(request: QuestionsRequest):
+    questions_result = await pipeline.generate_interview_questions(
+        resume_analysis=request.analysis_result,
+        vacancy_requirements=request.vacancy_requirements
+    )
+    return {
+        "status": "success",
+        "analysis_result": request.analysis_result,
+        "interview_plan": questions_result,
+        "vacancy_requirements": request.vacancy_requirements
+    }
 
 @app.get("/test-file-parser")
 async def test_file_parser():

@@ -1,0 +1,74 @@
+LOCUST LOAD TEST REPORT
+======================
+
+Timestamp: 2025-12-23 19:19:31
+Active users: 0
+
+--- REQUEST STATISTICS ---
+
+extract_resume POST
+  Requests: 20
+  Failures: 0
+  Avg response time: 8153.83 ms
+  P95 response time: 17000.00 ms
+  RPS: 0.00
+
+match_vacancy POST
+  Requests: 20
+  Failures: 0
+  Avg response time: 5628.85 ms
+  P95 response time: 14000.00 ms
+  RPS: 0.00
+
+generate_questions POST
+  Requests: 20
+  Failures: 0
+  Avg response time: 13579.23 ms
+  P95 response time: 20000.00 ms
+  RPS: 0.00
+
+--- PIPELINE STATISTICS ---
+
+Full pipeline:
+  Completed: 0
+  Failed: 0
+  Avg total time: 0.00 ms
+  P95 total time: 0.00 ms
+
+
+
+Статистика по запросам
+
+  extract_resume
+
+    Количество запросов: 20
+
+    Неудачных запросов: 0 → все запросы успешны
+
+    Среднее время ответа: 8153.83 ms (~8.15 с)
+
+    95-й перцентиль: 17 000 ms (17 с) → 5% самых медленных запросов занимали до 17 секунд
+
+    RPS: 0.00 → низкая частота запросов, скорее всего из-за того, что каждый пользователь последовательно обрабатывал свои файлы, а не параллельно
+
+  match_vacancy
+
+    Запросов: 20, неудачных: 0
+
+    Среднее время ответа: 5628.85 ms (~5.6 с)
+
+    P95: 14 000 ms
+
+    RPS: 0.00
+
+  generate_questions
+
+    Запросов: 20, неудачных: 0
+
+    Среднее время ответа: 13 579.23 ms (~13.5 с)
+
+    P95: 20 000 ms → очень медленные некоторые запросы
+
+    RPS: 0.00
+  
+Вывод: Все три этапа пайплайна обрабатываются успешно, но длительность запросов по генерации вопросов довольно велика. 

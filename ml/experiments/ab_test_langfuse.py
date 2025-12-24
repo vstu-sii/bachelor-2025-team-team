@@ -1,1225 +1,1340 @@
 import os
-import time
 import json
-import random
+import time
 import re
-import asyncio
 import requests
+import glob
+import asyncio
+import random
 import pandas as pd
-import hashlib
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any
 from datetime import datetime
+from typing import Dict, List, Any, Optional, Tuple
+from dataclasses import dataclass, field
 from dotenv import load_dotenv
-from langfuse import Langfuse
 import sys
+from dataclasses import dataclass, field
+from typing import Dict, List
+import tiktoken  # для подсчета токенов
 
-# Добавляем путь для импорта Langchain
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-# Загрузка окружения
+from ml.models.baseline import HRBaseline, langfuse
+from ml.utils.file_parser import FileParser
+
+# Загружаем ключи
 load_dotenv()
-# --- Конфигурация Mistral для проверки ---
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
-MISTRAL_MODEL = "mistral-small"
+MISTRAL_MODEL = "mistral-large-latest"
 
-# --- Ваши оригинальные промпты (сохраняем как есть) ---
+# ============================================================================
+# ПРОМПТЫ ДЛЯ A/B ТЕСТИРОВАНИЯ
+# ============================================================================
 
-from ml.prompt_templates import ( 
-    UC_MATCHING_PROMPT, 
-    UC_QUESTION_GENERATION_PROMPT,
-    UC_ANALYSIS_PROMPT
-)
+# 1. ПРОМПТЫ ДЛЯ ИЗВЛЕЧЕНИЯ ДАННЫХ ИЗ РЕЗЮМЕ
+EXTRACTION_PROMPTS = {
+    "baseline": {
+        "system": """Ты — HR-ассистент для анализа резюме.
+Твоя задача: проанализировать резюме и извлечь структурированную информацию.
 
-# --- Альтернативные варианты для A/B тестирования ---
+Правила анализа:
+- Извлекай только факты, указанные в резюме
+- Не добавляй информацию, которой нет в тексте
+- Для навыков указывай только те, что явно указаны
+- Для опыта считай только подтвержденные периоды работы
+- Для образования указывай только указанные учреждения и степени
 
-ANALYSIS_PROMPTS = {
-    "original": {
-        "system": UC_ANALYSIS_PROMPT,
-        "human": "Извлеки данные из этого резюме: {resume_text}"
-    },
-    "variant_a": {
-        "system": """Ты — опытный HR-специалист по резюме.
-        Извлеки структурированную информацию из текста резюме.
-        
-        ВАЖНЫЕ ПРАВИЛА:
-        1. Извлекай только явно указанную информацию
-        2. Для контактов - только если явно указаны
-        3. Навыки - только те, что перечислены
-        4. Опыт - рассчитай общий стаж из указанных периодов
-        5. Образование - все указанные учебные заведения
-        
-        Формат вывода строго в JSON:
-    {{
-    "contacts": {{
-        "name": "имя кандидата",
-        "sex": "пол кандидата", 
-        "city": "город",
-        "number": "телефон",
-        "email": "почта",
-        "social": ["список социальных сетей"],
-    }}, 
-    "skills": {{
-        "technical": ["список технических навыков"],
-        "soft": ["список мягких навыков"], 
-        "languages": ["список языков"]
-    }},
-    "experience": {{
-        "total_years": "число",
-        "relevant_years": "число",
-        "positions": [
-        {{
-            "title": "должность",
-            "company": "название компании (обычно идет после указания периода работы в компании и общего времени)", 
-            "sphere": "сектор, сфера, в которой работает компания", 
-            "years": "число",
-            "description": "описание обязанностей"
-        }}
-        ]
-    }},
-    "education": [
-        {{
-        "institution": "учебное заведение",
-        "degree": "степень",
-        "year": "год окончания",
-        "field": "специальность"
-        }}
-    }}
-    """,
-        "human": "Резюме кандидата:\n{resume_text}\n\nИзвлеки структурированные данные."
-    },
-    "variant_b": {
-        "system": """Ты — AI-ассистент для парсинга резюме.
-        Твоя задача: преобразовать неструктурированный текст резюме в структурированный JSON.
-        
-        Извлекай следующие категории:
-        - Контактная информация (если есть)
-        - Навыки (технические, мягкие, языки)
-        - Опыт работы (компании, должности, периоды)
-        - Образование
-        
-        Будь максимально точным. Не добавляй информацию, которой нет в тексте.
-        
-        Формат вывода строго в JSON:
-    {{
-    "contacts": {{
-        "name": "имя кандидата",
-        "sex": "пол кандидата", 
-        "city": "город",
-        "number": "телефон",
-        "email": "почта",
-        "social": ["список социальных сетей"],
-    }}, 
-    "skills": {{
-        "technical": ["список технических навыков"],
-        "soft": ["список мягких навыков"], 
-        "languages": ["список языков"]
-    }},
-    "experience": {{
-        "total_years": "число",
-        "relevant_years": "число",
-        "positions": [
-        {{
-            "title": "должность",
-            "company": "название компании (обычно идет после указания периода работы в компании и общего времени)", 
-            "sphere": "сектор, сфера, в которой работает компания", 
-            "years": "число",
-            "description": "описание обязанностей"
-        }}
-        ]
-    }},
-    "education": [
-        {{
-        "institution": "учебное заведение",
-        "degree": "степень",
-        "year": "год окончания",
-        "field": "специальность"
-        }}
-    }}""",
-        "human": "Пожалуйста, проанализируй это резюме и верни структурированные данные:\n{resume_text}"
-    }
-}
+ВАЖНО: Верни ТОЛЬКО JSON без каких-либо комментариев, объяснений или дополнительного текста.
 
-MATCHING_PROMPTS = {
-    "original": {
-        "system": UC_MATCHING_PROMPT,
-        "human": """ТРЕБОВАНИЯ ВАКАНСИИ:
-    Должность: {job_title}
-    Образование: {education}
-    Требуемый опыт: {work_experience} лет
-    Желаемая зарплата: {desired_salary} руб.
-    График работы: {work_schedule}
-    Формат работы: {work_format}
-    Дополнительные требования: {additional_requirements}
-
-    ДАННЫЕ КАНДИДАТА:
-    {resume_analysis}
-
-    Проведи сопоставление и верни оценку соответствия."""
-        },
-        "variant_a": {
-            "system": """Ты — эксперт по оценке кандидатов.
-            Сравни профиль кандидата с требованиями вакансии.
-            
-            Оцени по 6 критериям с весами:
-            1. Должность ({job_title_weight}%)
-            2. Образование ({education_weight}%) 
-            3. Опыт ({experience_weight}%)
-            4. График ({schedule_weight}%)
-            5. Формат ({format_weight}%)
-            6. Доп. требования ({additional_weight}%)
-            
-            Верни JSON с оценкой и рекомендацией.""",
-            "human": """Вакансия: {job_title}
-    Требования: образование={education}, опыт={work_experience} лет, зарплата={desired_salary}
-    График: {work_schedule}, Формат: {work_format}
-    Дополнительно: {additional_requirements}
-
-    Профиль кандидата:
-    {resume_analysis}
-
-    Оцени соответствие."""
-    },
-    "variant_b": {
-        "system": """Ты — система оценки соответствия кандидатов.
-        Проведи комплексную оценку match между кандидатом и вакансией.
-        
-        Используй взвешенную оценку по критериям.
-        Выяви критические несоответствия.
-        Дай рекомендацию по найму.
-        
-        Формат ответа — строго JSON.""",
-        "human": """Требования вакансии:
-        - Должность: {job_title}
-        - Образование: {education}
-        - Опыт: {work_experience} лет
-        - Зарплата: {desired_salary} руб.
-        - График: {work_schedule}
-        - Формат: {work_format}
-        - Дополнительно: {additional_requirements}
-
-        Анализ кандидата:
-        {resume_analysis}
-
-        Рассчитай score соответствия."""
-    }
-}
-
-QUESTION_GENERATION_PROMPTS = {
-    "original": {
-        "system": UC_QUESTION_GENERATION_PROMPT,
-        "human": """Проанализированное резюме кандидата: {resume_analysis}
-    Требования вакансии: {vacancy_requirements}
-    Дополнительные указания: {additional_instructions}
-
-    Сгенерируй персонализированные вопросы для интервью, учитывая:
-    - Пробелы в навыках
-    - Сильные стороны
-    - Опыт работы"""
-    },
-        "variant_a": {
-            "system": """Ты — рекрутер, готовящий вопросы для собеседования.
-            Создай персонализированные вопросы на основе резюме кандидата.
-            
-            Типы вопросов:
-            - Технические (проверка навыков)
-            - Поведенческие (опыт, кейсы)
-            - Мотивационные (цели, интересы)
-            - Культурные (ценности, fit)
-            
-            Формат: JSON с вопросами и метаданными.
-            Формат вывода строго в JSON:
-        {{
-        "interview_plan": {{
-            "duration_minutes": "60",
-            "structure": [
-            {{
-                "section": "введение",
-                "time_allocation": "5 минут",
-                "purpose": "знакомство и разогрев"
-            }}
-            ]
-        }},
-        "questions": [
-            {{
-            "type": "технический/поведенческий/кейсовый/мотивационный/культурный",
-            "question": "текст вопроса",
-            "purpose": "что проверяет этот вопрос",
-            "expected_answer_indicators": ["признаки хорошего ответа"],
-            "time_estimate": "1-2 минуты"
-            }}
-        ]
-        }}""",
-            "human": """Кандидат:
-    {resume_analysis}
-
-    Требования вакансии:
-    {vacancy_requirements}
-
-    Дополнительно:
-    {additional_instructions}
-
-    Сгенерируй вопросы для собеседования."""
-    },
-    "variant_b": {
-        "system": """Ты — помощник по подготовке к интервью.
-        Создай вопросы для оценки кандидата.
-        
-        Фокус на:
-        1. Проверка заявленных навыков
-        2. Оценка реального опыта
-        3. Понимание мотивации
-        4. Культурное соответствие
-        5. Потенциал роста
-        
-        Верни структурированный список вопросов в JSON.
-        
-        Формат вывода строго в JSON:
-    {{
-    "interview_plan": {{
-        "duration_minutes": "60",
-        "structure": [
-        {{
-            "section": "введение",
-            "time_allocation": "5 минут",
-            "purpose": "знакомство и разогрев"
-        }}
-        ]
-    }},
-    "questions": [
-        {{
-        "type": "технический/поведенческий/кейсовый/мотивационный/культурный",
-        "question": "текст вопроса",
-        "purpose": "что проверяет этот вопрос",
-        "expected_answer_indicators": ["признаки хорошего ответа"],
-        "time_estimate": "1-2 минуты"
-        }}
+Формат вывода строго в JSON:
+{{
+  "contacts": {{
+    "name": "имя кандидата",
+    "sex": "пол кандидата", 
+    "city": "город",
+    "number": "телефон",
+    "email": "почта",
+    "social": ["список социальных сетей"]
+  }}, 
+  "skills": {{
+    "technical": ["список технических навыков"],
+    "soft": ["список мягких навыков"], 
+    "languages": ["список языков"]
+  }},
+  "experience": {{
+    "total_years": "число",
+    "relevant_years": "число",
+    "positions": [
+      {{
+        "title": "должность",
+        "company": "название компании", 
+        "sphere": "сектор, сфера", 
+        "years": "число",
+        "description": "описание обязанностей"
+      }}
     ]
-    }}""",
-        "human": """Анализ кандидата:
-    {resume_analysis}
+  }},
+  "education": [
+    {{
+      "institution": "учебное заведение",
+      "degree": "степень",
+      "year": "год окончания",
+      "field": "специальность"
+    }}
+  ]
+}}""",
+        "user": "Проанализируй это резюме и верни ТОЛЬКО JSON в указанном формате: {resume_text}"
+    },
+    
+    "detailed": {
+        "system": """Ты — опытный HR-аналитик с 10-летним стажем. 
+Твоя задача: максимально подробно и точно извлечь ВСЕ данные из резюме.
 
-    Контекст вакансии:
-    {vacancy_requirements}
+ВНИМАНИЕ к деталям:
+1. Контакты: Извлеки ВСЕ доступные контактные данные
+2. Навыки: Раздели на технические, soft skills, инструменты, методологии
+3. Опыт: Для каждой позиции укажи ТОЧНЫЕ даты, достижения, используемые технологии
+4. Образование: Все степени, курсы, сертификаты, награды
+5. Дополнительно: Проекты, публикации, волонтерство, хобби
 
-    Уточнения:
-    {additional_instructions}
+Будь предельно точным. Если есть неясности — отмечай их в поле "notes".
 
-    Создай вопросы для оценки."""
+ВАЖНО: Верни ТОЛЬКО JSON без каких-либо комментариев, объяснений или дополнительного текста.
+
+Формат вывода строго в JSON:
+{{
+  "contacts": {{
+    "name": "имя кандидата",
+    "sex": "пол кандидата", 
+    "city": "город",
+    "number": "телефон",
+    "email": "почта",
+    "social": ["список социальных сетей"],
+    "additional_contacts": ["дополнительные контакты если есть"]
+  }}, 
+  "skills": {{
+    "technical": ["список технических навыков"],
+    "soft": ["список мягких навыков"], 
+    "languages": ["список языков"],
+    "tools": ["инструменты"],
+    "methodologies": ["методологии"]
+  }},
+  "experience": {{
+    "total_years": "число",
+    "relevant_years": "число",
+    "positions": [
+      {{
+        "title": "должность",
+        "company": "название компании", 
+        "sphere": "сектор, сфера", 
+        "start_date": "дата начала",
+        "end_date": "дата окончания",
+        "years": "число",
+        "achievements": ["достижения"],
+        "technologies": ["используемые технологии"],
+        "description": "описание обязанностей"
+      }}
+    ]
+  }},
+  "education": [
+    {{
+      "institution": "учебное заведение",
+      "degree": "степень",
+      "year": "год окончания",
+      "field": "специальность",
+      "courses": ["пройденные курсы"],
+      "certifications": ["сертификаты"],
+      "awards": ["награды"]
+    }}
+  ],
+  "additional": {{
+    "projects": ["проекты"],
+    "publications": ["публикации"],
+    "volunteering": ["волонтерство"],
+    "hobbies": ["хобби"]
+  }},
+  "notes": ["заметки о неясностях"]
+}}""",
+        "user": "Детально проанализируй это резюме и верни ТОЛЬКО JSON в указанном формате:\n\n{resume_text}"
+    },
+    
+    "minimal": {
+        "system": """Извлеки только КЛЮЧЕВЫЕ данные из резюме. 
+Только самое важное: имя, ключевые навыки, последнее место работы, образование.
+Без подробностей. Без интерпретаций.
+
+ВАЖНО: Верни ТОЛЬКО JSON без каких-либо комментариев, объяснений или дополнительного текста.
+
+Формат вывода строго в JSON:
+{{
+  "name": "имя кандидата",
+  "key_skills": ["ключевые навыки"],
+  "last_position": {{
+    "title": "должность",
+    "company": "компания",
+    "years": "стаж в годах"
+  }},
+  "education": {{
+    "highest_degree": "высшая степень",
+    "institution": "учебное заведение"
+  }},
+  "summary": "краткое резюме в 1-2 предложениях"
+}}""",
+        "user": "Извлеки ключевые данные из резюме и верни ТОЛЬКО JSON в указанном формате:\n\nРезюме: {resume_text}"
+    },
+    
+    "structured": {
+        "system": """Ты специалист по структурированию данных. 
+Преобразуй неструктурированное резюме в четко организованные данные.
+
+Требования:
+1. Стандартизируй названия должностей (приводи к common titles)
+2. Группируй похожие навыки (убирай дубликаты)
+3. Приводи даты к единому формату (ГГГГ-ММ)
+4. Классифицируй компании по отраслям (IT, Finance, Retail и т.д.)
+5. Определяй уровень seniority (Junior, Middle, Senior, Lead)
+
+Цель: сделать данные максимально удобными для автоматической обработки.
+
+ВАЖНО: Верни ТОЛЬКО JSON без каких-либо комментариев, объяснений или дополнительного текста.
+
+Формат вывода строго в JSON:
+{{
+  "standardized_data": {{
+    "contacts": {{
+      "name": "стандартизированное имя",
+      "city": "стандартизированный город"
+    }},
+    "skills": {{
+      "technical": ["стандартизированные технические навыки"],
+      "soft": ["стандартизированные мягкие навыки"]
+    }},
+    "experience": {{
+      "total_years": "число",
+      "seniority_level": "Junior/Middle/Senior/Lead",
+      "positions": [
+        {{
+          "title": "стандартизированная должность",
+          "company": "компания",
+          "industry": "отрасль",
+          "start_date": "ГГГГ-ММ",
+          "end_date": "ГГГГ-ММ или 'настоящее время'",
+          "duration_months": "число"
+        }}
+      ]
+    }},
+    "education": [
+      {{
+        "institution": "учебное заведение",
+        "degree_level": "Bachelor/Master/PhD/Certificate",
+        "graduation_year": "ГГГГ"
+      }}
+    ]
+  }},
+  "metadata": {{
+    "processing_date": "ГГГГ-ММ-ДД",
+    "data_quality_score": 0-100
+  }}
+}}""",
+        "user": "Структурируй данные из резюме и верни ТОЛЬКО JSON в указанном формате:\n{resume_text}"
     }
 }
 
-# --- Утилитные функции ---
+# 2. ПРОМПТЫ ДЛЯ ОЦЕНКИ СООТВЕТСТВИЯ ВАКАНСИИ
+EVALUATION_PROMPTS = {
+    "baseline": {
+        "system": """Ты — HR-эксперт по подбору персонала. 
+Оцени соответствие кандидата вакансии по 6 критериям с весами.
 
-def clean_mistral_output(output: str) -> str:
-    """Очистка вывода LLM"""
-    if not isinstance(output, str):
-        return ""
-    clean = re.sub(r"^```(?:json)?", "", output.strip(), flags=re.IGNORECASE | re.MULTILINE)
-    clean = re.sub(r"```$", "", clean.strip(), flags=re.MULTILINE)
-    clean = re.sub(r"\n\s*-\s*\n", "\n", clean)
-    clean = re.sub(r"^\s*-\s*{", "{", clean, flags=re.MULTILINE)
-    clean = re.sub(r'[\x00-\x1f\x7f]', ' ', clean)
-    end = clean.rfind("}")
-    if end != -1:
-        clean = clean[:end+1]
-    return clean.strip()
+ВАЖНО:
+1. Верни ТОЛЬКО JSON без каких-либо комментариев
+2. Ограничь текстовые поля до 200 символов
+3. Используй только числа для оценок
 
-def calculate_hash(data: Any) -> str:
-    """Рассчитывает хэш для данных"""
-    if isinstance(data, (dict, list)):
-        data_str = json.dumps(data, sort_keys=True, ensure_ascii=False)
-    else:
-        data_str = str(data)
+JSON структура:
+{
+  "scores": {
+    "job_title": {"score": 0-100, "weight": 0.2, "explanation": "до 100 символов"},
+    "education": {"score": 0-100, "weight": 0.15, "explanation": "до 100 символов"},
+    "experience": {"score": 0-100, "weight": 0.25, "explanation": "до 100 символов"},
+    "schedule": {"score": 0-100, "weight": 0.05, "explanation": "до 100 символов"},
+    "format": {"score": 0-100, "weight": 0.05, "explanation": "до 100 символов"},
+    "additional": {"score": 0-100, "weight": 0.3, "explanation": "до 100 символов"}
+  },
+  "overall": {
+    "score": 0-100,
+    "suitable": true/false,
+    "recommendation": "рекомендован/условно/нет (до 50 символов)"
+  }
+}""",
+        "user": """Вакансия: {vacancy_data}
+Кандидат: {resume_analysis}
+Оцени и верни JSON."""
+    },
     
-    return hashlib.md5(data_str.encode()).hexdigest()[:12]
+    "strategic": {
+        "system": """Ты стратегический HR-консультант. Дай краткую оценку.
 
-def save_input_output(
-    test_id: str,
-    variant: str,
-    task_type: str,
-    input_data: Dict,
-    output_data: Dict,
-    metadata: Dict,
-    base_dir: str = "./ab_test_data"
-):
-    """Сохраняет входные и выходные данные теста"""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+ВАЖНО:
+1. Верни ТОЛЬКО JSON
+2. Все текстовые поля до 150 символов
+3. Оценки только числа
+
+JSON:
+{
+  "current_fit": {
+    "job_fit": 0-100,
+    "skills_fit": 0-100,
+    "experience_fit": 0-100
+  },
+  "strategic": {
+    "growth_potential": 0-100,
+    "cultural_fit": 0-100,
+    "risk_level": "низкий/средний/высокий"
+  },
+  "recommendation": {
+    "decision": "рекомендую/условно/нет",
+    "priority": "высокий/средний/низкий"
+  }
+}""",
+        "user": """Вакансия: {vacancy_data}
+Кандидат: {resume_analysis}
+Стратегическая оценка. Только JSON."""
+    },
     
-    # Создаем структуру директорий
-    test_dir = Path(base_dir) / task_type / variant / test_id
-    test_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Сохраняем входные данные
-    input_file = test_dir / f"input_{timestamp}.json"
-    with open(input_file, 'w', encoding='utf-8') as f:
-        json.dump({
-            "test_id": test_id,
-            "variant": variant,
-            "task_type": task_type,
-            "timestamp": timestamp,
-            "input_hash": calculate_hash(input_data),
-            "data": input_data
-        }, f, ensure_ascii=False, indent=2)
-    
-    # Сохраняем выходные данные
-    output_file = test_dir / f"output_{timestamp}.json"
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump({
-            "test_id": test_id,
-            "variant": variant,
-            "task_type": task_type,
-            "timestamp": timestamp,
-            "input_hash": calculate_hash(input_data),
-            "metadata": metadata,
-            "data": output_data
-        }, f, ensure_ascii=False, indent=2)
-    
-    # Сохраняем сводку
-    summary_file = test_dir / "summary.json"
-    summary = {
-        "test_id": test_id,
-        "variant": variant,
-        "task_type": task_type,
-        "created_at": timestamp,
-        "updated_at": timestamp,
-        "input_file": str(input_file.relative_to(base_dir)),
-        "output_file": str(output_file.relative_to(base_dir)),
-        "input_hash": calculate_hash(input_data),
-        "metadata": metadata
+    "technical": {
+        "system": """Ты технический рекрутер. Оцени техническое соответствие.
+
+ВАЖНО: ТОЛЬКО JSON, тексты до 100 символов.
+
+JSON:
+{
+  "technical_match": 0-100,
+  "missing_critical": ["технология1", "технология2"],
+  "strengths": ["сила1", "сила2"],
+  "interview_focus": ["тема1", "тема2"]
+}""",
+        "user": """Требования: {vacancy_data}
+Навыки: {resume_analysis}
+Техническая оценка. Только JSON."""
     }
-    
-    with open(summary_file, 'w', encoding='utf-8') as f:
-        json.dump(summary, f, ensure_ascii=False, indent=2)
-    
-    return str(test_dir)
+}
 
-# --- Проверка качества через Mistral ---
+# 3. ПРОМПТЫ ДЛЯ ГЕНЕРАЦИИ ВОПРОСОВ
+QUESTION_PROMPTS = {
+    "baseline": {
+        "system": """Ты — эксперт по проведению интервью.
+Сгенерируй 5-8 вопросов для собеседования.
 
-def check_extraction_quality(
-    resume_text: str,
-    extracted_data: Dict,
-    variant: str
-) -> Dict:
-    """Проверяет качество извлечения данных"""
-    headers = {
-        "Authorization": f"Bearer {MISTRAL_API_KEY}",
-        "Content-Type": "application/json"
+ВАЖНО:
+1. ТОЛЬКО JSON
+2. Каждый вопрос до 150 символов
+3. Цель вопроса до 50 символов
+4. Максимальная простота структуры
+
+JSON:
+{
+  "questions": [
+    {
+      "text": "текст вопроса",
+      "type": "технический/поведенческий/кейсовый",
+      "purpose": "цель",
+      "time": "1-3 минуты"
     }
+  ],
+  "total": "число"
+}""",
+        "user": """Резюме: {resume_analysis}
+Вакансия: {vacancy_requirements}
+Сгенерируй 5-8 вопросов. Только JSON."""
+    },
     
-    prompt = f"""Ты — эксперт по оценке качества парсинга резюме.
+    "behavioral": {
+        "system": """Сгенерируй 4-6 поведенческих вопросов по STAR.
+
+ВАЖНО: ТОЛЬКО JSON, вопросы до 100 символов.
+
+JSON:
+{
+  "star_questions": [
+    {
+      "question": "вопрос",
+      "competency": "компетенция",
+      "focus": "ситуация/задача/действие/результат"
+    }
+  ]
+}""",
+        "user": """Кандидат: {resume_analysis}
+4-6 поведенческих вопросов. Только JSON."""
+    },
     
-Исходный текст резюме (первые 1500 символов):
-{resume_text[:1500]}...
+    "deep_dive": {
+        "system": """Сгенерируй 3-5 углубленных вопросов для senior.
+
+ВАЖНО: ТОЛЬКО JSON, вопросы до 120 символов.
+
+JSON:
+{
+  "deep_questions": [
+    {
+      "question": "вопрос",
+      "area": "архитектура/лидерство/стратегия",
+      "level": "senior/lead"
+    }
+  ]
+}""",
+        "user": """Senior кандидат: {resume_analysis}
+Вакансия: {vacancy_requirements}
+3-5 углубленных вопросов. Только JSON."""
+    }
+}
+
+# ============================================================================
+# СТАНДАРТНЫЕ ПРОМПТЫ ДЛЯ ОЦЕНКИ КАЧЕСТВА (ЕДИНЫЕ ДЛЯ ВСЕХ ТЕСТОВ)
+# ============================================================================
+
+QUALITY_EVALUATION_PROMPTS = {
+    "extraction": """Ты проверяющий ассистент. Оцени качество извлечения данных из резюме.
+
+Оригинальное резюме:
+{resume_text}
 
 Извлеченные данные:
-{json.dumps(extracted_data, ensure_ascii=False, indent=2)}
+{extracted_data}
 
-Использованный промпт: {variant}
-
-Оцени качество извлечения по критериям 0-100:
-1. Полнота: все ли обязательные поля заполнены (contacts, skills, experience, education)
-2. Точность: соответствуют ли данные оригинальному тексту
-3. Структура: правильный ли формат JSON, все ли вложенности соблюдены
-4. Консистентность: нет ли противоречий в данных
+Критерии оценки (0-100):
+1. ПОЛНОТА: Все ли данные из резюме извлечены
+2. ТОЧНОСТЬ: Точно ли воспроизведена информация
+3. СТРУКТУРА: Логично ли организованы данные
+4. ДЕТАЛЬНОСТЬ: Не пропущены ли важные детали
 
 Верни JSON:
 {{
-    "completeness_score": число,
-    "accuracy_score": число,
-    "structure_score": число,
-    "consistency_score": число,
-    "overall_score": число,
-    "missing_fields": ["поле1", "поле2"],
-    "incorrect_data": ["поле: что неверно"],
-    "suggestions": ["предложение1", "предложение2"]
+  "completeness_score": 0-100,
+  "accuracy_score": 0-100,
+  "structure_score": 0-100,
+  "detail_score": 0-100,
+  "overall_score": 0-100,
+  "missing_data": ["список пропущенных данных"],
+  "incorrect_data": ["список ошибок"],
+  "suggestions": ["рекомендации по улучшению"]
+}}""",
+    
+    "evaluation": """Ты HR-эксперт. Оцени качество оценки соответствия кандидата вакансии.
+
+Данные кандидата:
+{resume_data}
+
+Требования вакансии:
+{vacancy_data}
+
+Оценка соответствия:
+{evaluation_result}
+
+Критерии (0-100):
+1. ОБОСНОВАННОСТЬ: Логичны ли аргументы в оценке
+2. БАЛАНСИРОВАННОСТЬ: Учтены ли все аспекты
+3. ПРАКТИЧЕСКАЯ ПОЛЕЗНОСТЬ: Поможет ли оценка принять решение
+4. ДЕТАЛЬНОСТЬ: Достаточно ли подробный анализ
+
+JSON:
+{{
+  "reasoning_score": 0-100,
+  "balance_score": 0-100,
+  "practicality_score": 0-100,
+  "detail_score": 0-100,
+  "overall_score": 0-100,
+  "strengths": ["сильные стороны оценки"],
+  "weaknesses": ["слабые стороны"],
+  "improvements": ["предложения по улучшению"]
+}}""",
+    
+    "questions": """Ты senior HR. Оцени качество вопросов для интервью.
+
+Данные кандидата:
+{resume_data}
+
+Вакансия:
+{vacancy_data}
+
+Сгенерированные вопросы:
+{generated_questions}
+
+Критерии (0-100):
+1. РЕЛЕВАНТНОСТЬ: Соответствуют ли вопросы резюме и вакансии
+2. РАЗНООБРАЗИЕ: Разные типы вопросов, разные темы
+3. ГЛУБИНА: Насколько глубоко раскрывают компетенции
+4. ПРАКТИЧЕСКАЯ ЦЕННОСТЬ: Помогут ли оценить кандидата
+
+JSON:
+{{
+  "relevance_score": 0-100,
+  "diversity_score": 0-100,
+  "depth_score": 0-100,
+  "practical_value_score": 0-100,
+  "overall_score": 0-100,
+  "best_questions": ["3 лучших вопроса"],
+  "weak_questions": ["3 слабых вопроса"],
+  "recommendations": ["рекомендации"]
 }}"""
+}
+
+# ============================================================================
+# МЕНЕДЖЕР A/B ТЕСТИРОВАНИЯ
+# ============================================================================
+
+@dataclass
+class TestResult:
+    """Результат одного теста"""
+    test_type: str  # extraction, evaluation, questions
+    variant: str    # название варианта промпта
+    prompt_used: Dict[str, str]  # использованный промпт
+    result_data: Any  # результат выполнения
+    quality_metrics: Dict[str, float]  # метрики качества
+    performance: Dict[str, float]  # производительность
+    timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
+
+class ABTestManager:
+    """Управление A/B тестированием промптов"""
     
-    payload = {
-        "model": MISTRAL_MODEL,
-        "messages": [
-            {"role": "system", "content": "Будь объективным критиком. Оценивай строго."},
-            {"role": "user", "content": prompt}
-        ],
-        "temperature": 0.1,
-        "max_tokens": 512,
-    }
+    def __init__(self):
+        self.results: List[TestResult] = []
+        self.best_variants = {}
+        
+    def add_result(self, result: TestResult):
+        """Добавить результат теста"""
+        self.results.append(result)
+        
+    def get_best_variant(self, test_type: str) -> Optional[Tuple[str, Dict]]:
+        """Получить лучший вариант для типа теста"""
+        type_results = [r for r in self.results if r.test_type == test_type]
+        if not type_results:
+            return None
+            
+        # Группируем по вариантам
+        variants = {}
+        for result in type_results:
+            if result.variant not in variants:
+                variants[result.variant] = []
+            variants[result.variant].append(result)
+        
+        # Находим вариант с наивысшим средним overall_score
+        best_variant = None
+        best_score = -1
+        
+        for variant, results in variants.items():
+            avg_score = sum(r.quality_metrics.get('overall_score', 0) for r in results) / len(results)
+            if avg_score > best_score:
+                best_score = avg_score
+                best_variant = variant
+        
+        if best_variant:
+            # Собираем статистику по лучшему варианту
+            best_results = variants[best_variant]
+            stats = {
+                "avg_overall_score": best_score,
+                "avg_latency": sum(r.performance.get('latency', 0) for r in best_results) / len(best_results),
+                "total_tests": len(best_results),
+                "sample_prompt": best_results[0].prompt_used,
+                "sample_result": best_results[0].result_data
+            }
+            
+            self.best_variants[test_type] = (best_variant, stats)
+            return best_variant, stats
+        
+        return None
     
-    try:
-        resp = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
-        if resp.status_code != 200:
-            return {"error": f"API error: {resp.status_code}", "success": False}
-        
-        content = resp.json()["choices"][0]["message"]["content"]
-        cleaned = clean_mistral_output(content)
-        parsed = json.loads(cleaned)
-        
-        return {
-            "success": True,
-            "completeness_score": int(parsed.get("completeness_score", 0)),
-            "accuracy_score": int(parsed.get("accuracy_score", 0)),
-            "structure_score": int(parsed.get("structure_score", 0)),
-            "consistency_score": int(parsed.get("consistency_score", 0)),
-            "overall_score": int(parsed.get("overall_score", 0)),
-            "missing_fields": parsed.get("missing_fields", []),
-            "incorrect_data": parsed.get("incorrect_data", []),
-            "suggestions": parsed.get("suggestions", [])
+    def generate_report(self) -> Dict:
+        """Сгенерировать полный отчет"""
+        report = {
+            "generated_at": datetime.now().isoformat(),
+            "total_tests": len(self.results),
+            "by_test_type": {},
+            "best_variants": {},
+            "summary": {}
         }
         
-    except Exception as e:
-        return {"error": str(e), "success": False}
+        # Группируем по типам тестов
+        for test_type in ["extraction", "evaluation", "questions"]:
+            type_results = [r for r in self.results if r.test_type == test_type]
+            if not type_results:
+                continue
+                
+            report["by_test_type"][test_type] = {
+                "total": len(type_results),
+                "variants_tested": list(set(r.variant for r in type_results)),
+                "average_scores": self._calculate_average_scores(type_results)
+            }
+        
+        # Добавляем лучшие варианты
+        for test_type in ["extraction", "evaluation", "questions"]:
+            best = self.get_best_variant(test_type)
+            if best:
+                variant, stats = best
+                report["best_variants"][test_type] = {
+                    "variant": variant,
+                    "avg_score": stats["avg_overall_score"],
+                    "avg_latency": stats["avg_latency"],
+                    "total_tests": stats["total_tests"]
+                }
+        
+        # Сводка
+        report["summary"] = {
+            "overall_best": max(
+                [(k, v["avg_score"]) for k, v in report["best_variants"].items()],
+                key=lambda x: x[1]
+            ) if report["best_variants"] else None,
+            "recommendations": self._generate_recommendations()
+        }
+        
+        return report
+    
+    def _calculate_average_scores(self, results: List[TestResult]) -> Dict:
+        """Рассчитать средние метрики"""
+        if not results:
+            return {}
+            
+        metrics = {}
+        count = len(results)
+        
+        for result in results:
+            for key, value in result.quality_metrics.items():
+                if key not in metrics:
+                    metrics[key] = 0
+                metrics[key] += value
+        
+        return {k: v/count for k, v in metrics.items()}
+    
+    def _generate_recommendations(self) -> List[str]:
+        """Сгенерировать рекомендации"""
+        recs = []
+        
+        for test_type in ["extraction", "evaluation", "questions"]:
+            best = self.get_best_variant(test_type)
+            if best:
+                variant, stats = best
+                recs.append(f"{test_type.upper()}: Используйте вариант '{variant}' (средняя оценка: {stats['avg_overall_score']:.1f}/100)")
+        
+        if not recs:
+            recs.append("Недостаточно данных для рекомендаций. Запустите больше тестов.")
+        
+        return recs
+    
+    def save_report(self, filename: str = None):
+        """Сохранить отчет в файл"""
+        if filename is None:
+            filename = f"ab_test_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        
+        report = self.generate_report()
+        
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(report, f, ensure_ascii=False, indent=2)
+        
+        print(f"✅ Отчет сохранен: {filename}")
+        
+        # Также сохраняем текстовую версию
+        text_filename = filename.replace('.json', '.txt')
+        with open(text_filename, 'w', encoding='utf-8') as f:
+            f.write(self._format_text_report(report))
+        
+        return report
+    
+    def _format_text_report(self, report: Dict) -> str:
+        """Форматировать текстовый отчет"""
+        lines = []
+        lines.append("=" * 60)
+        lines.append("📊 ОТЧЕТ ПО A/B ТЕСТИРОВАНИЮ ПРОМПТОВ")
+        lines.append(f"📅 Сгенерирован: {report['generated_at']}")
+        lines.append(f"🧪 Всего тестов: {report['total_tests']}")
+        lines.append("=" * 60)
+        
+        for test_type, data in report.get('by_test_type', {}).items():
+            lines.append(f"\n🔧 {test_type.upper()}:")
+            lines.append(f"   Тестов: {data['total']}")
+            lines.append(f"   Вариантов: {', '.join(data['variants_tested'])}")
+            
+            for metric, value in data.get('average_scores', {}).items():
+                lines.append(f"   {metric}: {value:.1f}/100")
+        
+        lines.append("\n" + "=" * 60)
+        lines.append("🏆 ЛУЧШИЕ ВАРИАНТЫ:")
+        
+        for test_type, best in report.get('best_variants', {}).items():
+            lines.append(f"\n   {test_type.upper()}:")
+            lines.append(f"     Вариант: {best['variant']}")
+            lines.append(f"     Средняя оценка: {best['avg_score']:.1f}/100")
+            lines.append(f"     Среднее время: {best['avg_latency']:.2f} сек")
+        
+        lines.append("\n" + "=" * 60)
+        lines.append("💡 РЕКОМЕНДАЦИИ:")
+        
+        for rec in report.get('summary', {}).get('recommendations', []):
+            lines.append(f"   • {rec}")
+        
+        lines.append("\n" + "=" * 60)
+        
+        return "\n".join(lines)
 
-def check_questions_quality(
-    candidate_data: Dict,
-    vacancy_data: Dict,
-    generated_questions: List[Dict],
-    variant: str
-) -> Dict:
-    """Проверяет качество сгенерированных вопросов"""
+# ============================================================================
+# УТИЛИТЫ ДЛЯ РАБОТЫ С LLM
+# ============================================================================
+
+def clean_llm_output(output: str) -> str:
+    if not isinstance(output, str):
+        return ""
+
+    text = output.strip()
+
+    # Убираем markdown
+    text = re.sub(r"```(?:json)?", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"```", "", text)
+
+    # Ищем первый { и последнюю }
+    start = text.find("{")
+    end = text.rfind("}")
+
+    if start == -1 or end == -1 or end <= start:
+        return ""
+
+    json_text = text[start:end + 1]
+
+    # Убираем управляющие символы
+    json_text = re.sub(r'[\x00-\x1f\x7f]', '', json_text)
+
+    return json_text.strip()
+
+def call_mistral_api(system_prompt: str, user_prompt: str, max_tokens: int = 2048) -> Dict:
+    """Вызов API Mistral"""
     headers = {
         "Authorization": f"Bearer {MISTRAL_API_KEY}",
         "Content-Type": "application/json"
     }
     
-    prompt = f"""Ты — старший рекрутер с 10+ лет опыта.
-    
-Данные кандидата:
-{json.dumps(candidate_data, ensure_ascii=False, indent=2)}
-
-Требования вакансии:
-{json.dumps(vacancy_data, ensure_ascii=False, indent=2)}
-
-Сгенерированные вопросы ({len(generated_questions)}):
-{json.dumps(generated_questions, ensure_ascii=False, indent=2)}
-
-Промпт генерации: {variant}
-
-Оцени качество вопросов по критериям 0-100:
-1. Релевантность: соответствуют ли вопросы профилю кандидата и вакансии
-2. Разнообразие: разные типы вопросов (технические, поведенческие и т.д.)
-3. Конкретность: вопросы конкретные, а не общие
-4. Полезность: помогут ли вопросы принять решение о найме
-5. Баланс: не слишком ли много/мало вопросов
-
-Верни JSON:
-{{
-    "relevance_score": число,
-    "diversity_score": число,
-    "specificity_score": число,
-    "usefulness_score": число,
-    "balance_score": число,
-    "overall_score": число,
-    "strengths": ["сильные стороны"],
-    "weaknesses": ["слабые стороны"],
-    "recommendations": ["рекомендации по улучшению"]
-}}"""
-    
     payload = {
         "model": MISTRAL_MODEL,
         "messages": [
-            {"role": "system", "content": "Оценивай как строгий эксперт по подбору."},
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
         ],
         "temperature": 0.1,
-        "max_tokens": 512,
+        "max_tokens": max_tokens,
     }
     
     try:
+        start_time = time.time()
         resp = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
-        if resp.status_code != 200:
-            return {"error": f"API error: {resp.status_code}", "success": False}
+        latency = time.time() - start_time
         
-        content = resp.json()["choices"][0]["message"]["content"]
-        cleaned = clean_mistral_output(content)
-        parsed = json.loads(cleaned)
+        if resp.status_code != 200:
+            return {"error": f"API error: {resp.status_code}", "latency": latency}
+        
+        data = resp.json()
+        content = data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+        
+        if not content:
+            return {"error": "Empty response", "latency": latency}
+        
+        cleaned = clean_llm_output(content)
+        
+        try:
+            parsed = json.loads(cleaned)
+        except json.JSONDecodeError as e:
+            return {"error": f"Invalid JSON: {e}", "raw_output": content, "latency": latency}
         
         return {
-            "success": True,
-            "relevance_score": int(parsed.get("relevance_score", 0)),
-            "diversity_score": int(parsed.get("diversity_score", 0)),
-            "specificity_score": int(parsed.get("specificity_score", 0)),
-            "usefulness_score": int(parsed.get("usefulness_score", 0)),
-            "balance_score": int(parsed.get("balance_score", 0)),
-            "overall_score": int(parsed.get("overall_score", 0)),
-            "strengths": parsed.get("strengths", []),
-            "weaknesses": parsed.get("weaknesses", []),
-            "recommendations": parsed.get("recommendations", [])
+            "result": parsed,
+            "latency": latency,
+            "usage": data.get("usage", {}),
+            "raw_content": content
         }
         
     except Exception as e:
-        return {"error": str(e), "success": False}
+        return {"error": f"API call failed: {e}", "latency": latency if 'latency' in locals() else 0}
 
-# --- Класс для A/B тестирования ---
+def evaluate_quality(test_type: str, data_for_evaluation: Dict) -> Dict:
+    """Оценка качества результата (единый для всех вариантов)"""
+    
+    if test_type not in QUALITY_EVALUATION_PROMPTS:
+        return {"error": f"Unknown test type: {test_type}"}
+    
+    prompt = QUALITY_EVALUATION_PROMPTS[test_type].format(**data_for_evaluation)
+    
+    result = call_mistral_api(
+        system_prompt="Ты опытный оценщик качества. Будь объективным и строгим.",
+        user_prompt=prompt,
+        max_tokens=1024
+    )
+    
+    if "error" in result:
+        return result
+    
+    # Добавляем базовые метрики если их нет
+    if "overall_score" not in result["result"]:
+        scores = [v for k, v in result["result"].items() if "score" in k.lower() and isinstance(v, (int, float))]
+        if scores:
+            result["result"]["overall_score"] = sum(scores) / len(scores)
+    
+    return result["result"]
 
-class HRPromptABTest:
-    """A/B тестирование промптов для HR задач"""
-    
-    def __init__(self, model, output_dir: str = "/ab_test_results"):
-        self.model = model
-        self.output_dir = Path(output_dir)
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Счетчики тестов
-        self.test_counter = 0
-        
-    def _generate_test_id(self, task_type: str, variant: str) -> str:
-        """Генерация уникального ID теста"""
-        self.test_counter += 1
-        timestamp = datetime.now().strftime("%Y%m%d")
-        return f"{task_type}_{variant}_{timestamp}_{self.test_counter:04d}"
-    
-    def _pick_variant(self, prompts_dict: Dict) -> Tuple[str, Dict]:
-        """Выбор случайного варианта промпта"""
-        variants = list(prompts_dict.keys())
-        weights = [0.4, 0.3, 0.3] if len(variants) == 3 else [1/len(variants)] * len(variants)
-        variant = random.choices(variants, weights=weights)[0]
-        return variant, prompts_dict[variant]
-    
-    def test_resume_analysis(
-        self,
-        resume_text: str,
-        file_path: Optional[str] = None,
-        force_variant: Optional[str] = None
-    ) -> Dict:
-        """Тестирование извлечения данных из резюме"""
-        start_time = time.time()
-        
-        # Выбираем вариант промпта
-        if force_variant and force_variant in ANALYSIS_PROMPTS:
-            variant = force_variant
-            prompt_config = ANALYSIS_PROMPTS[variant]
-        else:
-            variant, prompt_config = self._pick_variant(ANALYSIS_PROMPTS)
-        
-        test_id = self._generate_test_id("analysis", variant)
-        
-        try:
-            # Формируем промпт
-            full_prompt = f"{prompt_config['system']}\n\n{prompt_config['human']}"
-            formatted_prompt = full_prompt.format(resume_text=resume_text[:10000])
-            
-            # Вызываем модель (адаптируйте под вашу модель)
-            if hasattr(self.model, 'analyze_resume_with_prompt'):
-                result = self.model.analyze_resume_with_prompt(formatted_prompt)
-            elif hasattr(self.model, 'analyze_resume'):
-                # Используем встроенный промпт, но логируем наш вариант
-                result = self.model.analyze_resume(resume_text)
-            else:
-                # Фолбэк через API
-                result = self._call_api_for_analysis(formatted_prompt)
-            
-            duration = time.time() - start_time
-            
-            # Проверяем качество
-            quality_check = check_extraction_quality(
-                resume_text[:2000],
-                result if isinstance(result, dict) else {},
-                variant
-            )
-            
-            # Сохраняем входные данные
-            input_data = {
-                "resume_text_preview": resume_text[:1000],
-                "resume_length": len(resume_text),
-                "file_path": file_path,
-                "prompt_variant": variant,
-                "prompt_preview": formatted_prompt[:500]
-            }
-            
-            # Сохраняем выходные данные
-            output_data = {
-                "extracted_data": result,
-                "quality_check": quality_check,
-                "processing_time": duration,
-                "prompt_hash": calculate_hash(formatted_prompt)
-            }
-            
-            # Метаданные для трекинга
-            metadata = {
-                "variant": variant,
-                "duration_seconds": round(duration, 2),
-                "quality_score": quality_check.get("overall_score", 0) if quality_check.get("success") else 0,
-                "resume_hash": calculate_hash(resume_text),
-                "timestamp": datetime.now().isoformat()
-            }
-            
-            # Сохраняем все данные
-            save_dir = save_input_output(
-                test_id=test_id,
-                variant=variant,
-                task_type="resume_analysis",
-                input_data=input_data,
-                output_data=output_data,
-                metadata=metadata,
-                base_dir=self.output_dir
-            )
-            
-            return {
-                "test_id": test_id,
-                "variant": variant,
-                "result": result,
-                "quality_check": quality_check,
-                "duration": duration,
-                "metadata": metadata,
-                "data_saved_to": save_dir
-            }
-            
-        except Exception as e:
-            error_data = {
-                "test_id": test_id,
-                "variant": variant,
-                "error": str(e),
-                "duration": time.time() - start_time,
-                "timestamp": datetime.now().isoformat()
-            }
-            
-            # Сохраняем информацию об ошибке
-            error_dir = self.output_dir / "errors" / "resume_analysis" / variant / test_id
-            error_dir.mkdir(parents=True, exist_ok=True)
-            
-            with open(error_dir / f"error_{int(time.time())}.json", 'w') as f:
-                json.dump(error_data, f, indent=2)
-            
-            return error_data
-    
-    def test_matching_evaluation(
-        self,
-        resume_analysis: Dict,
-        vacancy_data: Dict,
-        weights: Dict = None,
-        force_variant: Optional[str] = None
-    ) -> Dict:
-        """Тестирование оценки соответствия вакансии"""
-        start_time = time.time()
-        
-        # Выбираем вариант промпта
-        if force_variant and force_variant in MATCHING_PROMPTS:
-            variant = force_variant
-            prompt_config = MATCHING_PROMPTS[variant]
-        else:
-            variant, prompt_config = self._pick_variant(MATCHING_PROMPTS)
-        
-        test_id = self._generate_test_id("matching", variant)
-        
-        # Веса по умолчанию
-        default_weights = {
-            "job_title_weight": 20,
-            "education_weight": 15,
-            "experience_weight": 25,
-            "schedule_weight": 5,
-            "format_weight": 5,
-            "additional_weight": 30
-        }
-        
-        if weights:
-            default_weights.update(weights)
-        
-        try:
-            # Формируем промпт
-            full_prompt = f"{prompt_config['system']}\n\n{prompt_config['human']}"
-            formatted_prompt = full_prompt.format(
-                job_title=vacancy_data.get("job_title", "Не указана"),
-                education=vacancy_data.get("education", "Не указано"),
-                work_experience=vacancy_data.get("work_experience", 0),
-                desired_salary=vacancy_data.get("desired_salary", "Не указана"),
-                work_schedule=vacancy_data.get("work_schedule", "Полный день"),
-                work_format=vacancy_data.get("work_format", "Офис"),
-                additional_requirements=vacancy_data.get("additional_requirements", "Нет"),
-                resume_analysis=json.dumps(resume_analysis, ensure_ascii=False),
-                **default_weights
-            )
-            
-            # Вызываем модель
-            if hasattr(self.model, 'evaluate_match_with_prompt'):
-                result = self.model.evaluate_match_with_prompt(formatted_prompt)
-            else:
-                result = self._call_api_for_evaluation(formatted_prompt)
-            
-            duration = time.time() - start_time
-            
-            # Сохраняем данные
-            input_data = {
-                "resume_analysis_keys": list(resume_analysis.keys()),
-                "vacancy_data": vacancy_data,
-                "weights": default_weights,
-                "prompt_variant": variant,
-                "prompt_preview": formatted_prompt[:500]
-            }
-            
-            output_data = {
-                "evaluation_result": result,
-                "processing_time": duration,
-                "prompt_hash": calculate_hash(formatted_prompt)
-            }
-            
-            metadata = {
-                "variant": variant,
-                "duration_seconds": round(duration, 2),
-                "vacancy_title": vacancy_data.get("job_title", "unknown"),
-                "weights_used": default_weights,
-                "timestamp": datetime.now().isoformat()
-            }
-            
-            save_dir = save_input_output(
-                test_id=test_id,
-                variant=variant,
-                task_type="matching_evaluation",
-                input_data=input_data,
-                output_data=output_data,
-                metadata=metadata,
-                base_dir=self.output_dir
-            )
-            
-            
-            return {
-                "test_id": test_id,
-                "variant": variant,
-                "result": result,
-                "duration": duration,
-                "metadata": metadata,
-                "data_saved_to": save_dir
-            }
-            
-        except Exception as e:
-            error_data = {
-                "test_id": test_id,
-                "variant": variant,
-                "error": str(e),
-                "duration": time.time() - start_time
-            }
-            
-            error_dir = self.output_dir / "errors" / "matching" / variant / test_id
-            error_dir.mkdir(parents=True, exist_ok=True)
-            
-            with open(error_dir / f"error_{int(time.time())}.json", 'w') as f:
-                json.dump(error_data, f, indent=2)
-            
-            return error_data
-    
-    def test_question_generation(
-        self,
-        resume_analysis: Dict,
-        vacancy_requirements: Dict,
-        additional_instructions: str = "",
-        force_variant: Optional[str] = None
-    ) -> Dict:
-        """Тестирование генерации вопросов"""
-        start_time = time.time()
-        
-        # Выбираем вариант промпта
-        if force_variant and force_variant in QUESTION_GENERATION_PROMPTS:
-            variant = force_variant
-            prompt_config = QUESTION_GENERATION_PROMPTS[variant]
-        else:
-            variant, prompt_config = self._pick_variant(QUESTION_GENERATION_PROMPTS)
-        
-        test_id = self._generate_test_id("questions", variant)
-        
-        try:
-            # Формируем промпт
-            full_prompt = f"{prompt_config['system']}\n\n{prompt_config['human']}"
-            formatted_prompt = full_prompt.format(
-                job_title=vacancy_requirements.get("job_title", "Не указана"),
-                education=vacancy_requirements.get("education", "Не указано"),
-                work_experience=vacancy_requirements.get("work_experience", 0),
-                desired_salary=vacancy_requirements.get("desired_salary", "Не указана"),
-                work_schedule=vacancy_requirements.get("work_schedule", "Полный день"),
-                work_format=vacancy_requirements.get("work_format", "Офис"),
-                additional_requirements=vacancy_requirements.get("additional_requirements", "Нет"),
-                resume_analysis=json.dumps(resume_analysis, ensure_ascii=False),
-                additional_instructions=additional_instructions
-            )
-            
-            # Вызываем модель
-            if hasattr(self.model, 'generate_questions_with_prompt'):
-                result = self.model.generate_questions_with_prompt(formatted_prompt)
-            else:
-                result = self._call_api_for_questions(formatted_prompt)
-            
-            duration = time.time() - start_time
-            
-            # Проверяем качество вопросов
-            questions_list = result.get("questions", []) if isinstance(result, dict) else []
-            quality_check = check_questions_quality(
-                resume_analysis,
-                vacancy_requirements,
-                questions_list,
-                variant
-            )
-            
-            # Сохраняем данные
-            input_data = {
-                "resume_analysis_keys": list(resume_analysis.keys()),
-                "vacancy_requirements": vacancy_requirements,
-                "additional_instructions": additional_instructions,
-                "prompt_variant": variant,
-                "prompt_preview": formatted_prompt[:500]
-            }
-            
-            output_data = {
-                "generated_questions": result,
-                "questions_count": len(questions_list),
-                "quality_check": quality_check,
-                "processing_time": duration,
-                "prompt_hash": calculate_hash(formatted_prompt)
-            }
-            
-            metadata = {
-                "variant": variant,
-                "duration_seconds": round(duration, 2),
-                "questions_count": len(questions_list),
-                "quality_score": quality_check.get("overall_score", 0) if quality_check.get("success") else 0,
-                "timestamp": datetime.now().isoformat()
-            }
-            
-            save_dir = save_input_output(
-                test_id=test_id,
-                variant=variant,
-                task_type="question_generation",
-                input_data=input_data,
-                output_data=output_data,
-                metadata=metadata,
-                base_dir=self.output_dir
-            )
-            
-            return {
-                "test_id": test_id,
-                "variant": variant,
-                "result": result,
-                "quality_check": quality_check,
-                "duration": duration,
-                "metadata": metadata,
-                "data_saved_to": save_dir
-            }
-            
-        except Exception as e:
-            error_data = {
-                "test_id": test_id,
-                "variant": variant,
-                "error": f"KeyError в форматировании промпта: {e}",
-                "duration": time.time() - start_time
-            }
-            
-            error_dir = self.output_dir / "errors" / "questions" / variant / test_id
-            error_dir.mkdir(parents=True, exist_ok=True)
-            
-            with open(error_dir / f"error_{int(time.time())}.json", 'w') as f:
-                json.dump(error_data, f, indent=2)
-            
-            return error_data
-    
-    def _call_api_for_analysis(self, prompt: str) -> Dict:
-        """Фолбэк вызов API для анализа"""
-        headers = {
-            "Authorization": f"Bearer {MISTRAL_API_KEY}",
-            "Content-Type": "application/json"
-        }
-        
-        payload = {
-            "model": MISTRAL_MODEL,
-            "messages": [
-                {"role": "system", "content": "Ты HR-специалист. Возвращай только валидный JSON."},
-                {"role": "user", "content": prompt}
-            ],
-            "temperature": 0.1,
-            "max_tokens": 1024,
-            "response_format": {"type": "json_object"}
-        }
-        
-        try:
-            resp = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
-            if resp.status_code == 200:
-                content = resp.json()["choices"][0]["message"]["content"]
-                return json.loads(clean_mistral_output(content))
-        except:
-            pass
-        
-        return {"error": "API call failed"}
-    
-    def _call_api_for_evaluation(self, prompt: str) -> Dict:
-        """Фолбэк вызов API для оценки"""
-        headers = {
-            "Authorization": f"Bearer {MISTRAL_API_KEY}",
-            "Content-Type": "application/json"
-        }
-        
-        payload = {
-            "model": MISTRAL_MODEL,
-            "messages": [
-                {"role": "system", "content": "Ты эксперт по оценке кандидатов. Возвращай JSON."},
-                {"role": "user", "content": prompt}
-            ],
-            "temperature": 0.1,
-            "max_tokens": 1024,
-            "response_format": {"type": "json_object"}
-        }
-        
-        try:
-            resp = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
-            if resp.status_code == 200:
-                content = resp.json()["choices"][0]["message"]["content"]
-                return json.loads(clean_mistral_output(content))
-        except:
-            pass
-        
-        return {"error": "API call failed"}
-    
-    def _call_api_for_questions(self, prompt: str) -> Dict:
-        """Фолбэк вызов API для вопросов"""
-        headers = {
-            "Authorization": f"Bearer {MISTRAL_API_KEY}",
-            "Content-Type": "application/json"
-        }
-        
-        payload = {
-            "model": MISTRAL_MODEL,
-            "messages": [
-                {"role": "system", "content": "Ты рекрутер. Возвращай JSON с вопросами."},
-                {"role": "user", "content": prompt}
-            ],
-            "temperature": 0.3,
-            "max_tokens": 1024,
-            "response_format": {"type": "json_object"}
-        }
-        
-        try:
-            resp = requests.post(MISTRAL_URL, headers=headers, json=payload, timeout=60)
-            if resp.status_code == 200:
-                content = resp.json()["choices"][0]["message"]["content"]
-                return json.loads(clean_mistral_output(content))
-        except:
-            pass
-        
-        return {"error": "API call failed"}
+# ============================================================================
+# ФУНКЦИИ A/B ТЕСТИРОВАНИЯ
+# ============================================================================
 
-# --- Массовое тестирование ---
-
-async def run_batch_ab_tests(
-    test_cases: List[Dict],
-    model,
-    output_dir: str = "./ab_test_batch_results"
-) -> pd.DataFrame:
-    """Запуск массового A/B тестирования"""
+async def run_extraction_ab_test(resume_text: str, variants_to_test: List[str] = None) -> List[TestResult]:
+    """
+    A/B тест промптов для извлечения данных из резюме
     
-    tester = HRPromptABTest(model, output_dir)
-    all_results = []
-    
-    for i, test_case in enumerate(test_cases, 1):
-        print(f"🧪 Тест {i}/{len(test_cases)}: {test_case.get('name', f'Test {i}')}")
-        
-        try:
-            # Анализ резюме
-            if "resume_text" in test_case:
-                print("  📄 Анализ резюме...")
-                result = tester.test_resume_analysis(
-                    resume_text=test_case["resume_text"],
-                    file_path=test_case.get("file_path")
-                )
-                
-                if "error" not in result:
-                    all_results.append({
-                        "test_id": result["test_id"],
-                        "task": "resume_analysis",
-                        "variant": result["variant"],
-                        "quality_score": result.get("quality_check", {}).get("overall_score", 0),
-                        "duration": result["duration"],
-                        "success": True
-                    })
-                    print(f"    ✅ {result['variant']}, Оценка: {result.get('quality_check', {}).get('overall_score', 0)}")
-                else:
-                    print(f"    ❌ Ошибка: {result['error']}")
-            
-            # Генерация вопросов (если есть данные кандидата и вакансии)
-            if "resume_analysis" in test_case and "vacancy_requirements" in test_case:
-                print("  ❓ Генерация вопросов...")
-                result = tester.test_question_generation(
-                    resume_analysis=test_case["resume_analysis"],
-                    vacancy_requirements=test_case["vacancy_requirements"],
-                    additional_instructions=test_case.get("additional_instructions", "")
-                )
-                
-                if "error" not in result:
-                    all_results.append({
-                        "test_id": result["test_id"],
-                        "task": "question_generation",
-                        "variant": result["variant"],
-                        "quality_score": result.get("quality_check", {}).get("overall_score", 0),
-                        "questions_count": result.get("result", {}).get("questions_count", 0),
-                        "duration": result["duration"],
-                        "success": True
-                    })
-                    print(f"    ✅ {result['variant']}, Вопросов: {result.get('result', {}).get('questions_count', 0)}")
-            
-            # Оценка соответствия
-            if "resume_analysis" in test_case and "vacancy_data" in test_case:
-                print("  📊 Оценка соответствия...")
-                result = tester.test_matching_evaluation(
-                    resume_analysis=test_case["resume_analysis"],
-                    vacancy_data=test_case["vacancy_data"],
-                    weights=test_case.get("weights")
-                )
-                
-                if "error" not in result:
-                    all_results.append({
-                        "test_id": result["test_id"],
-                        "task": "matching_evaluation",
-                        "variant": result["variant"],
-                        "duration": result["duration"],
-                        "success": True
-                    })
-                    print(f"    ✅ {result['variant']}, Время: {result['duration']:.2f}с")
-        
-        except Exception as e:
-            print(f"  ❌ Критическая ошибка: {e}")
-            all_results.append({
-                "test_id": f"error_{i}",
-                "task": "unknown",
-                "variant": "error",
-                "error": str(e),
-                "success": False
-            })
-    
-    # Анализ результатов
-    if all_results:
-        df = pd.DataFrame(all_results)
-        
-        # Сохраняем сводку
-        summary_file = Path(output_dir) / f"batch_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-        df.to_csv(summary_file, index=False, encoding='utf-8')
-        
-        print(f"\n📊 Сводка сохранена в: {summary_file}")
-        
-        # Анализ по вариантам
-        successful = df[df["success"] == True]
-        
-        if not successful.empty:
-            print("\n📈 АНАЛИЗ РЕЗУЛЬТАТОВ:")
-            print("=" * 60)
-            
-            for task in successful["task"].unique():
-                task_data = successful[successful["task"] == task]
-                print(f"\n🔹 Задача: {task}")
-                print(f"   Всего тестов: {len(task_data)}")
-                
-                for variant in task_data["variant"].unique():
-                    variant_data = task_data[task_data["variant"] == variant]
-                    
-                    if task == "resume_analysis":
-                        avg_score = variant_data["quality_score"].mean()
-                        print(f"   - {variant}: {len(variant_data)} тестов, средняя оценка: {avg_score:.1f}")
-                    
-                    elif task == "question_generation":
-                        avg_score = variant_data["quality_score"].mean()
-                        avg_questions = variant_data["questions_count"].mean()
-                        print(f"   - {variant}: {len(variant_data)} тестов, оценка: {avg_score:.1f}, вопросов: {avg_questions:.1f}")
-                    
-                    else:
-                        avg_duration = variant_data["duration"].mean()
-                        print(f"   - {variant}: {len(variant_data)} тестов, время: {avg_duration:.2f}с")
-        
-        return df
-    
-    return pd.DataFrame()
-
-
-# --- Пример использования ---
-
-def main():
-    """Пример запуска A/B тестирования"""
-    
-    # Импортируем модель (замените на свою)
-    try:
-        from ml.models.baseline import HRBaseline
-        model = HRBaseline()
-        print("✅ Модель загружена")
-    except ImportError:
-        print("⚠️ Модель не найдена, используем API фолбэк")
-        model = None
-    
-    # Создаем тестер
-    tester = HRPromptABTest(model)
-    
-    # Пример 1: Тест анализа резюме
-    print("\n🧪 ТЕСТ 1: Анализ резюме")
-    
-    test_resume = """Иванов Иван Иванович
-    Python разработчик
-    
-    Контакты:
-    Email: ivan@example.com
-    Телефон: +7-999-123-45-67
-    Город: Москва
-    
-    Навыки:
-    - Python, Django, FastAPI
-    - PostgreSQL, Redis
-    - Docker, Git
-    - Английский (Intermediate)
-    
-    Опыт работы:
-    Senior Python Developer, TechCorp (2021-2024)
-    - Разработка микросервисов на FastAPI
-    - Оптимизация производительности
-    
-    Middle Python Developer, Startup Inc (2019-2021)
-    - Разработка backend на Django
-    - Интеграция с внешними API
-    
-    Образование:
-    МГТУ им. Баумана, Факультет информатики
-    Специалист, 2019 год
+    Каждый вариант промпта выполняется отдельно, 
+    результаты оцениваются единым стандартным способом
     """
     
-    candidate_data = tester.test_resume_analysis(test_resume)
-    print(f"Вариант: {candidate_data['variant']}")
-    print(f"Оценка качества: {candidate_data.get('quality_check', {}).get('overall_score', 'N/A')}")
-    print(f"Данные сохранены в: {candidate_data.get('data_saved_to', 'N/A')}")
+    if variants_to_test is None:
+        variants_to_test = list(EXTRACTION_PROMPTS.keys())
     
-
-    # Пример 2: Тест оценки соответствия
-    print("\n🧪 ТЕСТ 2: Оценка соответствия вакансии")
-
-    vacancy_data = {
-        "job_title": "Senior Python Developer",
-        "education": "Высшее техническое",
-        "work_experience": 3,
-        "desired_salary": "200000 руб.",
-        "work_schedule": "Полный день", 
-        "work_format": "Удаленно/гибрид",
-        "additional_requirements": "Опыт работы с микросервисами, знание Docker"
-    }
-
-    result = tester.test_matching_evaluation(
-        resume_analysis=candidate_data.get('result', {}),  # Из теста 2
-        vacancy_data=vacancy_data,
-        weights={
-            "job_title_weight": 20,
-            "education_weight": 15,
-            "experience_weight": 25,
-            "schedule_weight": 5,
-            "format_weight": 5,
-            "additional_weight": 30
+    print(f"\n🧪 A/B ТЕСТ ИЗВЛЕЧЕНИЯ ДАННЫХ")
+    print(f"Тестируем варианты: {', '.join(variants_to_test)}")
+    
+    results = []
+    
+    for variant in variants_to_test:
+        print(f"\n  🎯 Вариант: {variant}")
+        
+        if variant not in EXTRACTION_PROMPTS:
+            print(f"    ❌ Вариант не найден: {variant}")
+            continue
+        
+        prompt_config = EXTRACTION_PROMPTS[variant]
+        
+        # Шаг 1: Извлекаем данные с ЭТИМ промптом
+        extraction_result = call_mistral_api(
+            system_prompt=prompt_config["system"],
+            user_prompt=prompt_config["user"].format(resume_text=resume_text)
+        )
+        
+        if "error" in extraction_result:
+            print(f"    ❌ Ошибка извлечения: {extraction_result['error']}")
+            continue
+        
+        # Шаг 2: Оцениваем качество извлечения ЕДИНЫМ способом
+        quality_data = {
+            "resume_text": resume_text[:5000],  # Ограничиваем для экономии токенов
+            "extracted_data": json.dumps(extraction_result["result"], ensure_ascii=False)
         }
-    )
-
-    print(f"Вариант: {result['variant']}")
-    print(f"Данные сохранены в: {result.get('data_saved_to', 'N/A')}")
-    if 'result' in result:
-        eval_result = result['result']
-        if isinstance(eval_result, dict) and 'overall_score' in eval_result:
-            print(f"Оценка соответствия: {eval_result['overall_score']}")
-
-    # Пример 3: Тест генерации вопросов
-    print("\n🧪 ТЕСТ 3: Генерация вопросов")
+        
+        quality_evaluation = evaluate_quality("extraction", quality_data)
+        
+        if "error" in quality_evaluation:
+            print(f"    ❌ Ошибка оценки: {quality_evaluation['error']}")
+            continue
+        
+        # Шаг 3: Сохраняем результат
+        test_result = TestResult(
+            test_type="extraction",
+            variant=variant,
+            prompt_used=prompt_config,
+            result_data=extraction_result["result"],
+            quality_metrics=quality_evaluation,
+            performance={
+                "latency": extraction_result["latency"],
+                "total_tokens": extraction_result.get("usage", {}).get("total_tokens", 0)
+            }
+        )
+        
+        results.append(test_result)
+        
+        print(f"    ✅ Качество извлечения: {quality_evaluation.get('overall_score', 0):.1f}/100")
+        print(f"    ⏱️  Время выполнения: {extraction_result['latency']:.2f} сек")
+        print(f"    📊 Детали: ", end="")
+        for key, value in quality_evaluation.items():
+            if "score" in key and isinstance(value, (int, float)):
+                print(f"{key}: {value:.1f} ", end="")
+        print()
     
-    result = tester.test_question_generation(candidate_data.get('result', {}), vacancy_data)
-    print(f"Вариант: {result['variant']}")
-    print(f"Сгенерировано вопросов: {result.get('result', {}).get('questions_count', 0)}")
-    print(f"Оценка качества: {result.get('quality_check', {}).get('overall_score', 'N/A')}")
+    return results
+
+async def run_evaluation_ab_test(resume_data: Dict, vacancy_data: Dict, variants_to_test: List[str] = None) -> List[TestResult]:
+    """
+    A/B тест промптов для оценки соответствия вакансии
+    """
     
-    return tester
+    if variants_to_test is None:
+        variants_to_test = list(EVALUATION_PROMPTS.keys())
+    
+    print(f"\n🧪 A/B ТЕСТ ОЦЕНКИ СООТВЕТСТВИЯ")
+    print(f"Тестируем варианты: {', '.join(variants_to_test)}")
+    
+    results = []
+    
+    for variant in variants_to_test:
+        print(f"\n  🎯 Вариант: {variant}")
+        
+        if variant not in EVALUATION_PROMPTS:
+            print(f"    ❌ Вариант не найден: {variant}")
+            continue
+        
+        prompt_config = EVALUATION_PROMPTS[variant]
+        
+        # Шаг 1: Оцениваем соответствие с ЭТИМ промптом
+        evaluation_result = call_mistral_api(
+            system_prompt=prompt_config["system"],
+            user_prompt=prompt_config["user"].format(
+                resume_analysis=json.dumps(resume_data, ensure_ascii=False),
+                vacancy_data=json.dumps(vacancy_data, ensure_ascii=False)
+            )
+        )
+        
+        if "error" in evaluation_result:
+            print(f"    ❌ Ошибка оценки: {evaluation_result['error']}")
+            continue
+        
+        # Шаг 2: Оцениваем качество оценки ЕДИНЫМ способом
+        quality_data = {
+            "resume_data": json.dumps(resume_data, ensure_ascii=False),
+            "vacancy_data": json.dumps(vacancy_data, ensure_ascii=False),
+            "evaluation_result": json.dumps(evaluation_result["result"], ensure_ascii=False)
+        }
+        
+        quality_evaluation = evaluate_quality("evaluation", quality_data)
+        
+        if "error" in quality_evaluation:
+            print(f"    ❌ Ошибка оценки качества: {quality_evaluation['error']}")
+            continue
+        
+        # Шаг 3: Сохраняем результат
+        test_result = TestResult(
+            test_type="evaluation",
+            variant=variant,
+            prompt_used=prompt_config,
+            result_data=evaluation_result["result"],
+            quality_metrics=quality_evaluation,
+            performance={
+                "latency": evaluation_result["latency"],
+                "total_tokens": evaluation_result.get("usage", {}).get("total_tokens", 0)
+            }
+        )
+        
+        results.append(test_result)
+        
+        print(f"    ✅ Качество оценки: {quality_evaluation.get('overall_score', 0):.1f}/100")
+        print(f"    ⏱️  Время выполнения: {evaluation_result['latency']:.2f} сек")
+    
+    return results
+
+async def run_questions_ab_test(resume_data: Dict, vacancy_data: Dict, variants_to_test: List[str] = None) -> List[TestResult]:
+    """
+    A/B тест промптов для генерации вопросов
+    """
+    
+    if variants_to_test is None:
+        variants_to_test = list(QUESTION_PROMPTS.keys())
+    
+    print(f"\n🧪 A/B ТЕСТ ГЕНЕРАЦИИ ВОПРОСОВ")
+    print(f"Тестируем варианты: {', '.join(variants_to_test)}")
+    
+    results = []
+    
+    for variant in variants_to_test:
+        print(f"\n  🎯 Вариант: {variant}")
+        
+        if variant not in QUESTION_PROMPTS:
+            print(f"    ❌ Вариант не найден: {variant}")
+            continue
+        
+        prompt_config = QUESTION_PROMPTS[variant]
+        
+        # Шаг 1: Генерируем вопросы с ЭТИМ промптом
+        questions_result = call_mistral_api(
+            system_prompt=prompt_config["system"],
+            user_prompt=prompt_config["user"].format(
+                resume_analysis=json.dumps(resume_data, ensure_ascii=False),
+                vacancy_requirements=json.dumps(vacancy_data, ensure_ascii=False)
+            )
+        )
+        
+        if "error" in questions_result:
+            print(f"    ❌ Ошибка генерации: {questions_result['error']}")
+            continue
+        
+        # Шаг 2: Оцениваем качество вопросов ЕДИНЫМ способом
+        quality_data = {
+            "resume_data": json.dumps(resume_data, ensure_ascii=False),
+            "vacancy_data": json.dumps(vacancy_data, ensure_ascii=False),
+            "generated_questions": json.dumps(questions_result["result"], ensure_ascii=False)
+        }
+        
+        quality_evaluation = evaluate_quality("questions", quality_data)
+        
+        if "error" in quality_evaluation:
+            print(f"    ❌ Ошибка оценки качества: {quality_evaluation['error']}")
+            continue
+        
+        # Шаг 3: Сохраняем результат
+        test_result = TestResult(
+            test_type="questions",
+            variant=variant,
+            prompt_used=prompt_config,
+            result_data=questions_result["result"],
+            quality_metrics=quality_evaluation,
+            performance={
+                "latency": questions_result["latency"],
+                "total_tokens": questions_result.get("usage", {}).get("total_tokens", 0)
+            }
+        )
+        
+        results.append(test_result)
+        
+        print(f"    ✅ Качество вопросов: {quality_evaluation.get('overall_score', 0):.1f}/100")
+        print(f"    ⏱️  Время выполнения: {questions_result['latency']:.2f} сек")
+        
+        # Показываем лучшие вопросы если есть
+        if "best_questions" in quality_evaluation and quality_evaluation["best_questions"]:
+            print(f"    🏆 Лучшие вопросы:")
+            for i, q in enumerate(quality_evaluation["best_questions"][:2], 1):
+                print(f"      {i}. {q[:80]}...")
+    
+    return results
+
+# ============================================================================
+# ИНТЕГРАЦИЯ С ВАШЕЙ СИСТЕМОЙ
+# ============================================================================
+
+def _find_test_files(test_folders):
+    """Ищет тестовые файлы в различных папках"""
+    test_files = []
+    for folder in test_folders:
+        if os.path.exists(folder):
+            patterns = [f"{folder}/*.pdf", f"{folder}/*.docx", f"{folder}/*.doc", f"{folder}/*.txt"]
+            for pattern in patterns:
+                found_files = glob.glob(pattern)
+                test_files.extend(found_files)
+    return test_files
+
+async def run_comprehensive_ab_test_on_files(test_count: int = 2):
+    """
+    Комплексный A/B тест на нескольких тестовых файлах
+    """
+    
+    # Инициализируем менеджер
+    ab_manager = ABTestManager()
+    
+    # Находим тестовые файлы
+    test_files = _find_test_files(["C:/Users/67181/OneDrive/Dokumenty/bachelor-2025-team-team/data/test_resumes/"])
+    if not test_files:
+        print("❌ Тестовые файлы не найдены")
+        return ab_manager
+    
+    # Загружаем вакансию
+    vacancy_path = "C:/Users/67181/OneDrive/Dokumenty/bachelor-2025-team-team/data/vacancy.json"
+    try:
+        with open(vacancy_path, 'r', encoding='utf-8') as f:
+            vacancy_data = json.load(f)
+        print(f"✅ Загружена вакансия: {vacancy_data.get('position', 'Не указана')}")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки вакансии: {e}")
+        return ab_manager
+    
+    # Выбираем файлы для теста
+    selected_files = test_files[:min(test_count, len(test_files))]
+    
+    print("\n" + "=" * 60)
+    print(f"🚀 ЗАПУСК КОМПЛЕКСНОГО A/B ТЕСТИРОВАНИЯ")
+    print(f"📁 Тестируем {len(selected_files)} файлов")
+    print("=" * 60)
+    
+    for i, test_file in enumerate(selected_files, 1):
+        print(f"\n📄 ФАЙЛ {i}/{len(selected_files)}: {os.path.basename(test_file)}")
+        
+        try:
+            # Загружаем текст резюме (упрощенно)
+            resume_text = parsing_from_resumes(test_file)
+            
+            # 1. Тестируем извлечение данных
+            print("\n1. 🔧 Тестируем извлечение данных...")
+            extraction_results = await run_extraction_ab_test(resume_text)
+            
+            for result in extraction_results:
+                ab_manager.add_result(result)
+            
+            # Выбираем лучшее извлечение для дальнейших тестов
+            if extraction_results:
+                best_extraction = max(extraction_results, key=lambda x: x.quality_metrics.get('overall_score', 0))
+                extracted_data = best_extraction.result_data
+                
+                # 2. Тестируем оценку соответствия
+                print("\n2. 📊 Тестируем оценку соответствия...")
+                evaluation_results = await run_evaluation_ab_test(extracted_data, vacancy_data)
+                
+                for result in evaluation_results:
+                    ab_manager.add_result(result)
+                
+                # 3. Тестируем генерацию вопросов
+                print("\n3. ❓ Тестируем генерацию вопросов...")
+                questions_results = await run_questions_ab_test(extracted_data, vacancy_data)
+                
+                for result in questions_results:
+                    ab_manager.add_result(result)
+            
+        except Exception as e:
+            print(f"❌ Ошибка при обработке файла {test_file}: {e}")
+            continue
+    
+    # Генерируем отчет
+    print("\n" + "=" * 60)
+    print("📈 АНАЛИЗ РЕЗУЛЬТАТОВ")
+    print("=" * 60)
+    
+    report = ab_manager.save_report()
+    
+    # Выводим краткие результаты
+    print("\n🏆 ИТОГИ:")
+    for test_type in ["extraction", "evaluation", "questions"]:
+        best = ab_manager.get_best_variant(test_type)
+        if best:
+            variant, stats = best
+            print(f"  {test_type.upper()}: {variant} ({stats['avg_overall_score']:.1f}/100)")
+    
+    return ab_manager
+
+def parsing_from_resumes(file_path: str = None) -> str:
+        # Парсим файл
+        print(f"📄 Парсим файл...")
+        resume_text = FileParser.extract_text_from_file(file_path)
+        
+        # Проверяем успешность извлечения
+        if not FileParser.is_successful_extraction(resume_text):
+            print(f"❌ Ошибка парсинга: {resume_text}")
+            return {"error": f"Parsing failed: {resume_text}"}
+        
+        # Очищаем текст
+        cleaned_text = FileParser.clean_extracted_text(resume_text)
+        print(f"✅ Извлечено {len(cleaned_text)} символов")
+
+        return cleaned_text
+
+async def quick_ab_test_demo():
+    """Быстрая демонстрация A/B тестирования на одном файле"""
+    
+    # Находим тестовый файл
+    test_file = "C:/Users/67181/OneDrive/Dokumenty/bachelor-2025-team-team/data/test_resumes/1.docx"
+    
+    print(f"📁 Тестовый файл: {os.path.basename(test_file)}")
+    
+    # Загружаем вакансию
+    vacancy_path = "C:/Users/67181/OneDrive/Dokumenty/bachelor-2025-team-team/data/vacancy.json"
+    try:
+        with open(vacancy_path, 'r', encoding='utf-8') as f:
+            vacancy_data = json.load(f)
+    except:
+        vacancy_data = {"position": "Тестовая вакансия", "requirements": "Требования"}
+    
+    # Загружаем резюме
+    resume_text = parsing_from_resumes(test_file)
+    
+    # Инициализируем менеджер
+    ab_manager = ABTestManager()
+    
+    # Тестируем только извлечение (для демо)
+    print("\n🧪 ДЕМО: A/B тест извлечения данных")
+    results = await run_extraction_ab_test(resume_text, ["baseline", "detailed", "minimal"])
+    
+    for result in results:
+        ab_manager.add_result(result)
+    
+    # Показываем результаты
+    best = ab_manager.get_best_variant("extraction")
+    if best:
+        variant, stats = best
+        print(f"\n🏆 ЛУЧШИЙ ВАРИАНТ: {variant}")
+        print(f"📊 Средняя оценка: {stats['avg_overall_score']:.1f}/100")
+        print(f"⏱️  Среднее время: {stats['avg_latency']:.2f} сек")
+    
+    return ab_manager
+
+async def interactive_ab_test():
+    """Интерактивный режим A/B тестирования"""
+    
+    print("\n🎯 ИНТЕРАКТИВНОЕ A/B ТЕСТИРОВАНИЕ ПРОМПТОВ")
+    print("=" * 50)
+    
+    ab_manager = ABTestManager()
+    
+    while True:
+        print("\nЧто хотите протестировать?")
+        print("1. Извлечение данных из резюме")
+        print("2. Оценку соответствия вакансии")
+        print("3. Генерацию вопросов для интервью")
+        print("4. Комплексный тест всего")
+        print("5. Показать текущие результаты")
+        print("6. Сохранить отчет и выйти")
+        print("=" * 30)
+        
+        choice = input("Выберите (1-6): ").strip()
+        
+        if choice == "1":
+            # Тест извлечения
+            test_file = input("Путь к файлу резюме (или Enter для тестового): ").strip()
+            if not test_file:
+                test_files = _find_test_files(["C:/Users/67181/OneDrive/Dokumenty/bachelor-2025-team-team/data/test_resumes/"])
+                if test_files:
+                    test_file = test_files[0]
+                else:
+                    print("❌ Тестовые файлы не найдены")
+                    continue
+            
+            resume_text = parsing_from_resumes(test_file)
+            
+            variants = input("Варианты для теста (через запятую или Enter для всех): ").strip()
+            if variants:
+                variants_to_test = [v.strip() for v in variants.split(",")]
+            else:
+                variants_to_test = None
+            
+            results = await run_extraction_ab_test(resume_text, variants_to_test)
+            for result in results:
+                ab_manager.add_result(result)
+        
+        elif choice == "2":
+            # Тест оценки
+            print("Для оценки нужны данные резюме и вакансии")
+            
+            # Загружаем тестовые данные
+            test_files = _find_test_files(["C:/Users/67181/OneDrive/Dokumenty/bachelor-2025-team-team/data/test_resumes/"])
+            if not test_files:
+                print("❌ Тестовые файлы не найдены")
+                continue
+            
+            vacancy_path = "C:/Users/67181/OneDrive/Dokumenty/bachelor-2025-team-team/data/vacancy.json"
+            try:
+                with open(vacancy_path, 'r', encoding='utf-8') as f:
+                    vacancy_data = json.load(f)
+            except:
+                print("❌ Ошибка загрузки вакансии")
+                continue
+            
+            # Сначала нужно извлечь данные (используем baseline)
+            resume_text = parsing_from_resumes(test_files[0])
+            
+            print("📋 Извлекаем данные (baseline промпт)...")
+            extraction_result = call_mistral_api(
+                system_prompt=EXTRACTION_PROMPTS["baseline"]["system"],
+                user_prompt=EXTRACTION_PROMPTS["baseline"]["user"].format(resume_text=resume_text)
+            )
+            
+            if "error" in extraction_result:
+                print(f"❌ Ошибка извлечения: {extraction_result['error']}")
+                continue
+            
+            resume_data = extraction_result["result"]
+            
+            variants = input("Варианты для теста (через запятую или Enter для всех): ").strip()
+            if variants:
+                variants_to_test = [v.strip() for v in variants.split(",")]
+            else:
+                variants_to_test = None
+            
+            results = await run_evaluation_ab_test(resume_data, vacancy_data, variants_to_test)
+            for result in results:
+                ab_manager.add_result(result)
+        
+        elif choice == "3":
+            # Тест вопросов
+            print("Для генерации вопросов нужны данные резюме и вакансии")
+            
+            # Загружаем тестовые данные
+            test_files = _find_test_files(["C:/Users/67181/OneDrive/Dokumenty/bachelor-2025-team-team/data/test_resumes/"])
+            if not test_files:
+                print("❌ Тестовые файлы не найдены")
+                continue
+            
+            vacancy_path = "C:/Users/67181/OneDrive/Dokumenty/bachelor-2025-team-team/data/vacancy.json"
+            try:
+                with open(vacancy_path, 'r', encoding='utf-8') as f:
+                    vacancy_data = json.load(f)
+            except:
+                print("❌ Ошибка загрузки вакансии")
+                continue
+            
+            # Извлекаем данные
+            resume_text = parsing_from_resumes(test_files[0])
+            
+            print("📋 Извлекаем данные (baseline промпт)...")
+            extraction_result = call_mistral_api(
+                system_prompt=EXTRACTION_PROMPTS["baseline"]["system"],
+                user_prompt=EXTRACTION_PROMPTS["baseline"]["user"].format(resume_text=resume_text)
+            )
+            
+            if "error" in extraction_result:
+                print(f"❌ Ошибка извлечения: {extraction_result['error']}")
+                continue
+            
+            resume_data = extraction_result["result"]
+            
+            variants = input("Варианты для теста (через запятую или Enter для всех): ").strip()
+            if variants:
+                variants_to_test = [v.strip() for v in variants.split(",")]
+            else:
+                variants_to_test = None
+            
+            results = await run_questions_ab_test(resume_data, vacancy_data, variants_to_test)
+            for result in results:
+                ab_manager.add_result(result)
+        
+        elif choice == "4":
+            # Комплексный тест
+            count = input("Количество файлов для теста (по умолчанию 2): ").strip()
+            test_count = int(count) if count.isdigit() else 2
+            
+            await run_comprehensive_ab_test_on_files(test_count)
+        
+        elif choice == "5":
+            # Показать результаты
+            if not ab_manager.results:
+                print("📭 Нет результатов тестов")
+            else:
+                report = ab_manager.generate_report()
+                print(ab_manager._format_text_report(report))
+        
+        elif choice == "6":
+            # Сохранить и выйти
+            if ab_manager.results:
+                ab_manager.save_report()
+            print("👋 Завершение работы")
+            break
+        
+        else:
+            print("❌ Неверный выбор")
+
+# ============================================================================
+# МЭЙН ФУНКЦИИ
+# ============================================================================
+
+async def main():
+    """Главная функция"""
+    
+    print("\n" + "=" * 60)
+    print("🤖 СИСТЕМА A/B ТЕСТИРОВАНИЯ ПРОМПТОВ")
+    print("=" * 60)
+    print("Варианты запуска:")
+    print("1. Комплексный тест на нескольких файлах")
+    print("2. Быстрая демонстрация на одном файле")
+    print("3. Интерактивный режим")
+    print("=" * 60)
+    
+    choice = input("Выберите вариант (1-3): ").strip()
+    
+    if choice == "1":
+        count = input("Количество файлов (по умолчанию 2): ").strip()
+        test_count = int(count) if count.isdigit() else 2
+        await run_comprehensive_ab_test_on_files(test_count)
+    
+    elif choice == "2":
+        await quick_ab_test_demo()
+    
+    elif choice == "3":
+        await interactive_ab_test()
+    
+    else:
+        print("❌ Неверный выбор")
 
 if __name__ == "__main__":
-    tester = main()
-    
+    asyncio.run(main())
