@@ -23,8 +23,10 @@
     "test": "console.log('Hello world!');"
   },
   "dependencies": {
+    "axios": "^1.13.2",
     "express": "^5.2.1",
     "express-session": "^1.18.2",
+    "form-data": "^4.0.5",
     "multer": "^2.0.2",
     "mysql2": "^3.15.3",
     "nodemon": "^3.1.11",

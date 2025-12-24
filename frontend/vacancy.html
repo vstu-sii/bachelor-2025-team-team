@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <header>
-            <a class="logo">The best company in the world</a>
+            <a href="/vacancy" class="logo">The best company in the world</a>
             <div style="display: flex; gap: 20px; align-items: center;">
                 <span id="userGreeting" style="color: #f4d03f;"></span>
                 <a href="#" id="logoutBtn" class="contact-link" style="color: #ff6b6b;">Logout</a>
@@ -20,6 +20,31 @@
     <section class="filters-section">
         <div class="container">
             <div class="filters-content">
+                
+                <!-- Секция выбора существующей вакансии -->
+                <div class="existing-vacancies-section">
+                    <h2 style="color: #f4d03f; margin-bottom: 15px; font-size: 1.5rem;">
+                        Select Existing Vacancy or Create New
+                    </h2>
+                    
+                    <div class="vacancy-selection">
+                        <label style="display: block; margin-bottom: 10px; color: #cccccc;">
+                            Your Vacancies:
+                        </label>
+                        <select id="vacancySelector" style="width: 100%; padding: 12px; background-color: #2a2a2a; border: 2px solid #5a5a5a; border-radius: 8px; color: #ffffff; font-size: 1rem; margin-bottom: 15px; cursor: pointer;">
+                            <option value="">-- Create New Vacancy --</option>
+                        </select>
+                        
+                        <button id="loadVacancyBtn" style="padding: 10px 20px; background-color: #5a9bd5; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.95rem; transition: background-color 0.3s;">
+                            Load Selected Vacancy
+                        </button>
+                        
+                        <button id="clearFormBtn" style="padding: 10px 20px; background-color: #888; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.95rem; margin-left: 10px; transition: background-color 0.3s;">
+                            Clear Form
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Поле для описания вакансии -->
                 <div class="vacancy-description-section">
                     <h2 style="color: #f4d03f; margin-bottom: 15px; font-size: 1.5rem;">Vacancy Description</h2>
@@ -179,7 +204,7 @@
 
                 <!-- Кнопка Apply -->
                 <div class="apply-button-container">
-                    <button class="btn-apply" id="applyButton">Apply</button>
+                    <button class="btn-apply" id="applyButton">Apply & Continue</button>
                 </div>
             </div>
         </div>
@@ -226,6 +251,37 @@
     </footer>
 
     <style>
+        .existing-vacancies-section {
+            background-color: #3a3a3a;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .vacancy-selection {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #vacancySelector {
+            transition: border-color 0.3s;
+        }
+
+        #vacancySelector:focus {
+            outline: none;
+            border-color: #f4d03f;
+            background-color: #333333;
+        }
+
+        #loadVacancyBtn:hover {
+            background-color: #4a8bc5;
+        }
+
+        #clearFormBtn:hover {
+            background-color: #666;
+        }
+
         .vacancy-description-section {
             background-color: #3a3a3a;
             padding: 30px;
@@ -284,8 +340,10 @@
     </style>
 
     <script>
-        // Проверка авторизации
-        window.addEventListener('DOMContentLoaded', () => {
+        let currentVacancyId = null; // Хранит ID текущей загруженной вакансии
+
+        // Проверка авторизации и загрузка вакансий
+        window.addEventListener('DOMContentLoaded', async () => {
             const user = localStorage.getItem('user');
             if (!user) {
                 alert('Необходимо войти в систему');
@@ -295,6 +353,117 @@
 
             const userData = JSON.parse(user);
             document.getElementById('userGreeting').textContent = `Hello, ${userData.username}!`;
+
+            // Загружаем список вакансий
+            await loadVacancies();
+        });
+
+        // Функция загрузки списка вакансий
+        async function loadVacancies() {
+            try {
+                const response = await fetch('/api/vacancy/user');
+                const data = await response.json();
+
+                if (data.success && data.vacancies.length > 0) {
+                    const selector = document.getElementById('vacancySelector');
+                    
+                    data.vacancies.forEach(vacancy => {
+                        const option = document.createElement('option');
+                        option.value = vacancy.id;
+                        option.textContent = `#${vacancy.id} - ${vacancy.job_title.substring(0, 50)}${vacancy.job_title.length > 50 ? '...' : ''}`;
+                        selector.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки вакансий:', error);
+            }
+        }
+
+        // Обработка загрузки выбранной вакансии
+        document.getElementById('loadVacancyBtn').addEventListener('click', async () => {
+            const vacancyId = document.getElementById('vacancySelector').value;
+            
+            if (!vacancyId) {
+                alert('Пожалуйста, выберите вакансию из списка');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/vacancy/${vacancyId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const vacancy = data.vacancy;
+                    currentVacancyId = vacancy.id;
+
+                    // Заполняем форму данными вакансии
+                    document.getElementById('vacancyDescription').value = vacancy.job_title || '';
+
+                    // Заполняем фильтры, если есть данные
+                    if (vacancy.education) {
+                        const educationValues = vacancy.education.split(', ');
+                        document.querySelectorAll('input[name="education"]').forEach(cb => {
+                            cb.checked = educationValues.includes(cb.value);
+                        });
+                    }
+
+                    if (vacancy.work_experience) {
+                        const expValues = vacancy.work_experience.split(', ');
+                        document.querySelectorAll('input[name="work_experience"]').forEach(cb => {
+                            cb.checked = expValues.includes(cb.value);
+                        });
+                    }
+
+                    // Зарплата
+                    if (vacancy.desired_salary) {
+                        const salaryMatch = vacancy.desired_salary.match(/От (\d+) до (.+)/);
+                        if (salaryMatch) {
+                            document.getElementById('salary_min').value = salaryMatch[1];
+                            if (salaryMatch[2] !== '∞') {
+                                document.getElementById('salary_max').value = salaryMatch[2];
+                            }
+                        }
+                    }
+
+                    if (vacancy.work_shedule) {
+                        const scheduleValues = vacancy.work_shedule.split(', ');
+                        document.querySelectorAll('input[name="work_schedule"]').forEach(cb => {
+                            cb.checked = scheduleValues.includes(cb.value);
+                        });
+                    }
+
+                    if (vacancy.work_format) {
+                        const formatValues = vacancy.work_format.split(', ');
+                        document.querySelectorAll('input[name="work_format"]').forEach(cb => {
+                            cb.checked = formatValues.includes(cb.value);
+                        });
+                    }
+
+                    document.getElementById('otherRequirements').value = vacancy.additional_requirements || '';
+                    document.getElementById('freeInputArea').value = vacancy.additional_requirements || '';
+
+                    alert('Вакансия загружена успешно!');
+                } else {
+                    alert('Ошибка: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка соединения с сервером');
+            }
+        });
+
+        // Очистка формы
+        document.getElementById('clearFormBtn').addEventListener('click', () => {
+            if (confirm('Вы уверены, что хотите очистить форму?')) {
+                currentVacancyId = null;
+                document.getElementById('vacancySelector').value = '';
+                document.getElementById('vacancyDescription').value = '';
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                document.getElementById('salary_min').value = '';
+                document.getElementById('salary_max').value = '';
+                document.getElementById('otherRequirements').value = '';
+                document.getElementById('freeInputArea').value = '';
+            }
         });
 
         // Обработка выхода
@@ -355,9 +524,16 @@
                 return;
             }
 
+            // Если вакансия уже загружена, просто переходим дальше
+            if (currentVacancyId) {
+                localStorage.setItem('selectedVacancyId', currentVacancyId);
+                window.location.href = '/upload';
+                return;
+            }
+
+            // Иначе создаем новую вакансию
             const isFiltersMode = filtersContainer.style.display !== 'none';
             
-            // Показываем индикатор загрузки
             const applyButton = document.getElementById('applyButton');
             const originalText = applyButton.textContent;
             applyButton.textContent = 'Saving...';
@@ -369,7 +545,6 @@
                 };
 
                 if (isFiltersMode) {
-                    // Собираем данные из фильтров
                     const education = Array.from(document.querySelectorAll('input[name="education"]:checked'))
                         .map(cb => cb.value).join(', ');
                     
@@ -400,7 +575,6 @@
                         otherRequirements: otherRequirements || null
                     };
                 } else {
-                    // Режим свободного ввода
                     const freeText = document.getElementById('freeInputArea').value.trim();
                     if (!freeText) {
                         alert('Пожалуйста, введите требования!');
@@ -411,7 +585,6 @@
                     vacancyData.otherRequirements = freeText;
                 }
 
-                // Отправка на сервер
                 const response = await fetch('/api/vacancy/create', {
                     method: 'POST',
                     headers: {
@@ -423,8 +596,8 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    localStorage.setItem('selectedVacancyId', data.vacancyId);
                     alert('Вакансия успешно создана!');
-                    // Переход на страницу загрузки резюме
                     window.location.href = '/upload';
                 } else {
                     alert('Ошибка: ' + data.message);

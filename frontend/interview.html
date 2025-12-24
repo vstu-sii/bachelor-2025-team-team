@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Questions - AI HR Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .interview-section {
+            padding: 60px 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .interview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .interview-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .interview-header h1 {
+            font-size: 2.5rem;
+            color: #f4d03f;
+            margin-bottom: 10px;
+        }
+
+        .interview-header p {
+            color: #cccccc;
+            font-size: 1.1rem;
+        }
+
+        .interview-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .interview-card {
+            background-color: #3a3a3a;
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid #f4d03f;
+            transition: all 0.3s;
+        }
+
+        .interview-card:hover {
+            background-color: #424242;
+            transform: translateX(5px);
+        }
+
+        .interview-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #5a5a5a;
+        }
+
+        .interview-title {
+            font-size: 1.3rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .interview-meta {
+            display: flex;
+            gap: 15px;
+            color: #888888;
+            font-size: 0.9rem;
+        }
+
+        .questions-container {
+            margin-top: 20px;
+        }
+
+        .question-item {
+            background-color: #2a2a2a;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #5a9bd5;
+        }
+
+        .question-number {
+            color: #f4d03f;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-type-badge {
+            background-color: #5a9bd5;
+            color: #ffffff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .question-text {
+            color: #ffffff;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .no-questions {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            color: #888888;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .btn-download-questions {
+            background-color: #5a9bd5;
+            color: #ffffff;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-download-questions:hover {
+            background-color: #4a8bc5;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #f4d03f;
+            font-size: 1.2rem;
+        }
+
+        .no-interviews {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888888;
+        }
+
+        .no-interviews h2 {
+            color: #f4d03f;
+            margin-bottom: 10px;
+        }
+
+        .score-badge {
+            background-color: #f4d03f;
+            color: #000000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a class="logo">The best company in the world</a>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <span id="userGreeting" style="color: #f4d03f;"></span>
+                <a href="#" id="logoutBtn" class="contact-link" style="color: #ff6b6b;">Logout</a>
+            </div>
+        </header>
+    </div>
+
+    <section class="interview-section">
+        <div class="container">
+            <div class="interview-container">
+                <div class="interview-header">
+                    <h1>Interview Questions</h1>
+                    <p>AI-generated questions for top candidates</p>
+                </div>
+
+                <div id="loadingIndicator" class="loading">
+                    Loading interview questions...
+                </div>
+
+                <div id="interviewList" class="interview-list" style="display: none;"></div>
+
+                <div id="noInterviews" class="no-interviews" style="display: none;">
+                    <h2>No interview questions available</h2>
+                    <p>Process resumes to generate interview questions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 The best company in the world. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Проверка авторизации
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                alert('Необходимо войти в систему');
+                window.location.href = '/authorization';
+                return;
+            }
+
+            const userData = JSON.parse(user);
+            document.getElementById('userGreeting').textContent = `Hello, ${userData.username}!`;
+            
+            // Проверяем наличие выбранной вакансии
+            const vacancyId = localStorage.getItem('selectedVacancyId');
+            if (!vacancyId) {
+                alert('Вакансия не выбрана. Пожалуйста, сначала создайте или выберите вакансию.');
+                window.location.href = '/vacancy';
+                return;
+            }
+            
+            // Загружаем вопросы для собеседования
+            loadInterviewQuestions(vacancyId);
+        });
+
+        // Обработка выхода
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (confirm('Вы действительно хотите выйти?')) {
+                localStorage.removeItem('user');
+                await fetch('/logout');
+                window.location.href = '/authorization?logout=true';
+            }
+        });
+
+        // Загрузка вопросов для собеседования
+        async function loadInterviewQuestions(vacancyId) {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const interviewList = document.getElementById('interviewList');
+            const noInterviews = document.getElementById('noInterviews');
+
+            try {
+                const response = await fetch(`/api/interviews/questions?vacancyId=${vacancyId}`);
+                const data = await response.json();
+
+                loadingIndicator.style.display = 'none';
+
+                if (data.success && data.interviews.length > 0) {
+                    interviewList.style.display = 'flex';
+                    displayInterviews(data.interviews);
+                } else {
+                    noInterviews.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки вопросов:', error);
+                loadingIndicator.style.display = 'none';
+                noInterviews.style.display = 'block';
+            }
+        }
+
+        // Отображение вопросов для собеседования
+        function displayInterviews(interviews) {
+            const interviewList = document.getElementById('interviewList');
+            interviewList.innerHTML = '';
+
+            interviews.forEach((interview) => {
+                const card = document.createElement('div');
+                card.className = 'interview-card';
+
+                let questionsHTML = '<div class="no-questions">No questions available</div>';
+                
+                if (interview.questions) {
+                    try {
+                        const questionsData = typeof interview.questions === 'string' 
+                            ? JSON.parse(interview.questions) 
+                            : interview.questions;
+                        
+                        // Извлекаем массив вопросов из структуры
+                        let questions = [];
+                        
+                        // Проверяем разные возможные структуры
+                        if (Array.isArray(questionsData)) {
+                            questions = questionsData;
+                        } else if (questionsData.questions && Array.isArray(questionsData.questions)) {
+                            questions = questionsData.questions;
+                        } else if (questionsData.interview_plan && questionsData.questions) {
+                            questions = questionsData.questions;
+                        }
+                        
+                        if (questions.length > 0) {
+                            questionsHTML = '<div class="questions-container">';
+                            questions.forEach((q, index) => {
+                                // Извлекаем текст вопроса в зависимости от структуры
+                                let questionText = '';
+                                let questionType = '';
+                                
+                                if (typeof q === 'string') {
+                                    questionText = q;
+                                } else if (typeof q === 'object') {
+                                    questionText = q.question || q.text || JSON.stringify(q);
+                                    questionType = q.type || '';
+                                }
+                                
+                                const typeBadge = questionType 
+                                    ? `<span class="question-type-badge">${questionType}</span>` 
+                                    : '';
+                                
+                                questionsHTML += `
+                                    <div class="question-item">
+                                        <div class="question-number">
+                                            Question ${index + 1}
+                                            ${typeBadge}
+                                        </div>
+                                        <div class="question-text">${questionText}</div>
+                                    </div>
+                                `;
+                            });
+                            questionsHTML += '</div>';
+                        }
+                    } catch (e) {
+                        console.error('Error parsing questions:', e);
+                        console.error('Raw questions data:', interview.questions);
+                    }
+                }
+
+                card.innerHTML = `
+                    <div class="interview-card-header">
+                        <div>
+                            <div class="interview-title">Resume #${interview.resume_id}</div>
+                            <div class="interview-meta">
+                                <span>📊 Score: <strong>${interview.score || 'N/A'}</strong></span>
+                                <span>🎯 Vacancy #${interview.vacancy_id}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <div class="score-badge">${interview.score || 0} points</div>
+                            <button class="btn-download-questions" onclick="downloadQuestions(${interview.resume_id})">
+                                Download Questions
+                            </button>
+                        </div>
+                    </div>
+                    ${questionsHTML}
+                `;
+
+                interviewList.appendChild(card);
+            });
+        }
+
+        // Скачивание вопросов в текстовый файл
+        function downloadQuestions(resumeId) {
+            // Находим карточку с вопросами
+            const cards = document.querySelectorAll('.interview-card');
+            let questionsText = `Interview Questions for Resume #${resumeId}\n`;
+            questionsText += `Generated: ${new Date().toLocaleString()}\n`;
+            questionsText += '='.repeat(60) + '\n\n';
+
+            cards.forEach(card => {
+                const title = card.querySelector('.interview-title').textContent;
+                if (title.includes(`#${resumeId}`)) {
+                    const questions = card.querySelectorAll('.question-item');
+                    questions.forEach((q, index) => {
+                        const numberElement = q.querySelector('.question-number');
+                        const text = q.querySelector('.question-text').textContent;
+                        const type = numberElement ? numberElement.textContent : '';
+                        
+                        questionsText += `${index + 1}. ${text}\n`;
+                        if (type && type.includes('(')) {
+                            questionsText += `   Type: ${type.match(/\(([^)]+)\)/)?.[1] || ''}\n`;
+                        }
+                        questionsText += '\n';
+                    });
+                }
+            });
+
+            // Создаем и скачиваем файл
+            const blob = new Blob([questionsText], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `interview_questions_resume_${resumeId}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        // Глобальная функция для скачивания
+        window.downloadQuestions = downloadQuestions;
+    </script>
+</body>
+</html>

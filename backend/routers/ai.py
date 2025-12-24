@@ -167,7 +167,6 @@ async def excruct_resume_text(resume_text: str = Form(...)):
 async def generate_interview_plan(
     file: UploadFile = File(...),
     vacancy_requirements: str = Form(""),
-    question_type: str = Form("mixed")
 ):
     """Полный пайплайн с парсингом файла и генерацией вопросов"""
     
@@ -194,9 +193,8 @@ async def generate_interview_plan(
         
         # 2. Генерация вопросов
         questions_result = await pipeline.generate_interview_questions(
-            analysis_result=analysis_result,
-            vacancy_data=vacancy_requirements,
-            question_type=question_type
+            resume_analysis=analysis_result,
+            vacancy_requirements=vacancy_requirements
         )
         
         if "error" in questions_result:

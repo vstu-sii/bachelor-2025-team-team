@@ -12,15 +12,133 @@
         }
 
         .upload-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
-        .drop-zone {
+        /* Секция существующих резюме */
+        .existing-resumes-section {
             background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .existing-resumes-section h2 {
+            color: #f4d03f;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .resumes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .resume-card {
+            background-color: #3a3a3a;
+            border: 2px solid #5a5a5a;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .resume-card:hover {
+            border-color: #f4d03f;
+            transform: translateY(-2px);
+        }
+
+        .resume-card.selected {
+            border-color: #f4d03f;
+            background-color: #4a4a4a;
+        }
+
+        .resume-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .resume-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .resume-card-title {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .resume-card-info {
+            color: #cccccc;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        .resume-card-info span {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .process-existing-btn {
+            background-color: #5a9bd5;
+            color: #ffffff;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .process-existing-btn:hover:not(:disabled) {
+            background-color: #4a8bc5;
+            transform: translateY(-2px);
+        }
+
+        .process-existing-btn:disabled {
+            background-color: #5a5a5a;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 40px 0;
+            color: #888888;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Секция загрузки новых резюме */
+        .new-upload-section {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .new-upload-section h2 {
+            color: #f4d03f;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .drop-zone {
+            background-color: #3a3a3a;
             border: 3px dashed #5a5a5a;
             border-radius: 12px;
-            padding: 80px 40px;
+            padding: 60px 40px;
             text-align: center;
             transition: all 0.3s;
             cursor: pointer;
@@ -29,7 +147,7 @@
 
         .drop-zone.dragover {
             border-color: #f4d03f;
-            background-color: #333333;
+            background-color: #4a4a4a;
         }
 
         .drop-zone-text {
@@ -124,12 +242,25 @@
             background-color: #5a5a5a;
             cursor: not-allowed;
         }
+
+        .no-resumes-message {
+            color: #888888;
+            text-align: center;
+            padding: 30px;
+            font-size: 1rem;
+        }
+
+        .selected-count {
+            color: #f4d03f;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <a class="logo">The best company in the world</a>
+            <a href="/vacancy" class="logo">The best company in the world</a>
             <div style="display: flex; gap: 20px; align-items: center;">
                 <span id="userGreeting" style="color: #f4d03f;"></span>
                 <a href="#" id="logoutBtn" class="contact-link" style="color: #ff6b6b;">Logout</a>
@@ -140,19 +271,46 @@
     <section class="upload-section">
         <div class="container">
             <div class="upload-container">
-                <div class="drop-zone" id="dropZone">
-                    <div class="drop-zone-icon">📁</div>
-                    <div class="drop-zone-text">Drag and drop PDF files to upload</div>
-                    <button type="button" class="download-btn" id="browseBtn">Browse Files</button>
+                
+                <!-- Секция выбора существующих резюме -->
+                <div class="existing-resumes-section">
+                    <h2>📋 Process Existing Resumes</h2>
+                    <p style="color: #cccccc; margin-bottom: 20px;">Select resumes from your library to process with the current vacancy</p>
+                    
+                    <div id="selectedCount" class="selected-count" style="display: none;">
+                        Selected: <span id="countNumber">0</span> resume(s)
+                    </div>
+
+                    <div class="resumes-grid" id="resumesGrid">
+                        <div class="no-resumes-message">Loading resumes...</div>
+                    </div>
+
+                    <button class="process-existing-btn" id="processExistingBtn" disabled>
+                        Process Selected Resumes
+                    </button>
                 </div>
 
-                <input type="file" id="fileInput" multiple accept=".pdf">
+                <div class="divider">OR</div>
 
-                <div class="file-list" id="fileList"></div>
+                <!-- Секция загрузки новых резюме -->
+                <div class="new-upload-section">
+                    <h2>📤 Upload New Resumes</h2>
+                    
+                    <div class="drop-zone" id="dropZone">
+                        <div class="drop-zone-icon">📁</div>
+                        <div class="drop-zone-text">Drag and drop PDF files to upload</div>
+                        <button type="button" class="download-btn" id="browseBtn">Browse Files</button>
+                    </div>
 
-                <div class="submit-section">
-                    <button class="btn-submit" id="submitBtn" disabled>Upload Resumes</button>
+                    <input type="file" id="fileInput" multiple accept=".pdf">
+
+                    <div class="file-list" id="fileList"></div>
+
+                    <div class="submit-section">
+                        <button class="btn-submit" id="submitBtn" disabled>Upload New Resumes</button>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -164,8 +322,12 @@
     </footer>
 
     <script>
-        // Проверка авторизации
-        window.addEventListener('DOMContentLoaded', () => {
+        let existingResumes = [];
+        let selectedResumeIds = new Set();
+        let selectedFiles = [];
+
+        // Проверка авторизации и загрузка резюме
+        window.addEventListener('DOMContentLoaded', async () => {
             const user = localStorage.getItem('user');
             if (!user) {
                 alert('Необходимо войти в систему');
@@ -175,7 +337,159 @@
 
             const userData = JSON.parse(user);
             document.getElementById('userGreeting').textContent = `Hello, ${userData.username}!`;
+
+            // Загружаем существующие резюме
+            await loadExistingResumes();
         });
+
+        // Загрузка списка существующих резюме
+        async function loadExistingResumes() {
+            try {
+                const response = await fetch('/api/resumes/list');
+                const data = await response.json();
+
+                const grid = document.getElementById('resumesGrid');
+
+                if (data.success && data.resumes.length > 0) {
+                    existingResumes = data.resumes;
+                    grid.innerHTML = '';
+
+                    data.resumes.forEach(resume => {
+                        const card = createResumeCard(resume);
+                        grid.appendChild(card);
+                    });
+                } else {
+                    grid.innerHTML = '<div class="no-resumes-message">No resumes found. Upload your first resume below!</div>';
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки резюме:', error);
+                document.getElementById('resumesGrid').innerHTML = '<div class="no-resumes-message">Error loading resumes</div>';
+            }
+        }
+
+        // Создание карточки резюме
+        function createResumeCard(resume) {
+            const card = document.createElement('div');
+            card.className = 'resume-card';
+            card.dataset.resumeId = resume.id;
+
+            card.innerHTML = `
+                <div class="resume-card-header">
+                    <input type="checkbox" class="resume-checkbox" id="resume-${resume.id}">
+                    <label class="resume-card-title" for="resume-${resume.id}">Resume #${resume.id}</label>
+                </div>
+                <div class="resume-card-info">
+                    <span>📊 Size: ${formatSize(resume.file_size)}</span>
+                    ${resume.upload_date ? `<span>📅 ${resume.upload_date}</span>` : ''}
+                    ${resume.how_old ? `<span>🕒 Age: ${resume.how_old}</span>` : ''}
+                </div>
+            `;
+
+            const checkbox = card.querySelector('.resume-checkbox');
+            
+            // Клик по карточке
+            card.addEventListener('click', (e) => {
+                if (e.target !== checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    toggleResumeSelection(resume.id, checkbox.checked);
+                }
+            });
+
+            // Клик по чекбоксу
+            checkbox.addEventListener('change', (e) => {
+                e.stopPropagation();
+                toggleResumeSelection(resume.id, e.target.checked);
+            });
+
+            return card;
+        }
+
+        // Переключение выбора резюме
+        function toggleResumeSelection(resumeId, isSelected) {
+            const card = document.querySelector(`[data-resume-id="${resumeId}"]`);
+            
+            if (isSelected) {
+                selectedResumeIds.add(resumeId);
+                card.classList.add('selected');
+            } else {
+                selectedResumeIds.delete(resumeId);
+                card.classList.remove('selected');
+            }
+
+            updateSelectedCount();
+        }
+
+        // Обновление счетчика выбранных
+        function updateSelectedCount() {
+            const count = selectedResumeIds.size;
+            const countElement = document.getElementById('selectedCount');
+            const countNumber = document.getElementById('countNumber');
+            const processBtn = document.getElementById('processExistingBtn');
+
+            countNumber.textContent = count;
+            countElement.style.display = count > 0 ? 'block' : 'none';
+            processBtn.disabled = count === 0;
+        }
+
+        // Обработка существующих резюме
+        document.getElementById('processExistingBtn').addEventListener('click', async () => {
+            if (selectedResumeIds.size === 0) return;
+
+            // Получаем ID вакансии из localStorage
+            const vacancyId = localStorage.getItem('selectedVacancyId');
+            
+            if (!vacancyId) {
+                alert('Вакансия не выбрана. Пожалуйста, сначала создайте или выберите вакансию.');
+                window.location.href = '/vacancy';
+                return;
+            }
+
+            const processBtn = document.getElementById('processExistingBtn');
+            const originalText = processBtn.textContent;
+            const totalResumes = selectedResumeIds.size;
+            
+            processBtn.textContent = `Processing... (0/${totalResumes})`;
+            processBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/resumes/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        resumeIds: Array.from(selectedResumeIds),
+                        vacancyId: parseInt(vacancyId)
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    let message = `✅ Обработано резюме: ${data.processedCount}\n`;
+                    message += `✓ Успешно: ${data.successCount}\n`;
+                    
+                    if (data.errorCount > 0) {
+                        message += `⚠️ С ошибками: ${data.errorCount}\n\n`;
+                        message += data.warning || 'Некоторые резюме обработаны с использованием базовых оценок.';
+                    }
+                    
+                    alert(message);
+                    window.location.href = '/ranking';
+                } else {
+                    alert('Ошибка: ' + data.message);
+                    processBtn.textContent = originalText;
+                    processBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка соединения с сервером. Убедитесь, что AI сервер запущен.');
+                processBtn.textContent = originalText;
+                processBtn.disabled = false;
+            }
+        });
+
+        // === КОД ДЛЯ ЗАГРУЗКИ НОВЫХ ФАЙЛОВ ===
 
         // Обработка выхода
         document.getElementById('logoutBtn').addEventListener('click', async (e) => {
@@ -192,8 +506,6 @@
         const browseBtn = document.getElementById('browseBtn');
         const fileList = document.getElementById('fileList');
         const submitBtn = document.getElementById('submitBtn');
-        
-        let selectedFiles = [];
 
         // Открыть диалог выбора файлов
         browseBtn.addEventListener('click', (e) => {
@@ -236,19 +548,16 @@
         // Обработка выбранных файлов
         function handleFiles(files) {
             for (let file of files) {
-                // Валидация: только PDF
                 if (file.type !== 'application/pdf') {
                     alert(`Файл "${file.name}" не является PDF файлом!`);
                     continue;
                 }
 
-                // Проверка размера (макс 10MB)
                 if (file.size > 10 * 1024 * 1024) {
                     alert(`Файл "${file.name}" слишком большой. Максимум: 10MB`);
                     continue;
                 }
 
-                // Добавляем файл, если его еще нет
                 if (!selectedFiles.some(f => f.name === file.name)) {
                     selectedFiles.push(file);
                 }
@@ -286,7 +595,7 @@
             return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
         }
 
-        // Загрузка на сервер
+        // Загрузка новых файлов на сервер
         submitBtn.addEventListener('click', async () => {
             if (selectedFiles.length === 0) return;
 
@@ -308,17 +617,21 @@
 
                 if (data.success) {
                     alert('Резюме успешно загружены!');
-                    // Переход на страницу рейтинга
-                    window.location.href = '/ranking';
+                    // Перезагружаем список существующих резюме
+                    await loadExistingResumes();
+                    // Очищаем список новых файлов
+                    selectedFiles = [];
+                    updateFileList();
+                    submitBtn.textContent = 'Upload New Resumes';
                 } else {
                     alert('Ошибка: ' + data.message);
-                    submitBtn.textContent = 'Upload Resumes';
+                    submitBtn.textContent = 'Upload New Resumes';
                     submitBtn.disabled = false;
                 }
             } catch (error) {
                 console.error('Ошибка:', error);
                 alert('Ошибка соединения с сервером');
-                submitBtn.textContent = 'Upload Resumes';
+                submitBtn.textContent = 'Upload New Resumes';
                 submitBtn.disabled = false;
             }
         });

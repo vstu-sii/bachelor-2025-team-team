@@ -5,9 +5,249 @@ const { spawn } = require('child_process');
 const session = require('express-session');
 const multer = require('multer');
 const keys = require(path.join(__dirname, "..", "keys.json"));
+const axios = require('axios');
+const FormData = require('form-data');
+const { Readable } = require('stream');
 
 const app = express();
 const PORT = 3000;
+const AI_API_URL = 'http://localhost:8000';
+
+/**
+ * Конвертирует Buffer в Stream для отправки в FormData
+ */
+function bufferToStream(buffer) {
+    const readable = new Readable();
+    readable._read = () => {}; // Заглушка
+    readable.push(buffer);
+    readable.push(null);
+    return readable;
+}
+
+/**
+ * Форматирует данные вакансии в структурированный JSON
+ * Возвращает объект с полями, где отсутствующие данные = null
+ */
+function formatVacancyDataToJSON(vacancy) {
+    return {
+        job_title: vacancy.job_title || null,
+        education: vacancy.education || null,
+        work_experience: vacancy.work_experience ? parseInt(vacancy.work_experience) : null,
+        desired_salary: vacancy.desired_salary ? parseSalary(vacancy.desired_salary) : null,
+        work_schedule: vacancy.work_shedule || null,
+        work_format: vacancy.work_format || null,
+        additional_requirements: vacancy.additional_requirements || null
+    };
+}
+
+/**
+ * Парсит зарплату из строки формата "От X до Y" или возвращает число
+ */
+function parseSalary(salaryString) {
+    if (typeof salaryString === 'number') {
+        return salaryString;
+    }
+    
+    if (typeof salaryString === 'string') {
+        // Формат: "От 50000 до 100000"
+        const match = salaryString.match(/От\s*(\d+)/);
+        if (match) {
+            return parseInt(match[1]);
+        }
+        
+        // Просто число в строке
+        const numMatch = salaryString.match(/(\d+)/);
+        if (numMatch) {
+            return parseInt(numMatch[1]);
+        }
+    }
+    
+    return null;
+}
+
+/**
+ * Форматирует данные вакансии в текст
+ */
+function formatVacancyData(vacancy) {
+    const vacancyJSON = formatVacancyDataToJSON(vacancy);
+    
+    let vacancyText = `Vacancy Description:\n`;
+    
+    if (vacancyJSON.job_title) {
+        vacancyText += `Position: ${vacancyJSON.job_title}\n`;
+    }
+    
+    if (vacancyJSON.education) {
+        vacancyText += `Education: ${vacancyJSON.education}\n`;
+    }
+    
+    if (vacancyJSON.work_experience !== null) {
+        vacancyText += `Work Experience: ${vacancyJSON.work_experience} years\n`;
+    }
+    
+    if (vacancyJSON.desired_salary !== null) {
+        vacancyText += `Desired Salary: ${vacancyJSON.desired_salary}\n`;
+    }
+    
+    if (vacancyJSON.work_schedule) {
+        vacancyText += `Work Schedule: ${vacancyJSON.work_schedule}\n`;
+    }
+    
+    if (vacancyJSON.work_format) {
+        vacancyText += `Work Format: ${vacancyJSON.work_format}\n`;
+    }
+    
+    if (vacancyJSON.additional_requirements) {
+        vacancyText += `Additional Requirements:\n${vacancyJSON.additional_requirements}\n`;
+    }
+    
+    return vacancyText;
+}
+
+/**
+ * Вызов AI API для оценки резюме
+ */
+async function evaluateResumeWithAI(resumeBuffer, vacancyData) {
+    try {
+        const formData = new FormData();
+
+        const fileStream = bufferToStream(resumeBuffer);
+        formData.append('file', fileStream, {
+            filename: 'resume.pdf',
+            contentType: 'application/pdf'
+        });
+
+        // Используем текстовый формат для оценки (как было)
+        const vacancyText = formatVacancyData(vacancyData);
+        formData.append('vacancy_data', vacancyText);
+
+        const response = await axios.post(`${AI_API_URL}/match-vacancy`, formData, {
+            headers: {
+                ...formData.getHeaders()
+            },
+            timeout: 60000
+        });
+
+        console.log('AI API Response structure:', Object.keys(response.data));
+
+        let overallScore = 0;
+        let found = false;
+
+        // Поиск overall_score в ответе
+        if (response.data && response.data.matching_result && 
+            response.data.matching_result.matching_results) {
+            
+            const matchingResults = response.data.matching_result.matching_results;
+            if (typeof matchingResults.overall_score !== 'undefined') {
+                overallScore = matchingResults.overall_score;
+                console.log(`✅ Found overall_score in matching_result.matching_results: ${overallScore}`);
+                found = true;
+            }
+        }
+        
+        if (!found && response.data && response.data.matching_result && 
+            typeof response.data.matching_result.overall_score !== 'undefined') {
+            
+            overallScore = response.data.matching_result.overall_score;
+            console.log(`✅ Found overall_score in matching_result: ${overallScore}`);
+            found = true;
+        }
+        
+        if (!found && response.data && response.data.matching_results && 
+            typeof response.data.matching_results.overall_score !== 'undefined') {
+            
+            overallScore = response.data.matching_results.overall_score;
+            console.log(`✅ Found overall_score in matching_results: ${overallScore}`);
+            found = true;
+        }
+        
+        if (!found && response.data && typeof response.data.overall_score !== 'undefined') {
+            overallScore = response.data.overall_score;
+            console.log(`✅ Found overall_score in root: ${overallScore}`);
+            found = true;
+        }
+
+        if (found) {
+            console.log(`✅ AI evaluation completed: ${overallScore} points`);
+            return {
+                success: true,
+                score: overallScore,
+                details: response.data.matching_result || response.data.matching_results || response.data
+            };
+        }
+
+        console.warn('⚠️ Could not find overall_score in any expected location');
+        console.warn('Full response:', JSON.stringify(response.data, null, 2));
+        return {
+            success: false,
+            score: 0,
+            error: 'Could not find overall_score in AI response'
+        };
+
+    } catch (error) {
+        console.error('❌ AI API Error:', error.message);
+        if (error.response) {
+            console.error('Response status:', error.response.status);
+            console.error('Response data:', error.response.data);
+        }
+        return {
+            success: false,
+            score: 0,
+            error: error.message
+        };
+    }
+}
+
+/**
+ * Генерация вопросов для собеседования через AI
+ */
+async function generateInterviewQuestions(resumeBuffer, vacancyData) {
+    try {
+        const formData = new FormData();
+
+        // Конвертируем Buffer в Stream и добавляем как файл
+        const fileStream = bufferToStream(resumeBuffer);
+        formData.append('file', fileStream, {
+            filename: 'resume.pdf',
+            contentType: 'application/pdf'
+        });
+
+        // Форматируем данные вакансии в структурированный JSON
+        const vacancyJSON = formatVacancyDataToJSON(vacancyData);
+        
+        // Отправляем как JSON строку
+        formData.append('vacancy_requirements', JSON.stringify(vacancyJSON));
+        formData.append('question_type', 'mixed');
+
+        console.log('📤 Sending vacancy data to AI:', JSON.stringify(vacancyJSON, null, 2));
+
+        // Отправляем запрос к AI API
+        const response = await axios.post(`${AI_API_URL}/generate-interview-plan`, formData, {
+            headers: {
+                ...formData.getHeaders()
+            },
+            timeout: 90000 // 90 секунд таймаут для генерации вопросов
+        });
+
+        console.log('✅ Interview questions generated successfully');
+        
+        return {
+            success: true,
+            questions: response.data.interview_plan
+        };
+
+    } catch (error) {
+        console.error('❌ AI API Error (interview questions):', error.message);
+        if (error.response) {
+            console.error('Response status:', error.response.status);
+            console.error('Response data:', error.response.data);
+        }
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
 
 // Настройка multer для загрузки файлов в память (BLOB)
 const storage = multer.memoryStorage();
@@ -152,6 +392,10 @@ app.get('/upload', (req, res) => {
 
 app.get('/ranking', (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/ranking.html"));
+});
+
+app.get('/interview', (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/interview.html"));
 });
 
 app.get('/logout', (req, res) => {
@@ -388,6 +632,41 @@ app.get('/api/vacancy/user', async (req, res) => {
     }
 });
 
+
+// ПОЛУЧЕНИЕ ОДНОЙ ВАКАНСИИ ПО ID
+app.get('/api/vacancy/:id', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({
+            success: false,
+            message: 'Необходима авторизация'
+        });
+    }
+
+    try {
+        const query = 'SELECT * FROM vacancy WHERE id = ? AND user_id = ?';
+        const [vacancies] = await db.promise().query(query, [req.params.id, req.session.userId]);
+
+        if (vacancies.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Вакансия не найдена'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            vacancy: vacancies[0]
+        });
+
+    } catch (error) {
+        console.error('Ошибка получения вакансии:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
+
 // ==========================================
 // API МАРШРУТЫ - РЕЗЮМЕ
 // ==========================================
@@ -438,8 +717,9 @@ app.post('/api/resumes/upload', upload.array('resumes', 10), async (req, res) =>
     }
 });
 
-// ПОЛУЧЕНИЕ СПИСКА РЕЗЮМЕ С РЕЙТИНГОМ
-app.get('/api/resumes/ranked', async (req, res) => {
+
+// ПОЛУЧЕНИЕ СПИСКА РЕАЛЬНЫХ РЕЗЮМЕ ПОЛЬЗОВАТЕЛЯ
+app.get('/api/resumes/list', async (req, res) => {
     if (!req.session.userId) {
         return res.status(401).json({
             success: false,
@@ -450,21 +730,297 @@ app.get('/api/resumes/ranked', async (req, res) => {
     try {
         const query = `
             SELECT 
+                id,
+                how_old,
+                OCTET_LENGTH(file) AS file_size,
+                DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS upload_date
+            FROM resume
+            WHERE user_id = ?
+              AND file IS NOT NULL
+              AND OCTET_LENGTH(file) > 0
+              AND created_at IS NOT NULL
+            ORDER BY id DESC
+        `;
+
+        const [resumes] = await db.promise().query(query, [req.session.userId]);
+
+        // 🔒 ЯВНАЯ ЛОГИЧЕСКАЯ ОБРАБОТКА
+        if (!resumes || resumes.length === 0) {
+            return res.status(200).json({
+                success: true,
+                resumes: []
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            resumes
+        });
+
+    } catch (error) {
+        console.error('Ошибка получения списка резюме:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
+
+
+// ОБРАБОТКА СУЩЕСТВУЮЩИХ РЕЗЮМЕ ДЛЯ ВАКАНСИИ (С AI)
+app.post('/api/resumes/process', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({
+            success: false,
+            message: 'Необходима авторизация'
+        });
+    }
+
+    const { resumeIds, vacancyId } = req.body;
+
+    if (!resumeIds || !Array.isArray(resumeIds) || resumeIds.length === 0) {
+        return res.status(400).json({
+            success: false,
+            message: 'Не выбраны резюме для обработки'
+        });
+    }
+
+    if (!vacancyId) {
+        return res.status(400).json({
+            success: false,
+            message: 'Не указана вакансия'
+        });
+    }
+
+    try {
+        // Проверяем, что все резюме принадлежат пользователю
+        const checkQuery = 'SELECT id FROM resume WHERE id IN (?) AND user_id = ?';
+        const [ownedResumes] = await db.promise().query(checkQuery, [resumeIds, req.session.userId]);
+
+        if (ownedResumes.length !== resumeIds.length) {
+            return res.status(403).json({
+                success: false,
+                message: 'Некоторые резюме не принадлежат текущему пользователю'
+            });
+        }
+
+        // Получаем данные вакансии
+        const vacancyQuery = 'SELECT * FROM vacancy WHERE id = ? AND user_id = ?';
+        const [vacancies] = await db.promise().query(vacancyQuery, [vacancyId, req.session.userId]);
+
+        if (vacancies.length === 0) {
+            return res.status(403).json({
+                success: false,
+                message: 'Вакансия не найдена или не принадлежит пользователю'
+            });
+        }
+
+        const vacancy = vacancies[0];
+        
+        // Счетчики для статистики
+        let processedCount = 0;
+        let successCount = 0;
+        let errorCount = 0;
+        let questionsGeneratedCount = 0;
+        const results = [];
+
+        console.log(`🚀 Starting AI evaluation for ${resumeIds.length} resume(s)...`);
+
+        // Обрабатываем каждое резюме
+        for (const resumeId of resumeIds) {
+            try {
+                // Получаем файл резюме из базы
+                const resumeQuery = 'SELECT file FROM resume WHERE id = ?';
+                const [resumes] = await db.promise().query(resumeQuery, [resumeId]);
+
+                if (resumes.length === 0) {
+                    console.warn(`⚠️ Resume ${resumeId} not found`);
+                    errorCount++;
+                    continue;
+                }
+
+                const resumeBuffer = resumes[0].file;
+
+                // 1. ОЦЕНКА РЕЗЮМЕ через AI
+                console.log(`🤖 Evaluating resume #${resumeId}...`);
+                const aiResult = await evaluateResumeWithAI(resumeBuffer, vacancy);
+
+                let finalScore = 0;
+
+                if (aiResult.success) {
+                    finalScore = aiResult.score;
+                    
+                    // Сохраняем оценку
+                    const existingQuery = 'SELECT id FROM score WHERE resume_id = ? AND vacancy_id = ?';
+                    const [existing] = await db.promise().query(existingQuery, [resumeId, vacancyId]);
+
+                    if (existing.length === 0) {
+                        const insertScore = 'INSERT INTO score (resume_id, vacancy_id, number_of_top) VALUES (?, ?, ?)';
+                        await db.promise().query(insertScore, [resumeId, vacancyId, finalScore]);
+                    } else {
+                        const updateScore = 'UPDATE score SET number_of_top = ? WHERE resume_id = ? AND vacancy_id = ?';
+                        await db.promise().query(updateScore, [finalScore, resumeId, vacancyId]);
+                    }
+
+                    successCount++;
+                    console.log(`✅ Resume #${resumeId}: ${finalScore} points`);
+                } else {
+                    // Если AI не смог оценить, используем базовую оценку
+                    finalScore = 0;
+                    
+                    const existingQuery = 'SELECT id FROM score WHERE resume_id = ? AND vacancy_id = ?';
+                    const [existing] = await db.promise().query(existingQuery, [resumeId, vacancyId]);
+
+                    if (existing.length === 0) {
+                        const insertScore = 'INSERT INTO score (resume_id, vacancy_id, number_of_top) VALUES (?, ?, ?)';
+                        await db.promise().query(insertScore, [resumeId, vacancyId, finalScore]);
+                    } else {
+                        const updateScore = 'UPDATE score SET number_of_top = ? WHERE resume_id = ? AND vacancy_id = ?';
+                        await db.promise().query(updateScore, [finalScore, resumeId, vacancyId]);
+                    }
+
+                    errorCount++;
+                    console.warn(`⚠️ Resume #${resumeId}: Using fallback score (${finalScore}) - ${aiResult.error}`);
+                }
+
+                // 2. ГЕНЕРАЦИЯ ВОПРОСОВ ДЛЯ СОБЕСЕДОВАНИЯ (только для успешно оцененных резюме)
+                if (aiResult.success && finalScore > 0) {
+                    console.log(`💡 Generating interview questions for resume #${resumeId}...`);
+                    const questionsResult = await generateInterviewQuestions(resumeBuffer, vacancy);
+
+                    if (questionsResult.success) {
+                        // Сохраняем вопросы в базу данных
+                        const questionsJSON = JSON.stringify(questionsResult.questions);
+                        const updateQuestionsQuery = 'UPDATE resume SET questions = ? WHERE id = ?';
+                        await db.promise().query(updateQuestionsQuery, [questionsJSON, resumeId]);
+                        
+                        questionsGeneratedCount++;
+                        console.log(`✅ Interview questions generated for resume #${resumeId}`);
+                    } else {
+                        console.warn(`⚠️ Failed to generate questions for resume #${resumeId}: ${questionsResult.error}`);
+                    }
+                }
+
+                results.push({
+                    resumeId,
+                    score: finalScore,
+                    status: aiResult.success ? 'success' : 'fallback',
+                    questionsGenerated: aiResult.success && finalScore > 0
+                });
+
+                processedCount++;
+
+            } catch (error) {
+                console.error(`❌ Error processing resume #${resumeId}:`, error);
+                errorCount++;
+                results.push({
+                    resumeId,
+                    status: 'error',
+                    error: error.message
+                });
+            }
+        }
+
+        console.log(`📊 Processing complete: ${successCount} success, ${errorCount} errors, ${questionsGeneratedCount} questions generated`);
+
+        // Формируем ответ
+        const response = {
+            success: true,
+            message: `Обработано резюме: ${processedCount}`,
+            processedCount,
+            successCount,
+            errorCount,
+            questionsGeneratedCount,
+            results
+        };
+
+        // Если были ошибки, добавляем предупреждение
+        if (errorCount > 0) {
+            response.warning = `${errorCount} резюме обработано с ошибками. Использованы средние оценки.`;
+        }
+
+        res.status(200).json(response);
+
+    } catch (error) {
+        console.error('❌ Fatal error in resume processing:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера при обработке резюме',
+            error: error.message
+        });
+    }
+});
+
+// Проверка доступности AI сервера
+app.get('/api/ai/health', async (req, res) => {
+    try {
+        const response = await axios.get(`${AI_API_URL}/health`, {
+            timeout: 5000
+        });
+        
+        res.json({
+            success: true,
+            aiStatus: 'online',
+            details: response.data
+        });
+    } catch (error) {
+        res.json({
+            success: false,
+            aiStatus: 'offline',
+            error: error.message
+        });
+    }
+});
+
+// ПОЛУЧЕНИЕ СПИСКА РЕЗЮМЕ С РЕЙТИНГОМ (С ФИЛЬТРАЦИЕЙ ПО ВАКАНСИИ)
+app.get('/api/resumes/ranked', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({
+            success: false,
+            message: 'Необходима авторизация'
+        });
+    }
+
+    const { vacancyId } = req.query;
+
+    if (!vacancyId) {
+        return res.status(400).json({
+            success: false,
+            message: 'Не указана вакансия'
+        });
+    }
+
+    try {
+        // Проверяем, что вакансия принадлежит пользователю
+        const vacancyCheck = 'SELECT id FROM vacancy WHERE id = ? AND user_id = ?';
+        const [vacancies] = await db.promise().query(vacancyCheck, [vacancyId, req.session.userId]);
+
+        if (vacancies.length === 0) {
+            return res.status(403).json({
+                success: false,
+                message: 'Вакансия не найдена или не принадлежит пользователю'
+            });
+        }
+
+        // Получаем резюме только для указанной вакансии
+        const query = `
+            SELECT 
                 r.id as resume_id,
                 r.how_old,
                 s.number_of_top,
                 s.vacancy_id,
                 LENGTH(r.file) as file_size
             FROM resume r
-            LEFT JOIN score s ON r.id = s.resume_id
-            WHERE r.user_id = ?
-            ORDER BY s.number_of_top DESC
+            INNER JOIN score s ON r.id = s.resume_id
+            WHERE r.user_id = ? AND s.vacancy_id = ?
+            ORDER BY s.number_of_top DESC, r.id ASC
         `;
-        const [resumes] = await db.promise().query(query, [req.session.userId]);
+        const [resumes] = await db.promise().query(query, [req.session.userId, vacancyId]);
 
         res.status(200).json({
             success: true,
-            resumes: resumes
+            resumes: resumes,
+            vacancyId: vacancyId
         });
 
     } catch (error) {
@@ -504,6 +1060,68 @@ app.get('/api/resumes/download/:id', async (req, res) => {
 
     } catch (error) {
         console.error('Ошибка скачивания резюме:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка сервера'
+        });
+    }
+});
+
+// ПОЛУЧЕНИЕ ВОПРОСОВ ДЛЯ СОБЕСЕДОВАНИЯ
+app.get('/api/interviews/questions', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({
+            success: false,
+            message: 'Необходима авторизация'
+        });
+    }
+
+    const { vacancyId } = req.query;
+
+    if (!vacancyId) {
+        return res.status(400).json({
+            success: false,
+            message: 'Не указана вакансия'
+        });
+    }
+
+    try {
+        // Проверяем, что вакансия принадлежит пользователю
+        const vacancyCheck = 'SELECT id FROM vacancy WHERE id = ? AND user_id = ?';
+        const [vacancies] = await db.promise().query(vacancyCheck, [vacancyId, req.session.userId]);
+
+        if (vacancies.length === 0) {
+            return res.status(403).json({
+                success: false,
+                message: 'Вакансия не найдена или не принадлежит пользователю'
+            });
+        }
+
+        // Получаем резюме с вопросами для указанной вакансии
+        const query = `
+            SELECT 
+                r.id as resume_id,
+                r.questions,
+                s.number_of_top as score,
+                s.vacancy_id
+            FROM resume r
+            INNER JOIN score s ON r.id = s.resume_id
+            WHERE r.user_id = ? 
+              AND s.vacancy_id = ?
+              AND r.questions IS NOT NULL
+            ORDER BY s.number_of_top DESC
+        `;
+        
+        const [interviews] = await db.promise().query(query, [req.session.userId, vacancyId]);
+
+        res.status(200).json({
+            success: true,
+            interviews: interviews,
+            vacancyId: vacancyId
+        });
+
+    } catch (error) {
+        console.error('Ошибка получения вопросов:', error);
         res.status(500).json({
             success: false,
             message: 'Ошибка сервера'

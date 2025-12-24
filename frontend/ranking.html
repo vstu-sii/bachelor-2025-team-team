@@ -148,12 +148,29 @@
         .top-10 {
             border-left-color: #CD7F32;
         }
+
+        .btn-view-interviews {
+            background-color: #5a9bd5;
+            color: #ffffff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-view-interviews:hover {
+            background-color: #4a8bc5;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <a class="logo">The best company in the world</a>
+            <a href="/vacancy" class="logo">The best company in the world</a>
             <div style="display: flex; gap: 20px; align-items: center;">
                 <span id="userGreeting" style="color: #f4d03f;"></span>
                 <a href="#" id="logoutBtn" class="contact-link" style="color: #ff6b6b;">Logout</a>
@@ -167,6 +184,11 @@
                 <div class="ranking-header">
                     <h1>Resume Ranking</h1>
                     <p>Best candidates sorted by AI rating</p>
+                    <div style="margin-top: 20px;">
+                        <button id="viewInterviewsBtn" class="btn-view-interviews">
+                            💡 View Interview Questions
+                        </button>
+                    </div>
                 </div>
 
                 <div id="loadingIndicator" class="loading">
@@ -202,8 +224,16 @@
             const userData = JSON.parse(user);
             document.getElementById('userGreeting').textContent = `Hello, ${userData.username}!`;
             
-            // Загрузить список резюме
-            loadResumes();
+            // Проверяем наличие выбранной вакансии
+            const vacancyId = localStorage.getItem('selectedVacancyId');
+            if (!vacancyId) {
+                alert('Вакансия не выбрана. Пожалуйста, сначала создайте или выберите вакансию.');
+                window.location.href = '/vacancy';
+                return;
+            }
+            
+            // Загружаем резюме для конкретной вакансии
+            loadResumes(vacancyId);
         });
 
         // Обработка выхода
@@ -216,14 +246,14 @@
             }
         });
 
-        // Загрузка списка резюме
-        async function loadResumes() {
+        // Загрузка списка резюме для конкретной вакансии
+        async function loadResumes(vacancyId) {
             const loadingIndicator = document.getElementById('loadingIndicator');
             const resumeList = document.getElementById('resumeList');
             const noResumes = document.getElementById('noResumes');
 
             try {
-                const response = await fetch('/api/resumes/ranked');
+                const response = await fetch(`/api/resumes/ranked?vacancyId=${vacancyId}`);
                 const data = await response.json();
 
                 loadingIndicator.style.display = 'none';
@@ -325,6 +355,11 @@
 
         // Глобальная функция для скачивания
         window.downloadResume = downloadResume;
+
+        // Обработчик кнопки перехода к вопросам для собеседования
+        document.getElementById('viewInterviewsBtn').addEventListener('click', () => {
+            window.location.href = '/interview';
+        });
     </script>
 </body>
 </html>
