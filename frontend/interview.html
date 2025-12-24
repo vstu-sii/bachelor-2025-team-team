@@ -55,9 +55,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 0;
             padding-bottom: 15px;
             border-bottom: 2px solid #5a5a5a;
+        }
+
+        .interview-header-left {
+            flex: 1;
         }
 
         .interview-title {
@@ -71,6 +75,63 @@
             gap: 15px;
             color: #888888;
             font-size: 0.9rem;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .questions-count {
+            color: #888888;
+            font-size: 0.85rem;
+        }
+
+        .interview-header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .toggle-questions-btn {
+            background-color: transparent;
+            color: #f4d03f;
+            border: 2px solid #f4d03f;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .toggle-questions-btn:hover {
+            background-color: #f4d03f;
+            color: #000000;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+            font-size: 1rem;
+        }
+
+        .toggle-icon.collapsed {
+            transform: rotate(180deg);
+        }
+
+        .questions-content {
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+            opacity: 1;
+            margin-top: 20px;
+        }
+
+        .questions-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
         }
 
         .questions-container {
@@ -93,6 +154,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .question-type-badge {
@@ -104,10 +166,57 @@
             font-weight: 500;
         }
 
+        .question-time-badge {
+            color: #888888;
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+
         .question-text {
             color: #ffffff;
             line-height: 1.6;
             font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        .question-purpose {
+            color: #aaaaaa;
+            font-size: 0.85rem;
+            font-style: italic;
+            margin-bottom: 12px;
+            padding-left: 10px;
+            border-left: 2px solid #5a9bd5;
+        }
+
+        .expected-answers {
+            background-color: #1a1a1a;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-top: 12px;
+            border-left: 3px solid #4caf50;
+        }
+
+        .expected-answers-title {
+            color: #4caf50;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .expected-answers-list {
+            margin: 0;
+            padding-left: 20px;
+            color: #cccccc;
+            font-size: 0.85rem;
+        }
+
+        .expected-answers-list li {
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+
+        .expected-answers-list li:last-child {
+            margin-bottom: 0;
         }
 
         .no-questions {
@@ -122,13 +231,16 @@
         .btn-download-questions {
             background-color: #5a9bd5;
             color: #ffffff;
-            padding: 10px 25px;
+            padding: 12px 30px;
             border: none;
             border-radius: 8px;
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-download-questions:hover {
@@ -162,12 +274,19 @@
             font-weight: bold;
             font-size: 0.9rem;
         }
+
+        .download-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #5a5a5a;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <a class="logo">The best company in the world</a>
+            <a href="/vacancy" class="logo">The best company in the world</a>
             <div style="display: flex; gap: 20px; align-items: center;">
                 <span id="userGreeting" style="color: #f4d03f;"></span>
                 <a href="#" id="logoutBtn" class="contact-link" style="color: #ff6b6b;">Logout</a>
@@ -273,6 +392,7 @@
                 card.className = 'interview-card';
 
                 let questionsHTML = '<div class="no-questions">No questions available</div>';
+                let questionsCount = 0;
                 
                 if (interview.questions) {
                     try {
@@ -292,31 +412,67 @@
                             questions = questionsData.questions;
                         }
                         
+                        questionsCount = questions.length;
+                        
                         if (questions.length > 0) {
                             questionsHTML = '<div class="questions-container">';
                             questions.forEach((q, index) => {
                                 // Извлекаем текст вопроса в зависимости от структуры
                                 let questionText = '';
                                 let questionType = '';
+                                let purpose = '';
+                                let timeEstimate = '';
+                                let expectedAnswers = [];
                                 
                                 if (typeof q === 'string') {
                                     questionText = q;
                                 } else if (typeof q === 'object') {
                                     questionText = q.question || q.text || JSON.stringify(q);
                                     questionType = q.type || '';
+                                    purpose = q.purpose || '';
+                                    timeEstimate = q.time_estimate || '';
+                                    expectedAnswers = q.expected_answer_indicators || [];
                                 }
                                 
                                 const typeBadge = questionType 
                                     ? `<span class="question-type-badge">${questionType}</span>` 
                                     : '';
                                 
+                                const timeBadge = timeEstimate 
+                                    ? `<span class="question-time-badge">⏱️ ${timeEstimate}</span>`
+                                    : '';
+                                
+                                // Формируем список ожидаемых ответов
+                                let expectedAnswersHTML = '';
+                                if (expectedAnswers.length > 0) {
+                                    expectedAnswersHTML = `
+                                        <div class="expected-answers">
+                                            <div class="expected-answers-title">✓ Expected answer indicators:</div>
+                                            <ul class="expected-answers-list">
+                                                ${expectedAnswers.map(indicator => 
+                                                    `<li>${indicator}</li>`
+                                                ).join('')}
+                                            </ul>
+                                        </div>
+                                    `;
+                                }
+                                
+                                // Формируем описание цели вопроса
+                                let purposeHTML = '';
+                                if (purpose) {
+                                    purposeHTML = `<div class="question-purpose">💡 Purpose: ${purpose}</div>`;
+                                }
+                                
                                 questionsHTML += `
                                     <div class="question-item">
                                         <div class="question-number">
                                             Question ${index + 1}
                                             ${typeBadge}
+                                            ${timeBadge}
                                         </div>
                                         <div class="question-text">${questionText}</div>
+                                        ${purposeHTML}
+                                        ${expectedAnswersHTML}
                                     </div>
                                 `;
                             });
@@ -330,25 +486,55 @@
 
                 card.innerHTML = `
                     <div class="interview-card-header">
-                        <div>
+                        <div class="interview-header-left">
                             <div class="interview-title">Resume #${interview.resume_id}</div>
                             <div class="interview-meta">
                                 <span>📊 Score: <strong>${interview.score || 'N/A'}</strong></span>
                                 <span>🎯 Vacancy #${interview.vacancy_id}</span>
+                                <span class="questions-count">📋 ${questionsCount} question(s)</span>
                             </div>
                         </div>
-                        <div style="display: flex; gap: 10px; align-items: center;">
+                        <div class="interview-header-actions">
                             <div class="score-badge">${interview.score || 0} points</div>
-                            <button class="btn-download-questions" onclick="downloadQuestions(${interview.resume_id})">
-                                Download Questions
+                            <button class="toggle-questions-btn" onclick="toggleQuestions(${interview.resume_id})">
+                                <span class="toggle-text">Show Questions</span>
+                                <span class="toggle-icon collapsed">▼</span>
                             </button>
                         </div>
                     </div>
-                    ${questionsHTML}
+                    <div class="questions-content collapsed" id="questions-${interview.resume_id}">
+                        ${questionsHTML}
+                        <div class="download-section">
+                            <button class="btn-download-questions" onclick="downloadQuestions(${interview.resume_id})">
+                                📥 Download Questions
+                            </button>
+                        </div>
+                    </div>
                 `;
 
                 interviewList.appendChild(card);
             });
+        }
+
+        // Функция сворачивания/разворачивания вопросов
+        function toggleQuestions(resumeId) {
+            const questionsContent = document.getElementById(`questions-${resumeId}`);
+            const card = questionsContent.closest('.interview-card');
+            const toggleBtn = card.querySelector('.toggle-questions-btn');
+            const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+            const toggleText = toggleBtn.querySelector('.toggle-text');
+            
+            if (questionsContent.classList.contains('collapsed')) {
+                // Разворачиваем
+                questionsContent.classList.remove('collapsed');
+                toggleIcon.classList.remove('collapsed');
+                toggleText.textContent = 'Hide Questions';
+            } else {
+                // Сворачиваем
+                questionsContent.classList.add('collapsed');
+                toggleIcon.classList.add('collapsed');
+                toggleText.textContent = 'Show Questions';
+            }
         }
 
         // Скачивание вопросов в текстовый файл
@@ -357,7 +543,7 @@
             const cards = document.querySelectorAll('.interview-card');
             let questionsText = `Interview Questions for Resume #${resumeId}\n`;
             questionsText += `Generated: ${new Date().toLocaleString()}\n`;
-            questionsText += '='.repeat(60) + '\n\n';
+            questionsText += '='.repeat(70) + '\n\n';
 
             cards.forEach(card => {
                 const title = card.querySelector('.interview-title').textContent;
@@ -366,12 +552,41 @@
                     questions.forEach((q, index) => {
                         const numberElement = q.querySelector('.question-number');
                         const text = q.querySelector('.question-text').textContent;
-                        const type = numberElement ? numberElement.textContent : '';
+                        const purposeElement = q.querySelector('.question-purpose');
+                        const expectedAnswersElement = q.querySelector('.expected-answers-list');
+                        
+                        // Извлекаем тип вопроса
+                        const typeBadge = q.querySelector('.question-type-badge');
+                        const type = typeBadge ? typeBadge.textContent : '';
+                        
+                        // Извлекаем время
+                        const timeBadge = q.querySelector('.question-time-badge');
+                        const time = timeBadge ? timeBadge.textContent.replace('⏱️ ', '') : '';
                         
                         questionsText += `${index + 1}. ${text}\n`;
-                        if (type && type.includes('(')) {
-                            questionsText += `   Type: ${type.match(/\(([^)]+)\)/)?.[1] || ''}\n`;
+                        
+                        if (type) {
+                            questionsText += `   Type: ${type}\n`;
                         }
+                        
+                        if (time) {
+                            questionsText += `   Time estimate: ${time}\n`;
+                        }
+                        
+                        if (purposeElement) {
+                            const purpose = purposeElement.textContent.replace('💡 Purpose: ', '');
+                            questionsText += `   Purpose: ${purpose}\n`;
+                        }
+                        
+                        if (expectedAnswersElement) {
+                            const indicators = Array.from(expectedAnswersElement.querySelectorAll('li'))
+                                .map(li => li.textContent);
+                            questionsText += `   Expected answer indicators:\n`;
+                            indicators.forEach(indicator => {
+                                questionsText += `   - ${indicator}\n`;
+                            });
+                        }
+                        
                         questionsText += '\n';
                     });
                 }
@@ -389,7 +604,8 @@
             document.body.removeChild(a);
         }
 
-        // Глобальная функция для скачивания
+        // Глобальные функции
+        window.toggleQuestions = toggleQuestions;
         window.downloadQuestions = downloadQuestions;
     </script>
 </body>
